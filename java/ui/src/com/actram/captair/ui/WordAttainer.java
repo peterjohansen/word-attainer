@@ -6,9 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Captair extends Application {
+public class WordAttainer extends Application {
 	public static void main(String[] args) {
-		Application.launch(Captair.class, args);
+		Application.launch(WordAttainer.class, args);
 	}
 
 	@Override
