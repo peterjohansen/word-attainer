@@ -13,7 +13,7 @@ public class WordAttainer extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		Parent root = new FXMLLoader().load(getClass().getResourceAsStream("/ui/morpheme_lists.fxml"));
+		Parent root = new FXMLLoader().load(getClass().getResourceAsStream("/ui/modify_results.fxml"));
 		stage.setTitle("FXML Welcome");
 		stage.setScene(new Scene(root));
 		stage.show();
