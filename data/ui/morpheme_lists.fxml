@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<TitledPane minHeight="-Infinity" minWidth="-Infinity" text="Morpheme lists" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+         <right>
+            <VBox spacing="8.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button layoutX="10.0" layoutY="41.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add list" VBox.vgrow="NEVER" />
+                  <Button layoutX="10.0" layoutY="75.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Remove list" VBox.vgrow="NEVER" />
+                  <Button layoutX="10.0" layoutY="106.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Clear" VBox.vgrow="NEVER" />
+                  <Separator />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Move up" VBox.vgrow="NEVER" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Move down" VBox.vgrow="NEVER" />
+               </children>
+               <BorderPane.margin>
+                  <Insets left="5.0" />
+               </BorderPane.margin>
+            </VBox>
+         </right>
+         <center>
+            <ListView minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="5.0" right="5.0" />
+               </BorderPane.margin>
+            </ListView>
+         </center>
+         <bottom>
+            <CheckBox mnemonicParsing="false" text="Use the lists consecutively" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+               <BorderPane.margin>
+                  <Insets top="5.0" />
+               </BorderPane.margin>
+            </CheckBox>
+         </bottom>
+      </BorderPane>
+   </content>
+</TitledPane>

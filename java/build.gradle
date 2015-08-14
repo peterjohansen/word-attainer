@@ -1,0 +1,51 @@
+buildscript {
+	apply plugin: "eclipse"
+}
+
+subprojects {
+	apply plugin: "java"
+	apply plugin: "eclipse"
+	apply plugin: "idea"
+
+	ext {
+		jacksonVersion = '2.6.1'
+		jacksonDatabindVersion = '2.6.1'
+	}
+
+	repositories {
+		mavenCentral()
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+	}
+
+	sourceCompatibility = "1.8"
+	sourceSets {
+		main {
+			java {
+				srcDirs = ["src"]
+				srcDir "../../data"
+			}
+		}
+	}
+
+	eclipse.project {
+		name = "word-attainer-" + project.name
+	}
+}
+
+project(":core") {
+	dependencies {
+		compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+		compile "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
+	}
+}
+
+project(":ui") {
+	dependencies {
+		compile project(":core")
+	}
+}
+
+tasks.eclipse.doLast {
+	delete ".project"
+}
