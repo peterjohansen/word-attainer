@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<TitledPane text="Run" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <HBox alignment="CENTER" spacing="10.0">
+         <children>
+            <Button defaultButton="true" mnemonicParsing="false" text="Generate">
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+            </Button>
+            <RadioButton mnemonicParsing="false" text="List mode">
+               <toggleGroup>
+                  <ToggleGroup fx:id="generator_mode_group" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton mnemonicParsing="false" text="Selection mode" toggleGroup="$generator_mode_group" />
+         </children>
+      </HBox>
+   </content>
+</TitledPane>
