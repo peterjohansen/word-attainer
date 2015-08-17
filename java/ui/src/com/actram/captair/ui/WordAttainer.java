@@ -13,8 +13,10 @@ public class WordAttainer extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		Parent root = new FXMLLoader().load(getClass().getResourceAsStream("/ui/main.fxml"));
-		stage.setTitle("FXML Welcome");
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/ui/"));
+		Parent root = loader.load(getClass().getResourceAsStream("/ui/main.fxml"));
+		stage.setTitle("Word Attainer");
 		stage.setScene(new Scene(root));
 		stage.show();
 	}
