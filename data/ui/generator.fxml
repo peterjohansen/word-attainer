@@ -5,8 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<TitledPane text="Run" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root text="Run" type="TitledPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <HBox alignment="CENTER" spacing="10.0">
          <children>
@@ -17,11 +16,11 @@
             </Button>
             <RadioButton mnemonicParsing="false" text="List mode">
                <toggleGroup>
-                  <ToggleGroup fx:id="generator_mode_group" />
+                  <ToggleGroup fx:id="generatorModeGroup" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Selection mode" toggleGroup="$generator_mode_group" />
+            <RadioButton mnemonicParsing="false" text="Selection mode" toggleGroup="$generatorModeGroup" />
          </children>
       </HBox>
    </content>
-</TitledPane>
+</fx:root>
