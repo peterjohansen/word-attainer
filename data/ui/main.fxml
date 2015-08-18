@@ -10,12 +10,13 @@
         <fx:include source="results.fxml" />
    </center>
    <right>
-      <VBox BorderPane.alignment="CENTER">
-         <children>
-              <fx:include source="profile.fxml" />
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
               <fx:include source="morpheme_lists.fxml" />
+         </center>
+         <bottom>
               <fx:include source="generator.fxml" />
-         </children>
-      </VBox>
+         </bottom>
+      </BorderPane>
    </right>
 </BorderPane>

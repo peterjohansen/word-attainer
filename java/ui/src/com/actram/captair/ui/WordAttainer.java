@@ -16,8 +16,10 @@ public class WordAttainer extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/ui/"));
 		Parent root = loader.load(getClass().getResourceAsStream("/ui/main.fxml"));
-		stage.setTitle("Word Attainer");
 		stage.setScene(new Scene(root));
+		stage.setTitle("Word Attainer");
 		stage.show();
+		stage.setMinWidth(stage.getWidth());
+		stage.setMinHeight(stage.getHeight());
 	}
 }
