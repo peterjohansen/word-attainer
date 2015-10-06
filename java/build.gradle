@@ -35,8 +35,8 @@ subprojects {
 
 project(":core") {
 	dependencies {
-		compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
-		compile "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
+		//compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+		//compile "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
 	}
 }
 
