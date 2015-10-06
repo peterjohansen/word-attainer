@@ -1,4 +1,4 @@
-package com.actram.captair.ui;
+package com.actram.wordattainer.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
