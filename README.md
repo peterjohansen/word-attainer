@@ -1,0 +1,7 @@
+Word Attainer
+----
+...
+
+License
+----
+MIT

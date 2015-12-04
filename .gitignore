@@ -1,9 +1,13 @@
+
+# Java
 bin/
 .class
-.classpath
-.project
-.settings/
+
+# Gradle
+.gradle/
 build/
-.gradle
-.dropbox
-hs_err_pid*
+
+# Eclipse
+.settings/
+.project
+.classpath
