@@ -2,6 +2,7 @@ package com.actram.wordattainer.ui;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -10,12 +11,13 @@ import com.actram.wordattainer.MorphemeList;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.stage.FileChooser;
@@ -26,16 +28,12 @@ import javafx.stage.FileChooser;
  * @author Peter André Johansen
  */
 public class MorphemeListsController implements Initializable {
-	@FXML
-	private ListView<String> morphemeListView;
-	@FXML
-	private Button removeButton;
-	@FXML
-	private Button clearButton;
-	@FXML
-	private Button moveUpButton;
-	@FXML
-	private Button moveDownButton;
+	@FXML private ListView<String> morphemeListView;
+	@FXML private Button removeButton;
+	@FXML private Button clearButton;
+	@FXML private Button moveUpButton;
+	@FXML private Button moveDownButton;
+	@FXML private CheckBox retainOrderCheckBox;
 
 	private WordAttainer program;
 	private MorphemeList morphemes;
@@ -71,7 +69,7 @@ public class MorphemeListsController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.program = WordAttainer.getInstance();
-		this.morphemes = program.getMorphemes();
+		this.morphemes = program.getSettings().getMorphemes();
 
 		this.fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -86,26 +84,33 @@ public class MorphemeListsController implements Initializable {
 		updateMorphemeListsUI();
 
 		BooleanBinding emptySelection = morphemeListView.getSelectionModel().selectedItemProperty().isNull();
-		clearButton.disableProperty().bind(morphemeListProperty.emptyProperty());
-		removeButton.disableProperty().bind(emptySelection);
-		moveUpButton.disableProperty().bind(emptySelection);
-		moveDownButton.disableProperty().bind(emptySelection);
-	}
+		this.clearButton.disableProperty().bind(morphemeListProperty.emptyProperty());
+		this.removeButton.disableProperty().bind(emptySelection);
+		this.moveUpButton.disableProperty().bind(emptySelection);
+		this.moveDownButton.disableProperty().bind(emptySelection);
 
-	private void moveLists(boolean down) {
-		ObservableList<Integer> selectedIndices = morphemeListView.getSelectionModel().getSelectedIndices();
-		Integer[] newIndices = selectedIndices.toArray(new Integer[selectedIndices.size()]);
-		morphemes.shift(newIndices, down);
-
-		morphemes.setIndices(newIndices);
-		// morphemeListView.getSelectionModel().selectIndices(firstIndex,
-		// restIndices);
-		updateMorphemeListsUI();
+		this.retainOrderCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			program.getSettings().setRetainMorphemesOrder(newValue);
+		});
 	}
 
 	@FXML
 	public void moveListDown(ActionEvent event) {
 		moveLists(true);
+	}
+
+	private void moveLists(boolean down) {
+		List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
+		if (down) {
+			morphemes.moveDown(selection);
+		} else {
+			morphemes.moveUp(selection);
+		}
+		updateMorphemeListsUI();
+		morphemeListView.getSelectionModel().clearSelection();
+		for (String list : selection) {
+			morphemeListView.getSelectionModel().select(list);
+		}
 	}
 
 	@FXML
@@ -115,7 +120,8 @@ public class MorphemeListsController implements Initializable {
 
 	@FXML
 	public void removeList(ActionEvent event) {
-		System.out.println("remove list");
+		List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
+		morphemes.removeAll(selection);
 		updateMorphemeListsUI();
 	}
 
