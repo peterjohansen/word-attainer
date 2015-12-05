@@ -38,13 +38,13 @@ public class MorphemeListsController implements Initializable {
 	private WordAttainer program;
 	private MorphemeList morphemes;
 
-	private FileChooser fileChooser;
+	private FileChooser listFileChooser;
 
 	private ListProperty<String> morphemeListProperty;
 
 	@FXML
 	public void addList(ActionEvent event) {
-		List<File> files = fileChooser.showOpenMultipleDialog(program.getStage());
+		List<File> files = listFileChooser.showOpenMultipleDialog(program.getStage());
 		if (files != null && !files.isEmpty()) {
 			for (File file : files) {
 				morphemes.add(file.getAbsolutePath());
@@ -57,7 +57,7 @@ public class MorphemeListsController implements Initializable {
 	public void clearLists(ActionEvent event) {
 		if (!morphemes.isEmpty()) {
 			// @formatterOff
-			if (program.showConfirmAlert("Confirm clear", "Are you sure you want to clear the morpheme lists?\n\n"
+			if (program.showConfirmAlert("Confirm Clear", "Are you sure you want to clear the morpheme lists?\n\n"
 					+ "The files will not be removed from your system.", "Clear lists", "Cancel")) {
 				// @formatterOn
 				morphemes.clear();
@@ -71,9 +71,9 @@ public class MorphemeListsController implements Initializable {
 		this.program = WordAttainer.getInstance();
 		this.morphemes = program.getSettings().getMorphemes();
 
-		this.fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		fileChooser.setTitle("Open Morpheme Lists");
+		this.listFileChooser = new FileChooser();
+		listFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		listFileChooser.setTitle("Open Morpheme Lists");
 
 		this.morphemeListProperty = new SimpleListProperty<>();
 		morphemeListView.setItems(FXCollections.observableArrayList(morphemes));
