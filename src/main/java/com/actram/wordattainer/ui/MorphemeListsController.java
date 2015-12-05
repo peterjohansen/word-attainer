@@ -2,7 +2,6 @@ package com.actram.wordattainer.ui;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -27,11 +26,16 @@ import javafx.stage.FileChooser;
  * @author Peter André Johansen
  */
 public class MorphemeListsController implements Initializable {
-	@FXML private ListView<String> morphemeListView;
-	@FXML private Button removeButton;
-	@FXML private Button clearButton;
-	@FXML private Button moveUpButton;
-	@FXML private Button moveDownButton;
+	@FXML
+	private ListView<String> morphemeListView;
+	@FXML
+	private Button removeButton;
+	@FXML
+	private Button clearButton;
+	@FXML
+	private Button moveUpButton;
+	@FXML
+	private Button moveDownButton;
 
 	private WordAttainer program;
 	private MorphemeList morphemes;
@@ -55,11 +59,8 @@ public class MorphemeListsController implements Initializable {
 	public void clearLists(ActionEvent event) {
 		if (!morphemes.isEmpty()) {
 			// @formatterOff
-			if (program.showConfirmAlert("Confirm clear",
-											"Are you sure you want to clear the morpheme lists?\n\n"
-											+ "The files will not be removed from your system.",
-											"Clear lists",
-											"Cancel")) {
+			if (program.showConfirmAlert("Confirm clear", "Are you sure you want to clear the morpheme lists?\n\n"
+					+ "The files will not be removed from your system.", "Clear lists", "Cancel")) {
 				// @formatterOn
 				morphemes.clear();
 				updateMorphemeListsUI();
@@ -91,21 +92,25 @@ public class MorphemeListsController implements Initializable {
 		moveDownButton.disableProperty().bind(emptySelection);
 	}
 
-	@FXML
-	public void moveListDown(ActionEvent event) {
+	private void moveLists(boolean down) {
 		ObservableList<Integer> selectedIndices = morphemeListView.getSelectionModel().getSelectedIndices();
-		for (int i = 0; i < morphemes.size(); i++) {
-			if (selectedIndices.contains(i)) {
-				morphemes.swap(i, i + 1);
-			}
-		}
+		Integer[] newIndices = selectedIndices.toArray(new Integer[selectedIndices.size()]);
+		morphemes.shift(newIndices, down);
+
+		morphemes.setIndices(newIndices);
+		// morphemeListView.getSelectionModel().selectIndices(firstIndex,
+		// restIndices);
 		updateMorphemeListsUI();
 	}
 
 	@FXML
+	public void moveListDown(ActionEvent event) {
+		moveLists(true);
+	}
+
+	@FXML
 	public void moveListUp(ActionEvent event) {
-		System.out.println("move list up");
-		updateMorphemeListsUI();
+		moveLists(false);
 	}
 
 	@FXML
