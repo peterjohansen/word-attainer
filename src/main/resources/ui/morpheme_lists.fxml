@@ -13,11 +13,11 @@
             <VBox spacing="8.0" BorderPane.alignment="CENTER">
                <children>
                   <Button layoutX="10.0" layoutY="41.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addList" text="Add list" VBox.vgrow="NEVER" />
-                  <Button layoutX="10.0" layoutY="75.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeList" text="Remove list" VBox.vgrow="NEVER" />
-                  <Button layoutX="10.0" layoutY="106.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearLists" text="Clear" VBox.vgrow="NEVER" />
+                  <Button fx:id="removeButton" layoutX="10.0" layoutY="75.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeList" text="Remove list" VBox.vgrow="NEVER" />
+                  <Button fx:id="clearButton" layoutX="10.0" layoutY="106.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearLists" text="Clear" VBox.vgrow="NEVER" />
                   <Separator />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveListUp" text="Move up" VBox.vgrow="NEVER" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveListDown" text="Move down" VBox.vgrow="NEVER" />
+                  <Button fx:id="moveUpButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveListUp" text="Move up" VBox.vgrow="NEVER" />
+                  <Button fx:id="moveDownButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveListDown" text="Move down" VBox.vgrow="NEVER" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="4.0" left="5.0" />
@@ -25,7 +25,7 @@
             </VBox>
          </right>
          <center>
-            <ListView fx:id="morphemeListsListView" prefHeight="225.0" prefWidth="150.0">
+            <ListView fx:id="morphemeListView" prefHeight="225.0" prefWidth="150.0">
                <BorderPane.margin>
                   <Insets bottom="4.0" />
                </BorderPane.margin></ListView>

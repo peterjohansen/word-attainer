@@ -8,6 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
 
+/**
+ *
+ *
+ * @author Peter André Johansen
+ */
 public class GeneratorController implements Initializable {
 	@FXML private ToggleGroup generatorModeGroup;
 

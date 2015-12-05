@@ -8,6 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 
+/**
+ *
+ *
+ * @author Peter André Johansen
+ */
 public class ResultsController implements Initializable {
 	@FXML private ListView<?> resultsList;
 
