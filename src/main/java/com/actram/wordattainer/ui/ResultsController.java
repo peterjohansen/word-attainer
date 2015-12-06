@@ -87,7 +87,7 @@ public class ResultsController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.program = WordAttainer.getInstance();
-		this.results = program.getResults();
+		this.results = program.getMainController().getResults();
 
 		this.mergeFileChooser = new FileChooser();
 		mergeFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));

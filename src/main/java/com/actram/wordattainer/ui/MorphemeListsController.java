@@ -43,7 +43,7 @@ public class MorphemeListsController implements Initializable {
 	private ListProperty<String> morphemeListProperty;
 
 	@FXML
-	public void addList(ActionEvent event) {
+	public void addLists(ActionEvent event) {
 		List<File> files = listFileChooser.showOpenMultipleDialog(program.getStage());
 		if (files != null && !files.isEmpty()) {
 			for (File file : files) {
@@ -95,7 +95,7 @@ public class MorphemeListsController implements Initializable {
 	}
 
 	@FXML
-	public void moveListDown(ActionEvent event) {
+	public void moveListsDown(ActionEvent event) {
 		moveLists(true);
 	}
 
@@ -114,12 +114,12 @@ public class MorphemeListsController implements Initializable {
 	}
 
 	@FXML
-	public void moveListUp(ActionEvent event) {
+	public void moveListsUp(ActionEvent event) {
 		moveLists(false);
 	}
 
 	@FXML
-	public void removeList(ActionEvent event) {
+	public void removeLists(ActionEvent event) {
 		List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
 		morphemes.removeAll(selection);
 		updateMorphemeListsUI();

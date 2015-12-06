@@ -60,4 +60,9 @@ public class GeneratorController implements Initializable {
 		generatorModeToRadioButtonMap.get(program.getGeneratorMode()).setSelected(true);
 
 	}
+
+	public void setGeneratorMode(GeneratorMode mode) {
+		program.setGeneratorMode(mode);
+		generatorModeToRadioButtonMap.get(program.getGeneratorMode()).setSelected(true);
+	}
 }

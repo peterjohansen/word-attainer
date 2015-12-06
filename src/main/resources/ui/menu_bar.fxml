@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.input.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<MenuBar xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.actram.wordattainer.ui.MenuBarController">
+  <menus>
+    <Menu mnemonicParsing="false" text="File">
+      <items>
+            <MenuItem mnemonicParsing="false" onAction="#importProfile" text="Import Profile" />
+            <MenuItem mnemonicParsing="false" onAction="#exportProfile" text="Export Profile" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#editPreferences" text="Preferences" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+        <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit">
+               <accelerator>
+                  <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator></MenuItem>
+      </items>
+    </Menu>
+      <Menu mnemonicParsing="false" text="Generator">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#generateResults" text="Generate results" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <RadioMenuItem mnemonicParsing="false" onAction="#useListMode" text="List mode">
+               <toggleGroup>
+                  <ToggleGroup fx:id="generatorModeGroup" />
+               </toggleGroup>
+            </RadioMenuItem>
+            <RadioMenuItem mnemonicParsing="false" onAction="#useSelectionMode" text="Selection mode" toggleGroup="$generatorModeGroup" />
+         </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Morphemes">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#addLists" text="Add Lists" />
+            <MenuItem mnemonicParsing="false" onAction="#removeLists" text="Remove Lists" />
+            <MenuItem mnemonicParsing="false" onAction="#clearLists" text="Clear Lists" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#moveListsUp" text="Move Lists Up" />
+            <MenuItem mnemonicParsing="false" onAction="#moveListsDown" text="Move Lists Down" />
+         </items>
+      </Menu>
+    <Menu mnemonicParsing="false" text="Results">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#sortResults" text="Sort results" />
+            <MenuItem mnemonicParsing="false" onAction="#editResults" text="Edit results" />
+            <MenuItem mnemonicParsing="false" onAction="#mergeResults" text="Merge results" />
+            <MenuItem mnemonicParsing="false" onAction="#removeResults" text="Remove results" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+      <items>
+        <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>

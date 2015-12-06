@@ -2,12 +2,8 @@ package com.actram.wordattainer.ui;
 
 import java.util.Objects;
 
-import com.actram.wordattainer.GeneratorSettings;
-import com.actram.wordattainer.MorphemeList;
-import com.actram.wordattainer.ResultList;
-import com.actram.wordattainer.ui.generator.GeneratorMode;
-
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -26,6 +22,8 @@ import javafx.stage.Stage;
 public class WordAttainer extends Application {
 	private static final String TITLE = "Word Attainer";
 
+	private static final String UI_DIRECTORY = "/ui/";
+
 	private static WordAttainer instance;
 
 	public static WordAttainer getInstance() {
@@ -36,28 +34,10 @@ public class WordAttainer extends Application {
 		Application.launch(WordAttainer.class, args);
 	}
 
-	private final GeneratorSettings settings;
-	private final ResultList results;
-	private GeneratorMode generatorMode;
-
 	private Stage stage;
+	private FXMLLoader fxmlLoader;
 
-	public WordAttainer() {
-		this.settings = new GeneratorSettings();
-		this.results = new ResultList();
-		setGeneratorMode(GeneratorMode.LIST);
-		
-		MorphemeList morphemes = settings.getMorphemes();
-		morphemes.add("test1");
-		morphemes.add("test2");
-		morphemes.add("test3");
-		morphemes.add("test4");
-
-		results.add("test1");
-		results.add("test2");
-		results.add("test3");
-		results.add("test4");
-	}
+	@FXML private MainController mainController;
 
 	public Alert createAlert(AlertType type, String title) {
 		Objects.requireNonNull(type, "alert type cannot be null");
@@ -69,16 +49,8 @@ public class WordAttainer extends Application {
 		return alert;
 	}
 
-	public GeneratorMode getGeneratorMode() {
-		return generatorMode;
-	}
-
-	public ResultList getResults() {
-		return results;
-	}
-
-	public GeneratorSettings getSettings() {
-		return settings;
+	public MainController getMainController() {
+		return mainController;
 	}
 
 	public Stage getStage() {
@@ -90,19 +62,20 @@ public class WordAttainer extends Application {
 	}
 
 	public Parent loadFXML(String name) {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/ui/"));
+		fxmlLoader = new FXMLLoader();
+		fxmlLoader.setLocation(getClass().getResource(UI_DIRECTORY));
+
+		final String path = (UI_DIRECTORY + name);
 		try {
-			return loader.load(getClass().getResourceAsStream("/ui/" + name));
+			return fxmlLoader.load(getClass().getResourceAsStream(path));
 		} catch (Exception e) {
-			e.printStackTrace();
+			// Throw error later
 		}
-		return null;
+		throw new IllegalArgumentException(".fxml file not found: " + path);
 	}
 
-	public void setGeneratorMode(GeneratorMode generatorMode) {
-		Objects.requireNonNull(generatorMode, "generator mode cannot be null");
-		this.generatorMode = generatorMode;
+	void setMainController(MainController mainController) {
+		this.mainController = mainController;
 	}
 
 	public boolean showConfirmAlert(String title, String content, String okButtonText, String cancelButtonText) {
