@@ -4,6 +4,11 @@ import java.util.Objects;
 
 import com.actram.wordattainer.ui.generator.GeneratorMode;
 
+/**
+ *
+ *
+ * @author Peter André Johansen
+ */
 public class Preferences {
 
 	private GeneratorMode generatorMode;

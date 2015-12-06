@@ -19,7 +19,7 @@ public class MorphemeList extends ArrayList<String> {
 
 	public void moveDown(List<String> selection) {
 		Objects.requireNonNull(selection, "selection cannot be null");
-		
+
 		// Don't move elements further down if
 		// one of them has reached the end
 		if (selection.get(selection.size() - 1).equals(get(size() - 1))) {

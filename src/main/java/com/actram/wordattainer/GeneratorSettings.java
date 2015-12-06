@@ -1,5 +1,10 @@
 package com.actram.wordattainer;
 
+/**
+ * 
+ *
+ * @author Peter André Johansen
+ */
 public class GeneratorSettings {
 
 	private final MorphemeList morphemes;

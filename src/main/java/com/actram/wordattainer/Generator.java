@@ -8,5 +8,5 @@ package com.actram.wordattainer;
 public interface Generator {
 
 	public String query();
-	
+
 }
