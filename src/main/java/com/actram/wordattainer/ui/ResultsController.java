@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -45,19 +44,41 @@ public class ResultsController implements Initializable {
 	@FXML
 	public void editResults(ActionEvent event) {
 
+		// Retrieve indices of items to edit
+		List<Integer> indicesSelection;
+		if (resultsListView.getSelectionModel().isEmpty()) {
+
+			// Select every result
+			indicesSelection = new ArrayList<>(results.size());
+			for (int i = 0; i < results.size(); i++) {
+				indicesSelection.add(i);
+			}
+
+		} else {
+
+			// Use only selected results
+			indicesSelection = resultsListView.getSelectionModel().getSelectedIndices();
+
+		}
+
+		// Copy results into edit alert
 		Parent content = program.loadFXML("edit_results.fxml");
 		TextArea resultsTextArea = (TextArea) content.lookup("#resultsTextArea");
-		for (int i = 0; i < results.size(); i++) {
-			resultsTextArea.appendText(results.get(i));
-			if (i != results.size() - 1) {
+		for (int i = 0; i < indicesSelection.size(); i++) {
+			int index = indicesSelection.get(i);
+			resultsTextArea.appendText(results.get(index));
+			if (index != results.size() - 1) {
 				resultsTextArea.appendText("\n");
 			}
 		}
 
+		// Display edit alert and update results if appropriate
 		if (program.showFormAlert("Edit Results", content, "Apply changes", "Cancel")) {
-			results.clear();
-			results.addAll(Arrays.asList(resultsTextArea.getText().split("\\n")));
-
+			String[] editedResults = resultsTextArea.getText().split("\\n");
+			for (int i = 0; i < editedResults.length; i++) {
+				int index = indicesSelection.get(i);
+				results.set(index, editedResults[i]);
+			}
 			updateResultsListUI();
 		}
 

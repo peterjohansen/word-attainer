@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.MorphemeList;
 import com.actram.wordattainer.ResultList;
+import com.actram.wordattainer.ui.generator.GeneratorMode;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,13 +38,15 @@ public class WordAttainer extends Application {
 
 	private final GeneratorSettings settings;
 	private final ResultList results;
+	private GeneratorMode generatorMode;
 
 	private Stage stage;
 
 	public WordAttainer() {
 		this.settings = new GeneratorSettings();
 		this.results = new ResultList();
-
+		setGeneratorMode(GeneratorMode.LIST);
+		
 		MorphemeList morphemes = settings.getMorphemes();
 		morphemes.add("test1");
 		morphemes.add("test2");
@@ -64,6 +67,10 @@ public class WordAttainer extends Application {
 		alert.setHeaderText(null);
 		alert.setTitle(title != null ? getTitle() + " - " + title : getTitle());
 		return alert;
+	}
+
+	public GeneratorMode getGeneratorMode() {
+		return generatorMode;
 	}
 
 	public ResultList getResults() {
@@ -89,9 +96,13 @@ public class WordAttainer extends Application {
 			return loader.load(getClass().getResourceAsStream("/ui/" + name));
 		} catch (Exception e) {
 			e.printStackTrace();
-			showErrorAlert("Initialization Error", "Unable to load UI module: " + name);
 		}
 		return null;
+	}
+
+	public void setGeneratorMode(GeneratorMode generatorMode) {
+		Objects.requireNonNull(generatorMode, "generator mode cannot be null");
+		this.generatorMode = generatorMode;
 	}
 
 	public boolean showConfirmAlert(String title, String content, String okButtonText, String cancelButtonText) {

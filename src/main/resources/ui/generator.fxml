@@ -14,12 +14,12 @@
                   <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                </padding>
             </Button>
-            <RadioButton mnemonicParsing="false" text="List mode">
+            <RadioButton fx:id="listModeRadioButton" mnemonicParsing="false" text="List mode">
                <toggleGroup>
                   <ToggleGroup fx:id="generatorModeGroup" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Selection mode" toggleGroup="$generatorModeGroup" />
+            <RadioButton fx:id="selectionModeRadioButton" mnemonicParsing="false" text="Selection mode" toggleGroup="$generatorModeGroup" />
          </children>
       </HBox>
    </content>
