@@ -1,15 +1,15 @@
 package com.actram.wordattainer.ui;
 
-import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.actram.wordattainer.GeneratorSettings;
+import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
 import com.actram.wordattainer.util.BiMap;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.RadioMenuItem;
 
 /**
@@ -17,8 +17,7 @@ import javafx.scene.control.RadioMenuItem;
  *
  * @author Peter André Johansen
  */
-public class MenuBarController implements Initializable {
-	private WordAttainer program;
+public class MenuBarController implements MainControllerChild {
 	private MainController mainController;
 
 	private BiMap<GeneratorMode, RadioMenuItem> modeRadioItemMap;
@@ -67,16 +66,14 @@ public class MenuBarController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		this.program = WordAttainer.getInstance();
-		this.mainController = program.getMainController();
+	public void initialize(MainController mainController, ResourceBundle resources) {
+		this.mainController = mainController;
 
-		/*
 		this.modeRadioItemMap = new BiMap<>();
 		modeRadioItemMap.put(GeneratorMode.LIST, listModeRadioItem);
 		modeRadioItemMap.put(GeneratorMode.SELECTION, selectionModeRadioItem);
-		*/
 	}
+
 	@FXML
 	public void mergeResults(ActionEvent evt) {
 		mainController.getResultsController().mergeResults(null);
@@ -112,7 +109,8 @@ public class MenuBarController implements Initializable {
 		mainController.getResultsController().sortResults(null);
 	}
 
-	public void updateGeneratorMode() {
-		modeRadioItemMap.getSecondary(mainController.getGeneratorMode()).setSelected(true);
+	@Override
+	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
+		modeRadioItemMap.getSecondary(preferences.getGeneratorMode()).setSelected(true);
 	}
 }

@@ -1,15 +1,15 @@
 package com.actram.wordattainer.ui;
 
-import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.actram.wordattainer.GeneratorSettings;
+import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
 import com.actram.wordattainer.util.BiMap;
 
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -19,14 +19,11 @@ import javafx.scene.control.ToggleGroup;
  *
  * @author Peter André Johansen
  */
-public class GeneratorController implements Initializable {
+public class GeneratorController implements MainControllerChild {
 	@FXML private ToggleGroup generatorModeGroup;
 
 	@FXML private RadioButton listModeRadioButton;
 	@FXML private RadioButton selectionModeRadioButton;
-
-	private WordAttainer program;
-	private MainController mainController;
 
 	private BiMap<GeneratorMode, RadioButton> modeRadioButtonMap;
 
@@ -36,11 +33,7 @@ public class GeneratorController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		this.program = WordAttainer.getInstance();
-		this.mainController = program.getMainController();
-
-		/*
+	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.modeRadioButtonMap = new BiMap<>();
 		modeRadioButtonMap.put(GeneratorMode.LIST, listModeRadioButton);
 		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);
@@ -48,15 +41,16 @@ public class GeneratorController implements Initializable {
 			RadioButton radioButton = (RadioButton) newValue;
 			GeneratorMode mode = modeRadioButtonMap.getPrimary(radioButton);
 			if (mode == null) {
-				throw new AssertionError("no generator mode found for fxid: " + radioButton.getId());
+				throw new AssertionError("no generator mode found for fx:id: " + radioButton.getId());
 			}
-			mainController.setGeneratorMode(mode);
+			mainController.accessPreferences(preferences -> {
+				preferences.setGeneratorMode(mode);
+			});
 		});
-		updateGeneratorMode();
-		*/
 	}
 
-	public void updateGeneratorMode() {
-		modeRadioButtonMap.getSecondary(mainController.getGeneratorMode()).setSelected(true);
+	@Override
+	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
+		modeRadioButtonMap.getSecondary(preferences.getGeneratorMode()).setSelected(true);
 	}
 }

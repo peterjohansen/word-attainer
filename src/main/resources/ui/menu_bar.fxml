@@ -28,7 +28,7 @@
                   <ToggleGroup fx:id="generatorModeGroup" />
                </toggleGroup>
             </RadioMenuItem>
-            <RadioMenuItem mnemonicParsing="false" text="Selection mode" toggleGroup="$generatorModeGroup" />
+            <RadioMenuItem fx:id="selectionModeRadioItem" mnemonicParsing="false" text="Selection mode" toggleGroup="$generatorModeGroup" />
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Morphemes">
