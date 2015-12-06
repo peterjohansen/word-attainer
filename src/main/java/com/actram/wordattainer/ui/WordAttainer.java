@@ -1,5 +1,6 @@
 package com.actram.wordattainer.ui;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import javafx.application.Application;
@@ -68,10 +69,10 @@ public class WordAttainer extends Application {
 		final String path = (UI_DIRECTORY + name);
 		try {
 			return fxmlLoader.load(getClass().getResourceAsStream(path));
-		} catch (Exception e) {
-			// Throw error later
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		throw new IllegalArgumentException(".fxml file not found: " + path);
+		throw new IllegalArgumentException("unable to load .fxml file: " + path);
 	}
 
 	void setMainController(MainController mainController) {

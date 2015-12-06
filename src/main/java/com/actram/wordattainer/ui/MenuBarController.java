@@ -4,11 +4,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.ui.generator.GeneratorMode;
+import com.actram.wordattainer.util.BiMap;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.RadioMenuItem;
 
 /**
  *
@@ -18,6 +20,11 @@ import javafx.fxml.Initializable;
 public class MenuBarController implements Initializable {
 	private WordAttainer program;
 	private MainController mainController;
+
+	private BiMap<GeneratorMode, RadioMenuItem> modeRadioItemMap;
+
+	@FXML private RadioMenuItem listModeRadioItem;
+	@FXML private RadioMenuItem selectionModeRadioItem;
 
 	@FXML
 	public void addLists(ActionEvent evt) {
@@ -63,8 +70,13 @@ public class MenuBarController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		this.program = WordAttainer.getInstance();
 		this.mainController = program.getMainController();
-	}
 
+		/*
+		this.modeRadioItemMap = new BiMap<>();
+		modeRadioItemMap.put(GeneratorMode.LIST, listModeRadioItem);
+		modeRadioItemMap.put(GeneratorMode.SELECTION, selectionModeRadioItem);
+		*/
+	}
 	@FXML
 	public void mergeResults(ActionEvent evt) {
 		mainController.getResultsController().mergeResults(null);
@@ -90,10 +102,6 @@ public class MenuBarController implements Initializable {
 		mainController.getResultsController().removeResults(null);
 	}
 
-	public void setGeneratorMode(GeneratorMode generatorMode) {
-		// TODO
-	}
-
 	@FXML
 	public void showAbout(ActionEvent evt) {
 		System.out.println("show about");
@@ -104,13 +112,7 @@ public class MenuBarController implements Initializable {
 		mainController.getResultsController().sortResults(null);
 	}
 
-	@FXML
-	public void useListMode(ActionEvent evt) {
-		mainController.getGeneratorController().setGeneratorMode(GeneratorMode.LIST);
-	}
-
-	@FXML
-	public void useSelectionMode(ActionEvent evt) {
-		mainController.getGeneratorController().setGeneratorMode(GeneratorMode.SELECTION);
+	public void updateGeneratorMode() {
+		modeRadioItemMap.getSecondary(mainController.getGeneratorMode()).setSelected(true);
 	}
 }

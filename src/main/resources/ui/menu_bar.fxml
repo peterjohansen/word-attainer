@@ -23,12 +23,12 @@
          <items>
             <MenuItem mnemonicParsing="false" onAction="#generateResults" text="Generate results" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <RadioMenuItem mnemonicParsing="false" onAction="#useListMode" text="List mode">
+            <RadioMenuItem fx:id="listModeRadioItem" mnemonicParsing="false" text="List mode">
                <toggleGroup>
                   <ToggleGroup fx:id="generatorModeGroup" />
                </toggleGroup>
             </RadioMenuItem>
-            <RadioMenuItem mnemonicParsing="false" onAction="#useSelectionMode" text="Selection mode" toggleGroup="$generatorModeGroup" />
+            <RadioMenuItem mnemonicParsing="false" text="Selection mode" toggleGroup="$generatorModeGroup" />
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Morphemes">

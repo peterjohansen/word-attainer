@@ -5,42 +5,21 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.actram.wordattainer.ui.MainController">
    <center>
-        <fx:include source="results.fxml" />
+      <fx:include fx:id="results" source="results.fxml" />
    </center>
    <right>
       <BorderPane BorderPane.alignment="CENTER">
          <center>
-              <fx:include source="morpheme_lists.fxml" />
+              <fx:include fx:id="morphemeLists" source="morpheme_lists.fxml" />
          </center>
          <bottom>
-              <fx:include source="generator.fxml" />
+              <fx:include fx:id="generator" source="generator.fxml" />
          </bottom>
       </BorderPane>
    </right>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Import profile" />
-                  <MenuItem mnemonicParsing="false" text="Export profile" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Exit" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Preferences" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+      <fx:include fx:id="menuBar" source="menu_bar.fxml" />
    </top>
 </BorderPane>

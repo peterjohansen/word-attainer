@@ -89,6 +89,7 @@ public class ResultsController implements Initializable {
 		this.program = WordAttainer.getInstance();
 		this.results = program.getMainController().getResults();
 
+		/*
 		this.mergeFileChooser = new FileChooser();
 		mergeFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		mergeFileChooser.setTitle("Select Results To Merge With");
@@ -103,6 +104,7 @@ public class ResultsController implements Initializable {
 
 		BooleanBinding emptySelection = resultsListView.getSelectionModel().selectedItemProperty().isNull();
 		this.removeButton.disableProperty().bind(emptySelection);
+		*/
 
 	}
 

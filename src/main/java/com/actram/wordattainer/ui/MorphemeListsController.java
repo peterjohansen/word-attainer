@@ -36,6 +36,7 @@ public class MorphemeListsController implements Initializable {
 	@FXML private CheckBox retainOrderCheckBox;
 
 	private WordAttainer program;
+	private MainController mainController;
 	private MorphemeList morphemes;
 
 	private FileChooser listFileChooser;
@@ -57,8 +58,7 @@ public class MorphemeListsController implements Initializable {
 	public void clearLists(ActionEvent event) {
 		if (!morphemes.isEmpty()) {
 			// @formatterOff
-			if (program.showConfirmAlert("Confirm Clear", "Are you sure you want to clear the morpheme lists?\n\n"
-					+ "The files will not be removed from your system.", "Clear lists", "Cancel")) {
+			if (program.showConfirmAlert("Confirm Clear", "Are you sure you want to clear the morpheme lists?\n\n" + "The files will not be removed from your system.", "Clear lists", "Cancel")) {
 				// @formatterOn
 				morphemes.clear();
 				updateMorphemeListsUI();
@@ -69,8 +69,10 @@ public class MorphemeListsController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.program = WordAttainer.getInstance();
-		this.morphemes = program.getSettings().getMorphemes();
+		this.mainController = program.getMainController();
+		this.morphemes = mainController.getGeneratorSettings().getMorphemes();
 
+		/*
 		this.listFileChooser = new FileChooser();
 		listFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		listFileChooser.setTitle("Open Morpheme Lists");
@@ -90,13 +92,9 @@ public class MorphemeListsController implements Initializable {
 		this.moveDownButton.disableProperty().bind(emptySelection);
 
 		this.retainOrderCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-			program.getSettings().setRetainMorphemesOrder(newValue);
+			mainController.getGeneratorSettings().setRetainMorphemesOrder(newValue);
 		});
-	}
-
-	@FXML
-	public void moveListsDown(ActionEvent event) {
-		moveLists(true);
+		*/
 	}
 
 	private void moveLists(boolean down) {
@@ -111,6 +109,11 @@ public class MorphemeListsController implements Initializable {
 		for (String list : selection) {
 			morphemeListView.getSelectionModel().select(list);
 		}
+	}
+
+	@FXML
+	public void moveListsDown(ActionEvent event) {
+		moveLists(true);
 	}
 
 	@FXML

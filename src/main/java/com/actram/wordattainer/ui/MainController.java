@@ -12,6 +12,11 @@ import com.actram.wordattainer.ui.generator.GeneratorMode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+/**
+ *
+ * 
+ * @author Peter André Johansen
+ */
 public class MainController implements Initializable {
 	@FXML private GeneratorController generatorController;
 	@FXML private MenuBarController menuBarController;
@@ -28,18 +33,30 @@ public class MainController implements Initializable {
 		return generatorController;
 	}
 
+	public GeneratorMode getGeneratorMode() {
+		return generatorMode;
+	}
+
+	public GeneratorSettings getGeneratorSettings() {
+		return generatorSettings;
+	}
+
 	public MenuBarController getMenuBarController() {
 		return menuBarController;
 	}
-
+		
 	public MorphemeListsController getMorphemeListsController() {
 		return morphemeListsController;
+	}
+	
+	public ResultList getResults() {
+		return results;
 	}
 
 	public ResultsController getResultsController() {
 		return resultsController;
 	}
-
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.program = WordAttainer.getInstance();
@@ -60,13 +77,11 @@ public class MainController implements Initializable {
 		results.add("test3");
 		results.add("test4");
 	}
-	
-	public ResultList getResults() {
-		return results;
-	}
 
 	public void setGeneratorMode(GeneratorMode mode) {
 		Objects.requireNonNull(mode, "the generator mode cannot be null");
 		this.generatorMode = mode;
+		generatorController.updateGeneratorMode();
+		menuBarController.updateGeneratorMode();
 	}
 }
