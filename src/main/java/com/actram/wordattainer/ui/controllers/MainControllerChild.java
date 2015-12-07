@@ -1,9 +1,10 @@
-package com.actram.wordattainer.ui;
+package com.actram.wordattainer.ui.controllers;
 
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultList;
+import com.actram.wordattainer.ui.Preferences;
 
 /**
  * 

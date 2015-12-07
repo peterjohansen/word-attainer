@@ -1,15 +1,14 @@
 package com.actram.wordattainer;
 
 import java.util.Objects;
+import java.util.Random;
 
 /**
- * 
+ *
  *
  * @author Peter André Johansen
  */
-public class GeneratorSettings {
-	private final MorphemeFileList morphemeListFiles;
-	private CharacterValidator characterValidator;
+public class ResultCreator {
 	private ResultCase capitalization;
 	private String morphemeSeparator;
 	private int minMorphemeCount;
@@ -17,12 +16,11 @@ public class GeneratorSettings {
 	private boolean allowDuplicateConsecutiveMorphemes;
 	private boolean mapListsToMorphemes;
 
-	public GeneratorSettings() {
-		this.morphemeListFiles = new MorphemeFileList();
-		setCharacterValidator(new CharacterValidator());
+	public ResultCreator() {
 		setCapitalization(ResultCase.SENTENCE_CASE);
 		setMorphemeSeparator("");
-		setMorphemeCountRange(2, 4);
+		setMinMorphemeCount(2);
+		setMaxMorphemeCount(4);
 		setAllowDuplicateConsecutiveMorphemes(true);
 		setMapListsToMorphemes(false);
 	}
@@ -35,28 +33,16 @@ public class GeneratorSettings {
 		return capitalization;
 	}
 
-	public CharacterValidator getCharacterValidator() {
-		return characterValidator;
-	}
-
-	public int getMaxMorphemeCount() {
-		return maxMorphemeCount;
-	}
-
-	public int getMinMorphemeCount() {
-		return minMorphemeCount;
-	}
-
-	public MorphemeFileList getMorphemeListFiles() {
-		return morphemeListFiles;
-	}
-
 	public String getMorphemeSeparator() {
 		return morphemeSeparator;
 	}
 
 	public boolean mapListsToMorphemes() {
 		return mapListsToMorphemes;
+	}
+
+	public String nextResult(Random rand, MorphemeFileList[] morphemeLists) {
+		return null;
 	}
 
 	public void setAllowDuplicateConsecutiveMorphemes(boolean allowDuplicateConsecutiveMorphemes) {
@@ -66,11 +52,6 @@ public class GeneratorSettings {
 	public void setCapitalization(ResultCase capitalization) {
 		Objects.requireNonNull("capitalization cannot be null");
 		this.capitalization = capitalization;
-	}
-
-	public void setCharacterValidator(CharacterValidator characterValidator) {
-		Objects.requireNonNull(characterValidator, "the character validator cannot be null");
-		this.characterValidator = characterValidator;
 	}
 
 	public void setExactMorphemeCount(int count) {
@@ -85,15 +66,24 @@ public class GeneratorSettings {
 		this.mapListsToMorphemes = mapListsToMorphemes;
 	}
 
-	public void setMorphemeCountRange(int min, int max) {
-		if (min < 1) {
+	public void setMaxMorphemeCount(int maxMorphemeCount) {
+		if (maxMorphemeCount < 0) {
+			throw new IllegalArgumentException("the maximum morpheme count cannot be less than one");
+		}
+		if (maxMorphemeCount < minMorphemeCount) {
+			throw new IllegalArgumentException("the maximum morpheme count cannot be smaller than the minimum");
+		}
+		this.maxMorphemeCount = maxMorphemeCount;
+	}
+
+	public void setMinMorphemeCount(int minMorphemeCount) {
+		if (minMorphemeCount < 1) {
 			throw new IllegalArgumentException("the minimum morpheme count cannot be less than one");
 		}
-		if (min > max) {
+		if (minMorphemeCount > maxMorphemeCount) {
 			throw new IllegalArgumentException("the minimum morpheme count cannot be larger than the maximum");
 		}
-		this.minMorphemeCount = min;
-		this.maxMorphemeCount = max;
+		this.minMorphemeCount = minMorphemeCount;
 	}
 
 	public void setMorphemeSeparator(String morphemeSeparator) {

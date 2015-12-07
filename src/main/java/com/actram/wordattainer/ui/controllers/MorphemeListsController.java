@@ -1,4 +1,4 @@
-package com.actram.wordattainer.ui;
+package com.actram.wordattainer.ui.controllers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultList;
+import com.actram.wordattainer.ui.Preferences;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -43,7 +44,7 @@ public class MorphemeListsController implements MainControllerChild {
 			List<File> files = listFileChooser.showOpenMultipleDialog(mainController.getStage());
 			if (files != null && !files.isEmpty()) {
 				for (File file : files) {
-					settings.getMorphemes().add(file.getAbsolutePath());
+					settings.getMorphemeListFiles().add(file.getAbsolutePath());
 				}
 			}
 		});
@@ -52,14 +53,14 @@ public class MorphemeListsController implements MainControllerChild {
 	@FXML
 	public void clearLists(ActionEvent event) {
 		mainController.accessGeneratorSettings(settings -> {
-			if (!settings.getMorphemes().isEmpty()) {
+			if (!settings.getMorphemeListFiles().isEmpty()) {
 			// @formatterOff
 			if (mainController.showConfirmAlert("Confirm Clear",
 												"Are you sure you want to clear the morpheme lists?\n\n"
 												+ "The files will not be removed from your system.",
 												"Clear lists", "Cancel")) {
 				// @formatterOn
-					settings.getMorphemes().clear();
+					settings.getMorphemeListFiles().clear();
 				}
 			}
 		});
@@ -85,7 +86,7 @@ public class MorphemeListsController implements MainControllerChild {
 
 		this.retainOrderCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 			mainController.accessGeneratorSettings(settings -> {
-				settings.setRetainMorphemesOrder(newValue);
+				settings.setMapListsToMorphemes(newValue);
 			});
 		});
 	}
@@ -94,9 +95,9 @@ public class MorphemeListsController implements MainControllerChild {
 		mainController.accessGeneratorSettings(settings -> {
 			List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
 			if (down) {
-				settings.getMorphemes().moveDown(selection);
+				settings.getMorphemeListFiles().moveDown(selection);
 			} else {
-				settings.getMorphemes().moveUp(selection);
+				settings.getMorphemeListFiles().moveUp(selection);
 			}
 			morphemeListView.getSelectionModel().clearSelection();
 			for (String list : selection) {
@@ -119,12 +120,12 @@ public class MorphemeListsController implements MainControllerChild {
 	public void removeLists(ActionEvent event) {
 		mainController.accessGeneratorSettings(settings -> {
 			List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
-			settings.getMorphemes().removeAll(selection);
+			settings.getMorphemeListFiles().removeAll(selection);
 		});
 	}
 
 	@Override
 	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
-		morphemeListView.getItems().setAll(generatorSettings.getMorphemes());
+		morphemeListView.getItems().setAll(generatorSettings.getMorphemeListFiles().getFileList());
 	}
 }

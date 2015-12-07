@@ -1,4 +1,4 @@
-package com.actram.wordattainer.ui;
+package com.actram.wordattainer.ui.controllers;
 
 import java.net.URL;
 import java.util.Objects;
@@ -6,8 +6,9 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import com.actram.wordattainer.GeneratorSettings;
-import com.actram.wordattainer.MorphemeList;
 import com.actram.wordattainer.ResultList;
+import com.actram.wordattainer.ui.Preferences;
+import com.actram.wordattainer.ui.WordAttainer;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -102,12 +103,6 @@ public class MainController implements Initializable {
 		this.preferences = new Preferences();
 		this.generatorSettings = new GeneratorSettings();
 		this.results = new ResultList();
-
-		MorphemeList morphemes = generatorSettings.getMorphemes();
-		morphemes.add("test1");
-		morphemes.add("test2");
-		morphemes.add("test3");
-		morphemes.add("test4");
 
 		results.add("test1");
 		results.add("test2");

@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<TitledPane collapsible="false" text="Run" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.actram.wordattainer.ui.GeneratorController">
+<TitledPane collapsible="false" text="Run" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.actram.wordattainer.ui.controllers.GeneratorController">
    <content>
       <HBox alignment="CENTER" spacing="10.0">
          <children>
