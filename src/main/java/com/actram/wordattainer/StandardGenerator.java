@@ -12,7 +12,6 @@ import java.util.Random;
  * @author Peter André Johansen
  */
 public class StandardGenerator implements ResultGenerator {
-
 	private final Map<Integer, List<String>> morphemeListsCache = new HashMap<>();
 	private int morphemeListsCacheHash;
 

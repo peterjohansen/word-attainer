@@ -1,8 +1,11 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.util.Arrays;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.GeneratorSettings;
+import com.actram.wordattainer.ResultGenerator;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
@@ -28,13 +31,34 @@ public class GeneratorController implements MainControllerChild {
 
 	private BiMap<GeneratorMode, RadioButton> modeRadioButtonMap;
 
+	private MainController mainController;
+
 	@FXML
 	public void generate(ActionEvent event) {
-		System.out.println("generate");
+		mainController.accessGeneratorSettings(settings -> {
+			mainController.accessPreferences(preferences -> {
+				ResultGenerator generator = mainController.getResultGenerator();
+				Random random = new Random();
+				String[] generatedResults = new String[preferences.getResultAmount()];
+				try {
+					for (int i = 0; i < generatedResults.length; i++) {
+						generatedResults[i] = generator.query(random, settings);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				mainController.accessResults(results -> {
+					results.clear();
+					results.addAll(Arrays.asList(generatedResults));
+				});
+			});
+		});
 	}
 
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
+		this.mainController = mainController;
+
 		this.modeRadioButtonMap = new BiMap<>();
 		modeRadioButtonMap.put(GeneratorMode.LIST, listModeRadioButton);
 		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);

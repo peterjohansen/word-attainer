@@ -13,10 +13,12 @@ import com.actram.wordattainer.ui.generator.GeneratorMode;
 public class Preferences {
 	private GeneratorMode generatorMode;
 	private CharacterValidator characterValidator;
+	private int resultAmount;
 
 	public Preferences() {
-		this.generatorMode = GeneratorMode.LIST;
-		this.characterValidator = new CharacterValidator();
+		setGeneratorMode(GeneratorMode.LIST);
+		setCharacterValidator(new CharacterValidator());
+		setResultAmount(32);
 	}
 
 	public CharacterValidator getCharacterValidator() {
@@ -27,8 +29,20 @@ public class Preferences {
 		return generatorMode;
 	}
 
+	public int getResultAmount() {
+		return resultAmount;
+	}
+
+	public void setCharacterValidator(CharacterValidator characterValidator) {
+		this.characterValidator = characterValidator;
+	}
+
 	public void setGeneratorMode(GeneratorMode generatorMode) {
 		Objects.requireNonNull(generatorMode, "the generator mode cannot be null");
 		this.generatorMode = generatorMode;
+	}
+
+	public void setResultAmount(int resultAmount) {
+		this.resultAmount = resultAmount;
 	}
 }

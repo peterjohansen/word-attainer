@@ -6,7 +6,9 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import com.actram.wordattainer.GeneratorSettings;
+import com.actram.wordattainer.ResultGenerator;
 import com.actram.wordattainer.ResultList;
+import com.actram.wordattainer.StandardGenerator;
 import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.WordAttainer;
 
@@ -30,6 +32,7 @@ public class MainController implements Initializable {
 	@FXML private MenuBarController menuBarController;
 	@FXML private MorphemeListsController morphemeListsController;
 	@FXML private ResultsController resultsController;
+	@FXML private ResultGenerator resultGenerator;
 
 	private Preferences preferences;
 	private GeneratorSettings generatorSettings;
@@ -89,6 +92,10 @@ public class MainController implements Initializable {
 		return morphemeListsController;
 	}
 
+	public ResultGenerator getResultGenerator() {
+		return resultGenerator;
+	}
+
 	public ResultsController getResultsController() {
 		return resultsController;
 	}
@@ -103,11 +110,7 @@ public class MainController implements Initializable {
 		this.preferences = new Preferences();
 		this.generatorSettings = new GeneratorSettings();
 		this.results = new ResultList();
-
-		results.add("test1");
-		results.add("test2");
-		results.add("test3");
-		results.add("test4");
+		this.resultGenerator = new StandardGenerator();
 
 		// Initialize child controllers
 		forEachChildController(controller -> {
@@ -121,6 +124,11 @@ public class MainController implements Initializable {
 
 	public Parent loadFXML(String name) {
 		return program.loadFXML(name);
+	}
+
+	public void setResultGenerator(ResultGenerator resultGenerator) {
+		Objects.requireNonNull(resultGenerator, "the result generator cannot be null");
+		this.resultGenerator = resultGenerator;
 	}
 
 	public boolean showConfirmAlert(String title, String content, String okButtonText, String cancelButtonText) {
