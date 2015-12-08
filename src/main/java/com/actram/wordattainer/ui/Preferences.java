@@ -2,7 +2,6 @@ package com.actram.wordattainer.ui;
 
 import java.util.Objects;
 
-import com.actram.wordattainer.CharacterValidator;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
 
 /**
@@ -12,17 +11,11 @@ import com.actram.wordattainer.ui.generator.GeneratorMode;
  */
 public class Preferences {
 	private GeneratorMode generatorMode;
-	private CharacterValidator characterValidator;
 	private int resultAmount;
 
 	public Preferences() {
 		setGeneratorMode(GeneratorMode.LIST);
-		setCharacterValidator(new CharacterValidator());
 		setResultAmount(32);
-	}
-
-	public CharacterValidator getCharacterValidator() {
-		return characterValidator;
 	}
 
 	public GeneratorMode getGeneratorMode() {
@@ -31,10 +24,6 @@ public class Preferences {
 
 	public int getResultAmount() {
 		return resultAmount;
-	}
-
-	public void setCharacterValidator(CharacterValidator characterValidator) {
-		this.characterValidator = characterValidator;
 	}
 
 	public void setGeneratorMode(GeneratorMode generatorMode) {

@@ -19,7 +19,6 @@ public class MorphemeFileList {
 
 	public void add(String morphemeFile) {
 		Objects.requireNonNull(morphemeFile, "morpheme file cannot be null");
-
 		fileList.add(morphemeFile);
 	}
 
@@ -31,18 +30,6 @@ public class MorphemeFileList {
 		return (index < size() && index >= 0);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		MorphemeFileList other = (MorphemeFileList) obj;
-		if (fileList == null) {
-			if (other.fileList != null) return false;
-		} else if (!fileList.equals(other.fileList)) return false;
-		return true;
-	}
-
 	public String get(int index) {
 		if (!contains(index)) {
 			throw new IllegalArgumentException("index is out of bounds: " + index);
@@ -52,14 +39,6 @@ public class MorphemeFileList {
 
 	public List<String> getFileList() {
 		return Collections.unmodifiableList(fileList);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fileList == null) ? 0 : fileList.hashCode());
-		return result;
 	}
 
 	public boolean isEmpty() {
@@ -112,10 +91,12 @@ public class MorphemeFileList {
 	}
 
 	public String nextMorpheme(Random random) {
+		Objects.requireNonNull(random, "the random object cannot be null");
 		return get(random.nextInt(size()));
 	}
 
 	public void removeAll(List<String> selection) {
+		Objects.requireNonNull(selection, "selection cannot be null");
 		fileList.removeAll(selection);
 	}
 

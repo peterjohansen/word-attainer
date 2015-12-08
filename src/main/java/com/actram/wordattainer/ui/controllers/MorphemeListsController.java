@@ -44,7 +44,7 @@ public class MorphemeListsController implements MainControllerChild {
 			List<File> files = listFileChooser.showOpenMultipleDialog(mainController.getStage());
 			if (files != null && !files.isEmpty()) {
 				for (File file : files) {
-					settings.getMorphemeListFiles().add(file.getAbsolutePath());
+					settings.getMorphemeFileList().add(file.getAbsolutePath());
 				}
 			}
 		});
@@ -53,14 +53,14 @@ public class MorphemeListsController implements MainControllerChild {
 	@FXML
 	public void clearLists(ActionEvent event) {
 		mainController.accessGeneratorSettings(settings -> {
-			if (!settings.getMorphemeListFiles().isEmpty()) {
+			if (!settings.getMorphemeFileList().isEmpty()) {
 			// @formatterOff
 			if (mainController.showConfirmAlert("Confirm Clear",
 												"Are you sure you want to clear the morpheme lists?\n\n"
 												+ "The files will not be removed from your system.",
 												"Clear lists", "Cancel")) {
 				// @formatterOn
-					settings.getMorphemeListFiles().clear();
+					settings.getMorphemeFileList().clear();
 				}
 			}
 		});
@@ -95,9 +95,9 @@ public class MorphemeListsController implements MainControllerChild {
 		mainController.accessGeneratorSettings(settings -> {
 			List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
 			if (down) {
-				settings.getMorphemeListFiles().moveDown(selection);
+				settings.getMorphemeFileList().moveDown(selection);
 			} else {
-				settings.getMorphemeListFiles().moveUp(selection);
+				settings.getMorphemeFileList().moveUp(selection);
 			}
 			morphemeListView.getSelectionModel().clearSelection();
 			for (String list : selection) {
@@ -120,12 +120,12 @@ public class MorphemeListsController implements MainControllerChild {
 	public void removeLists(ActionEvent event) {
 		mainController.accessGeneratorSettings(settings -> {
 			List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
-			settings.getMorphemeListFiles().removeAll(selection);
+			settings.getMorphemeFileList().removeAll(selection);
 		});
 	}
 
 	@Override
 	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
-		morphemeListView.getItems().setAll(generatorSettings.getMorphemeListFiles().getFileList());
+		morphemeListView.getItems().setAll(generatorSettings.getMorphemeFileList().getFileList());
 	}
 }

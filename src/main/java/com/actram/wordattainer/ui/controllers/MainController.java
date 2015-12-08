@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import com.actram.wordattainer.GeneratorSettings;
-import com.actram.wordattainer.ResultGenerator;
+import com.actram.wordattainer.Generator;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.StandardGenerator;
 import com.actram.wordattainer.ui.Preferences;
@@ -32,7 +32,7 @@ public class MainController implements Initializable {
 	@FXML private MenuBarController menuBarController;
 	@FXML private MorphemeListsController morphemeListsController;
 	@FXML private ResultsController resultsController;
-	@FXML private ResultGenerator resultGenerator;
+	@FXML private Generator resultGenerator;
 
 	private Preferences preferences;
 	private GeneratorSettings generatorSettings;
@@ -92,7 +92,7 @@ public class MainController implements Initializable {
 		return morphemeListsController;
 	}
 
-	public ResultGenerator getResultGenerator() {
+	public Generator getResultGenerator() {
 		return resultGenerator;
 	}
 
@@ -126,7 +126,7 @@ public class MainController implements Initializable {
 		return program.loadFXML(name);
 	}
 
-	public void setResultGenerator(ResultGenerator resultGenerator) {
+	public void setResultGenerator(Generator resultGenerator) {
 		Objects.requireNonNull(resultGenerator, "the result generator cannot be null");
 		this.resultGenerator = resultGenerator;
 	}

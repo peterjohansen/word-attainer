@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import com.actram.wordattainer.Generator;
 import com.actram.wordattainer.GeneratorSettings;
-import com.actram.wordattainer.ResultGenerator;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
@@ -37,15 +37,17 @@ public class GeneratorController implements MainControllerChild {
 	public void generate(ActionEvent event) {
 		mainController.accessGeneratorSettings(settings -> {
 			mainController.accessPreferences(preferences -> {
-				ResultGenerator generator = mainController.getResultGenerator();
+				Generator generator = mainController.getResultGenerator();
+				try {
+					generator.update(settings);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
 				Random random = new Random();
 				String[] generatedResults = new String[preferences.getResultAmount()];
-				try {
-					for (int i = 0; i < generatedResults.length; i++) {
-						generatedResults[i] = generator.query(random, settings);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				for (int i = 0; i < generatedResults.length; i++) {
+					generatedResults[i] = generator.query();
 				}
 				mainController.accessResults(results -> {
 					results.clear();

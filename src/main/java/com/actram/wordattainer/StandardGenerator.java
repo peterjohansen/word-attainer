@@ -1,9 +1,8 @@
 package com.actram.wordattainer;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -11,23 +10,15 @@ import java.util.Random;
  *
  * @author Peter André Johansen
  */
-public class StandardGenerator implements ResultGenerator {
-	private final Map<Integer, List<String>> morphemeListsCache = new HashMap<>();
-	private int morphemeListsCacheHash;
+public class StandardGenerator implements Generator {
+	private final List<List<String>> morphemeLists = new ArrayList<>();
+
+	private GeneratorSettings settings;
 
 	@Override
-	public String query(Random random, GeneratorSettings settings) throws IOException {
+	public String query() {
 
-		// Load (or reload) morphemes and cache them
-		MorphemeFileList listFiles = settings.getMorphemeListFiles();
-		int hash = listFiles.hashCode();
-		if (this.morphemeListsCacheHash != hash) {
-			this.morphemeListsCacheHash = listFiles.hashCode();
-			morphemeListsCache.clear();
-			for (int i = 0; i < listFiles.size(); i++) {
-				morphemeListsCache.put(i, listFiles.load(i));
-			}
-		}
+		Random random = settings.getRandom();
 
 		// Find the morpheme count in the next result
 		final int morphemeCount;
@@ -40,15 +31,14 @@ public class StandardGenerator implements ResultGenerator {
 		}
 
 		CharacterValidator characterValidator = settings.getCharacterValidator();
-		ResultCase capitalization = settings.getCapitalization();
-		Map<Integer, List<String>> morphemeLists = morphemeListsCache;
+		ResultCase capitalization = settings.getMorphemeCapitalization();
 		// String morphemeSeparator;
 		// boolean allowDuplicateConsecutiveMorphemes;
-		
-		// Create, validate and format each morpheme 
+
+		// Create, validate and format each morpheme
 		String[] resultParts = new String[morphemeCount];
 		for (int i = 0; i < morphemeCount; i++) {
-			
+
 			// Find index of list of morphemes to pick from
 			int listIndex;
 			if (settings.mapListsToMorphemes()) {
@@ -56,11 +46,11 @@ public class StandardGenerator implements ResultGenerator {
 			} else {
 				listIndex = random.nextInt(morphemeLists.size());
 			}
-			
+
 			// Pick a random morpheme
 			List<String> morphemeList = morphemeLists.get(listIndex);
 			resultParts[i] = morphemeList.get(random.nextInt(morphemeList.size()));
-			
+
 		}
 
 		// Assemble result from morphemes
@@ -69,5 +59,15 @@ public class StandardGenerator implements ResultGenerator {
 			builder.append(part);
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public void update(GeneratorSettings settings) throws IOException {
+		this.settings = settings;
+
+		MorphemeFileList fileList = settings.getMorphemeFileList();
+		for (int i = 0; i < fileList.size(); i++) {
+			morphemeLists.add(fileList.load(i));
+		}
 	}
 }

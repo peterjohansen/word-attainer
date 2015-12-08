@@ -1,13 +1,17 @@
 package com.actram.wordattainer;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Tests characters to see if they are allowed in a result.
  *
  * @author Peter André Johansen
  */
-public class CharacterValidator {
+public class CharacterValidator implements Serializable {
+	private static final long serialVersionUID = 4925100950081975952L;
+
 	private boolean allowLetters;
 	private boolean allowDigits;
 	private boolean allowPunctuation;
@@ -15,31 +19,54 @@ public class CharacterValidator {
 	private char[] customCharacters;
 
 	public CharacterValidator() {
-		setAllowLetters(true);
-		setAllowDigits(false);
-		setAllowPunctuation(false);
-		setAllowCustom(false);
+		allowLetters(true);
+		allowDigits(false);
+		allowPunctuation(false);
+		allowCustom(false);
 		setCustomCharacters(new char[0]);
 	}
 
-	public boolean allowCustom() {
+	public void allowCustom(boolean allowCustom) {
+		this.allowCustom = allowCustom;
+	}
+
+	public void allowDigits(boolean allowDigits) {
+		this.allowDigits = allowDigits;
+	}
+
+	public void allowLetters(boolean allowLetters) {
+		this.allowLetters = allowLetters;
+	}
+
+	public void allowPunctuation(boolean allowPunctuation) {
+		this.allowPunctuation = allowPunctuation;
+	}
+
+	public boolean isCustomAllowed() {
 		return allowCustom;
 	}
 
-	public boolean allowDigits() {
+	public boolean isCustomChar(char c) {
+		if (allowCustom) {
+			for (char custom : customCharacters) {
+				if (custom == c) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean isDigitsAllowed() {
 		return allowDigits;
 	}
 
-	public boolean allowLetters() {
+	public boolean isLettersAllowed() {
 		return allowLetters;
 	}
 
-	public boolean allowPunctuation() {
+	public boolean isPunctuationAllowed() {
 		return allowPunctuation;
-	}
-
-	public char[] getCustomCharacters() {
-		return customCharacters;
 	}
 
 	public boolean isValid(char c) {
@@ -52,33 +79,14 @@ public class CharacterValidator {
 		if (allowPunctuation && Pattern.matches("\\p{Punct}", String.valueOf(c))) {
 			return true;
 		}
-		if (allowCustom) {
-			for (char custom : customCharacters) {
-				if (custom == c) {
-					return true;
-				}
-			}
+		if (allowCustom && isCustomChar(c)) {
+			return true;
 		}
 		return false;
 	}
 
-	public void setAllowCustom(boolean allowCustom) {
-		this.allowCustom = allowCustom;
-	}
-
-	public void setAllowDigits(boolean allowDigits) {
-		this.allowDigits = allowDigits;
-	}
-
-	public void setAllowLetters(boolean allowLetters) {
-		this.allowLetters = allowLetters;
-	}
-
-	public void setAllowPunctuation(boolean allowPunctuation) {
-		this.allowPunctuation = allowPunctuation;
-	}
-
 	public void setCustomCharacters(char[] customCharacters) {
+		Objects.requireNonNull("custom character cannot be null");
 		this.customCharacters = customCharacters;
 	}
 }
