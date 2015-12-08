@@ -34,7 +34,15 @@ public class GeneratorController implements MainControllerChild {
 
 	@FXML
 	public void generate(ActionEvent event) {
+
+		// Don't proceed if there are no morpheme lists
 		Preferences preferences = mainController.getPreferences();
+		if (preferences.getMorphemeFileList().isEmpty()) {
+			mainController.showErrorAlert("Missing Morphemes", "At least one morpheme list must be added before results can be generated.");
+			return;
+		}
+
+		// Update generator with current preferences
 		Generator generator = preferences.getGenerator();
 		try {
 			generator.update(preferences);
@@ -42,11 +50,13 @@ public class GeneratorController implements MainControllerChild {
 			e.printStackTrace();
 		}
 
+		// Generate desired amount of results
 		String[] generatedResults = new String[preferences.getResultAmount()];
 		for (int i = 0; i < generatedResults.length; i++) {
 			generatedResults[i] = generator.query();
 		}
 
+		// Copy generated results into results
 		ResultList results = mainController.getResults();
 		results.clear();
 		results.addAll(Arrays.asList(generatedResults));
