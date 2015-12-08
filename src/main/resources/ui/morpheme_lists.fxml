@@ -31,7 +31,7 @@
                </BorderPane.margin></ListView>
          </center>
          <bottom>
-            <CheckBox fx:id="retainOrderCheckBox" mnemonicParsing="false" text="Use the lists consecutively" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+            <CheckBox fx:id="mapListsToMorphemesCheckBox" mnemonicParsing="false" text="Use the lists consecutively" wrapText="true" BorderPane.alignment="CENTER_LEFT">
                <BorderPane.margin>
                   <Insets top="4.0" />
                </BorderPane.margin>

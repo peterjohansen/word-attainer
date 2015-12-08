@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -26,9 +27,10 @@ public class MenuBarController implements MainControllerChild {
 	private BiMap<GeneratorMode, RadioMenuItem> modeRadioItemMap;
 
 	@FXML private ToggleGroup generatorModeGroup;
-
 	@FXML private RadioMenuItem listModeRadioItem;
 	@FXML private RadioMenuItem selectionModeRadioItem;
+	
+	@FXML private CheckMenuItem mapListsToMorphemesCheckItem;
 
 	@FXML
 	public void addLists(ActionEvent evt) {
@@ -88,6 +90,10 @@ public class MenuBarController implements MainControllerChild {
 				mainController.stateUpdated();
 			}
 		});
+		this.mapListsToMorphemesCheckItem.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			mainController.getPreferences().setMapListsToMorphemes(newValue);
+			mainController.stateUpdated();
+		});
 	}
 
 	@FXML
@@ -128,5 +134,6 @@ public class MenuBarController implements MainControllerChild {
 	@Override
 	public void updateUI(Preferences preferences, ResultList results) {
 		modeRadioItemMap.getSecondary(preferences.getGeneratorMode()).setSelected(true);
+		mapListsToMorphemesCheckItem.setSelected(preferences.isMorphemesMappedToLists());
 	}
 }

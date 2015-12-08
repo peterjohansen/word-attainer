@@ -39,6 +39,8 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#moveListsUp" text="Move Lists Up" />
             <MenuItem mnemonicParsing="false" onAction="#moveListsDown" text="Move Lists Down" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <CheckMenuItem fx:id="mapListsToMorphemesCheckItem" mnemonicParsing="false" text="Use lists consecutively" />
          </items>
       </Menu>
     <Menu mnemonicParsing="false" text="Results">

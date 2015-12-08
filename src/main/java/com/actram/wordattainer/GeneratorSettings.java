@@ -98,10 +98,6 @@ public class GeneratorSettings {
 		return mapListsToMorphemes;
 	}
 
-	public boolean mapListsToMorphemes() {
-		return mapListsToMorphemes;
-	}
-
 	public void setExactMorphemeCount(int count) {
 		if (count < 1) {
 			throw new IllegalArgumentException("the exact morpheme count cannot be less than one");

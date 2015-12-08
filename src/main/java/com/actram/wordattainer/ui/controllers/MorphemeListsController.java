@@ -31,7 +31,7 @@ public class MorphemeListsController implements MainControllerChild {
 	@FXML private Button clearButton;
 	@FXML private Button moveUpButton;
 	@FXML private Button moveDownButton;
-	@FXML private CheckBox retainOrderCheckBox;
+	@FXML private CheckBox mapListsToMorphemesCheckBox;
 
 	private MainController mainController;
 
@@ -82,7 +82,7 @@ public class MorphemeListsController implements MainControllerChild {
 		this.moveUpButton.disableProperty().bind(emptySelection);
 		this.moveDownButton.disableProperty().bind(emptySelection);
 
-		this.retainOrderCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+		this.mapListsToMorphemesCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 			mainController.getPreferences().setMapListsToMorphemes(newValue);
 			mainController.stateUpdated();
 		});
@@ -123,5 +123,6 @@ public class MorphemeListsController implements MainControllerChild {
 	@Override
 	public void updateUI(Preferences preferences, ResultList results) {
 		morphemeListView.getItems().setAll(preferences.getMorphemeFileList().getFileList());
+		mapListsToMorphemesCheckBox.setSelected(preferences.isMorphemesMappedToLists());
 	}
 }

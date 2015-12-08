@@ -31,7 +31,6 @@ public class StandardGenerator implements Generator {
 			morphemeCount = random.nextInt(maxCount + 1) + minCount;
 		}
 
-		CharacterValidator characterValidator = settings.getCharacterValidator();
 		ResultCase capitalization = settings.getMorphemeCapitalization();
 		// String morphemeSeparator;
 		// boolean allowDuplicateConsecutiveMorphemes;
@@ -42,7 +41,7 @@ public class StandardGenerator implements Generator {
 
 			// Find index of list of morphemes to pick from
 			int listIndex;
-			if (settings.mapListsToMorphemes()) {
+			if (settings.isMorphemesMappedToLists()) {
 				listIndex = (i % morphemeLists.size());
 			} else {
 				listIndex = random.nextInt(morphemeLists.size());
