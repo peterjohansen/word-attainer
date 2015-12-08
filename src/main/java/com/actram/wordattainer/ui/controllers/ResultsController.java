@@ -69,13 +69,13 @@ public class ResultsController implements MainControllerChild {
 		// Display edit alert and update results if appropriate
 		if (mainController.showFormAlert("Edit Results", content, "Apply changes", "Cancel")) {
 			String[] editedResults = resultsTextArea.getText().split("\\n");
-
 			if (results.size() != editedResults.length) {
 
 				// Amount of results have been changed,
 				// so we just append them to the end
-				for (int index : indicesSelection) {
-					results.remove(index);
+				for (int i = indicesSelection.size() - 1; i >= 0; i--) {
+					results.remove((int) indicesSelection.get(i));
+					System.out.println(indicesSelection.get(i));
 				}
 				for (String editedResult : editedResults) {
 					results.add(editedResult);
@@ -91,10 +91,10 @@ public class ResultsController implements MainControllerChild {
 				}
 
 			}
+
+			results.removeDuplicates();
+			mainController.stateUpdated();
 		}
-
-		mainController.stateUpdated();
-
 	}
 
 	@Override

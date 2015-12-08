@@ -92,6 +92,11 @@ public class MainController implements Initializable {
 		this.program = WordAttainer.getInstance();
 		this.preferences = new Preferences();
 		this.results = new ResultList();
+		
+		results.add("test1");
+		results.add("test2");
+		results.add("test3");
+		results.add("test4");
 
 		// Initialize child controllers
 		forEachChildController(controller -> {
