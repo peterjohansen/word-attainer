@@ -2,6 +2,7 @@ package com.actram.wordattainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -49,7 +50,8 @@ public class StandardGenerator implements Generator {
 
 			// Pick a random morpheme
 			List<String> morphemeList = morphemeLists.get(listIndex);
-			resultParts[i] = morphemeList.get(random.nextInt(morphemeList.size()));
+			String morpheme = morphemeList.get(random.nextInt(morphemeList.size()));
+			resultParts[i] = morpheme;
 
 		}
 
@@ -67,7 +69,25 @@ public class StandardGenerator implements Generator {
 
 		MorphemeFileList fileList = settings.getMorphemeFileList();
 		for (int i = 0; i < fileList.size(); i++) {
-			morphemeLists.add(fileList.load(i));
+			List<String> morphemes = fileList.load(i);
+
+			// Remove any morphemes with illegal characters
+			Iterator<String> morphemeIterator = morphemes.iterator();
+			while (morphemeIterator.hasNext()) {
+				String morpheme = morphemeIterator.next();
+				for (char c : morpheme.toCharArray()) {
+					if (!settings.getCharacterValidator().isValid(c)) {
+						morphemeIterator.remove();
+						break;
+					}
+				}
+			}
+
+			// If the list isn't empty after processing, add it
+			if (!morphemes.isEmpty()) {
+				morphemeLists.add(morphemes);
+			}
+
 		}
 	}
 }
