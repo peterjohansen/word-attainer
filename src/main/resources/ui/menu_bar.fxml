@@ -46,7 +46,6 @@
     <Menu mnemonicParsing="false" text="Results">
       <items>
         <MenuItem mnemonicParsing="false" onAction="#sortResults" text="Sort results" />
-            <MenuItem mnemonicParsing="false" onAction="#editResults" text="Edit results" />
             <MenuItem mnemonicParsing="false" onAction="#mergeResults" text="Merge results" />
             <MenuItem mnemonicParsing="false" onAction="#removeResults" text="Remove results" />
       </items>

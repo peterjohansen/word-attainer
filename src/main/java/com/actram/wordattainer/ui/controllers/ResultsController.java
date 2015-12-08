@@ -13,11 +13,10 @@ import com.actram.wordattainer.ui.Preferences;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.FileChooser;
 
 /**
@@ -34,69 +33,6 @@ public class ResultsController implements MainControllerChild {
 
 	private FileChooser mergeFileChooser;
 
-	@FXML
-	public void editResults(ActionEvent event) {
-		ResultList results = mainController.getResults();
-
-		// Retrieve indices of items to edit
-		List<Integer> indicesSelection;
-		if (resultsListView.getSelectionModel().isEmpty()) {
-
-			// Select every result
-			indicesSelection = new ArrayList<>(results.size());
-			for (int i = 0; i < results.size(); i++) {
-				indicesSelection.add(i);
-			}
-
-		} else {
-
-			// Use only selected results
-			indicesSelection = resultsListView.getSelectionModel().getSelectedIndices();
-
-		}
-
-		// Copy results into edit alert
-		Parent content = mainController.loadFXML("edit_results.fxml");
-		TextArea resultsTextArea = (TextArea) content.lookup("#resultsTextArea");
-		for (int i = 0; i < indicesSelection.size(); i++) {
-			int index = indicesSelection.get(i);
-			resultsTextArea.appendText(results.get(index));
-			if (index != results.size() - 1) {
-				resultsTextArea.appendText("\n");
-			}
-		}
-
-		// Display edit alert and update results if appropriate
-		if (mainController.showFormAlert("Edit Results", content, "Apply changes", "Cancel")) {
-			String[] editedResults = resultsTextArea.getText().split("\\n");
-			if (results.size() != editedResults.length) {
-
-				// Amount of results have been changed,
-				// so we just append them to the end
-				for (int i = indicesSelection.size() - 1; i >= 0; i--) {
-					results.remove((int) indicesSelection.get(i));
-					System.out.println(indicesSelection.get(i));
-				}
-				for (String editedResult : editedResults) {
-					results.add(editedResult);
-				}
-
-			} else {
-
-				// Amount of results are the same, so
-				// insert them where they were before
-				for (int i = 0; i < editedResults.length; i++) {
-					int index = indicesSelection.get(i);
-					results.set(index, editedResults[i]);
-				}
-
-			}
-
-			results.removeDuplicates();
-			mainController.stateUpdated();
-		}
-	}
-
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
@@ -106,6 +42,7 @@ public class ResultsController implements MainControllerChild {
 		mergeFileChooser.setTitle("Select Results To Merge With");
 
 		this.resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		resultsListView.setCellFactory(TextFieldListCell.forListView());
 
 		BooleanBinding emptySelection = resultsListView.getSelectionModel().selectedItemProperty().isNull();
 		this.removeButton.disableProperty().bind(emptySelection);
@@ -137,6 +74,20 @@ public class ResultsController implements MainControllerChild {
 	public void removeResults(ActionEvent event) {
 		List<String> selection = new ArrayList<>(resultsListView.getSelectionModel().getSelectedItems());
 		mainController.getResults().removeAll(selection);
+		mainController.stateUpdated();
+	}
+
+	@FXML
+	public void resultEdited(ListView.EditEvent<String> result) {
+		ResultList results = mainController.getResults();
+
+		String newValue = result.getNewValue();
+		if (newValue.trim().isEmpty()) {
+			results.remove(result.getIndex());
+		} else {
+			results.set(result.getIndex(), newValue);
+			results.removeDuplicates();
+		}
 		mainController.stateUpdated();
 	}
 

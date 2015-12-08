@@ -48,11 +48,6 @@ public class MenuBarController implements MainControllerChild {
 	}
 
 	@FXML
-	public void editResults(ActionEvent evt) {
-		mainController.getResultsController().editResults(null);
-	}
-
-	@FXML
 	public void exit(ActionEvent evt) {
 		Platform.exit();
 	}
