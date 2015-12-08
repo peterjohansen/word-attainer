@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 
@@ -37,46 +36,47 @@ public class ResultsController implements MainControllerChild {
 
 	@FXML
 	public void editResults(ActionEvent event) {
-		mainController.accessResults(results -> {
+		ResultList preferences = mainController.getResults();
 
-			// Retrieve indices of items to edit
-			List<Integer> indicesSelection;
-			if (resultsListView.getSelectionModel().isEmpty()) {
+		// Retrieve indices of items to edit
+		List<Integer> indicesSelection;
+		if (resultsListView.getSelectionModel().isEmpty()) {
 
-				// Select every result
-				indicesSelection = new ArrayList<>(results.size());
-				for (int i = 0; i < results.size(); i++) {
-					indicesSelection.add(i);
-				}
-
-			} else {
-
-				// Use only selected results
-				indicesSelection = resultsListView.getSelectionModel().getSelectedIndices();
-
+			// Select every result
+			indicesSelection = new ArrayList<>(preferences.size());
+			for (int i = 0; i < preferences.size(); i++) {
+				indicesSelection.add(i);
 			}
 
-			// Copy results into edit alert
-			Parent content = mainController.loadFXML("edit_results.fxml");
-			TextArea resultsTextArea = (TextArea) content.lookup("#resultsTextArea");
-			for (int i = 0; i < indicesSelection.size(); i++) {
+		} else {
+
+			// Use only selected results
+			indicesSelection = resultsListView.getSelectionModel().getSelectedIndices();
+
+		}
+
+		// Copy results into edit alert
+		Parent content = mainController.loadFXML("edit_results.fxml");
+		TextArea resultsTextArea = (TextArea) content.lookup("#resultsTextArea");
+		for (int i = 0; i < indicesSelection.size(); i++) {
+			int index = indicesSelection.get(i);
+			resultsTextArea.appendText(preferences.get(index));
+			if (index != preferences.size() - 1) {
+				resultsTextArea.appendText("\n");
+			}
+		}
+
+		// Display edit alert and update results if appropriate
+		if (mainController.showFormAlert("Edit Results", content, "Apply changes", "Cancel")) {
+			String[] editedResults = resultsTextArea.getText().split("\\n");
+			for (int i = 0; i < editedResults.length; i++) {
 				int index = indicesSelection.get(i);
-				resultsTextArea.appendText(results.get(index));
-				if (index != results.size() - 1) {
-					resultsTextArea.appendText("\n");
-				}
+				preferences.set(index, editedResults[i]);
 			}
+		}
 
-			// Display edit alert and update results if appropriate
-			if (mainController.showFormAlert("Edit Results", content, "Apply changes", "Cancel")) {
-				String[] editedResults = resultsTextArea.getText().split("\\n");
-				for (int i = 0; i < editedResults.length; i++) {
-					int index = indicesSelection.get(i);
-					results.set(index, editedResults[i]);
-				}
-			}
+		mainController.stateUpdated();
 
-		});
 	}
 
 	@Override
@@ -95,43 +95,41 @@ public class ResultsController implements MainControllerChild {
 
 	@FXML
 	public void mergeResults(ActionEvent event) {
-		mainController.accessResults(results -> {
-			List<File> files = mergeFileChooser.showOpenMultipleDialog(mainController.getStage());
-			if (files != null && !files.isEmpty()) {
-				for (File file : files) {
-					try {
-						List<String> lines = Files.readAllLines(file.toPath());
-						for (String line : lines) {
-							if (!results.contains(line)) {
-								results.add(line);
-							}
+		List<File> files = mergeFileChooser.showOpenMultipleDialog(mainController.getStage());
+		if (files != null && !files.isEmpty()) {
+			ResultList results = mainController.getResults();
+			for (File file : files) {
+				try {
+					List<String> lines = Files.readAllLines(file.toPath());
+					for (String line : lines) {
+						if (!results.contains(line)) {
+							results.add(line);
 						}
-					} catch (IOException e) {
-						e.printStackTrace();
-						mainController.showErrorAlert("Import Error", "Unable to open the selected files for merging.");
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					mainController.showErrorAlert("Import Error", "Unable to open the selected files for merging.");
 				}
 			}
-		});
+			mainController.stateUpdated();
+		}
 	}
 
 	@FXML
 	public void removeResults(ActionEvent event) {
-		mainController.accessResults(results -> {
-			List<String> selection = new ArrayList<>(resultsListView.getSelectionModel().getSelectedItems());
-			results.removeAll(selection);
-		});
+		List<String> selection = new ArrayList<>(resultsListView.getSelectionModel().getSelectedItems());
+		mainController.getResults().removeAll(selection);
+		mainController.stateUpdated();
 	}
 
 	@FXML
 	public void sortResults(ActionEvent event) {
-		mainController.accessResults(results -> {
-			results.sort();
-		});
+		mainController.getResults().sort();
+		mainController.stateUpdated();
 	}
 
 	@Override
-	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
+	public void updateUI(Preferences preferences, ResultList results) {
 		resultsListView.getItems().setAll(results);
 	}
 }

@@ -1,11 +1,10 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.Generator;
-import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
@@ -35,26 +34,24 @@ public class GeneratorController implements MainControllerChild {
 
 	@FXML
 	public void generate(ActionEvent event) {
-		mainController.accessGeneratorSettings(settings -> {
-			mainController.accessPreferences(preferences -> {
-				Generator generator = mainController.getResultGenerator();
-				try {
-					generator.update(settings);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+		Preferences preferences = mainController.getPreferences();
+		Generator generator = preferences.getGenerator();
+		try {
+			generator.update(preferences);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-				Random random = new Random();
-				String[] generatedResults = new String[preferences.getResultAmount()];
-				for (int i = 0; i < generatedResults.length; i++) {
-					generatedResults[i] = generator.query();
-				}
-				mainController.accessResults(results -> {
-					results.clear();
-					results.addAll(Arrays.asList(generatedResults));
-				});
-			});
-		});
+		String[] generatedResults = new String[preferences.getResultAmount()];
+		for (int i = 0; i < generatedResults.length; i++) {
+			generatedResults[i] = generator.query();
+		}
+
+		ResultList results = mainController.getResults();
+		results.clear();
+		results.addAll(Arrays.asList(generatedResults));
+
+		mainController.stateUpdated();
 	}
 
 	@Override
@@ -70,14 +67,13 @@ public class GeneratorController implements MainControllerChild {
 			if (mode == null) {
 				throw new AssertionError("no generator mode found for fx:id: " + radioButton.getId());
 			}
-			mainController.accessPreferences(preferences -> {
-				preferences.setGeneratorMode(mode);
-			});
+			mainController.getPreferences().setGeneratorMode(mode);
+			mainController.stateUpdated();
 		});
 	}
 
 	@Override
-	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
+	public void updateUI(Preferences preferences, ResultList results) {
 		modeRadioButtonMap.getSecondary(preferences.getGeneratorMode()).setSelected(true);
 	}
 }

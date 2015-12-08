@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 
@@ -40,30 +39,29 @@ public class MorphemeListsController implements MainControllerChild {
 
 	@FXML
 	public void addLists(ActionEvent event) {
-		mainController.accessGeneratorSettings(settings -> {
-			List<File> files = listFileChooser.showOpenMultipleDialog(mainController.getStage());
-			if (files != null && !files.isEmpty()) {
-				for (File file : files) {
-					settings.getMorphemeFileList().add(file.getAbsolutePath());
-				}
+		List<File> files = listFileChooser.showOpenMultipleDialog(mainController.getStage());
+		if (files != null && !files.isEmpty()) {
+			for (File file : files) {
+				mainController.getPreferences().getMorphemeFileList().add(file.getAbsolutePath());
 			}
-		});
+			mainController.stateUpdated();
+		}
 	}
 
 	@FXML
 	public void clearLists(ActionEvent event) {
-		mainController.accessGeneratorSettings(settings -> {
-			if (!settings.getMorphemeFileList().isEmpty()) {
+		Preferences preferences = mainController.getPreferences();
+		if (!preferences.getMorphemeFileList().isEmpty()) {
 			// @formatterOff
 			if (mainController.showConfirmAlert("Confirm Clear",
 												"Are you sure you want to clear the morpheme lists?\n\n"
 												+ "The files will not be removed from your system.",
 												"Clear lists", "Cancel")) {
 				// @formatterOn
-					settings.getMorphemeFileList().clear();
-				}
+				preferences.getMorphemeFileList().clear();
 			}
-		});
+			mainController.stateUpdated();
+		}
 	}
 
 	@Override
@@ -85,25 +83,24 @@ public class MorphemeListsController implements MainControllerChild {
 		this.moveDownButton.disableProperty().bind(emptySelection);
 
 		this.retainOrderCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-			mainController.accessGeneratorSettings(settings -> {
-				settings.setMapListsToMorphemes(newValue);
-			});
+			mainController.getPreferences().setMapListsToMorphemes(newValue);
+			mainController.stateUpdated();
 		});
 	}
 
 	private void moveLists(boolean down) {
-		mainController.accessGeneratorSettings(settings -> {
-			List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
-			if (down) {
-				settings.getMorphemeFileList().moveDown(selection);
-			} else {
-				settings.getMorphemeFileList().moveUp(selection);
-			}
-			morphemeListView.getSelectionModel().clearSelection();
-			for (String list : selection) {
-				morphemeListView.getSelectionModel().select(list);
-			}
-		});
+		Preferences preferences = mainController.getPreferences();
+		List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
+		if (down) {
+			preferences.getMorphemeFileList().moveDown(selection);
+		} else {
+			preferences.getMorphemeFileList().moveUp(selection);
+		}
+		morphemeListView.getSelectionModel().clearSelection();
+		for (String list : selection) {
+			morphemeListView.getSelectionModel().select(list);
+		}
+		mainController.stateUpdated();
 	}
 
 	@FXML
@@ -118,14 +115,13 @@ public class MorphemeListsController implements MainControllerChild {
 
 	@FXML
 	public void removeLists(ActionEvent event) {
-		mainController.accessGeneratorSettings(settings -> {
-			List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
-			settings.getMorphemeFileList().removeAll(selection);
-		});
+		List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
+		mainController.getPreferences().getMorphemeFileList().removeAll(selection);
+		mainController.stateUpdated();
 	}
 
 	@Override
-	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
-		morphemeListView.getItems().setAll(generatorSettings.getMorphemeFileList().getFileList());
+	public void updateUI(Preferences preferences, ResultList results) {
+		morphemeListView.getItems().setAll(preferences.getMorphemeFileList().getFileList());
 	}
 }

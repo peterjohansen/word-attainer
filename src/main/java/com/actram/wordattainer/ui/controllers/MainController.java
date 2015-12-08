@@ -5,10 +5,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import com.actram.wordattainer.GeneratorSettings;
-import com.actram.wordattainer.Generator;
 import com.actram.wordattainer.ResultList;
-import com.actram.wordattainer.StandardGenerator;
 import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.WordAttainer;
 
@@ -32,29 +29,11 @@ public class MainController implements Initializable {
 	@FXML private MenuBarController menuBarController;
 	@FXML private MorphemeListsController morphemeListsController;
 	@FXML private ResultsController resultsController;
-	@FXML private Generator resultGenerator;
 
 	private Preferences preferences;
-	private GeneratorSettings generatorSettings;
 	private ResultList results;
 
 	private WordAttainer program;
-
-	public void accessGeneratorSettings(Consumer<GeneratorSettings> modifier) {
-		modifier.accept(generatorSettings);
-		morphemeListsController.updateUI(preferences, generatorSettings, results);
-	}
-
-	public void accessPreferences(Consumer<Preferences> modifier) {
-		modifier.accept(preferences);
-		generatorController.updateUI(preferences, generatorSettings, results);
-		menuBarController.updateUI(preferences, generatorSettings, results);
-	}
-
-	public void accessResults(Consumer<ResultList> modifier) {
-		modifier.accept(results);
-		resultsController.updateUI(preferences, generatorSettings, results);
-	}
 
 	public Alert createAlert(AlertType type, String title) {
 		Objects.requireNonNull(type, "alert type cannot be null");
@@ -92,8 +71,12 @@ public class MainController implements Initializable {
 		return morphemeListsController;
 	}
 
-	public Generator getResultGenerator() {
-		return resultGenerator;
+	public Preferences getPreferences() {
+		return preferences;
+	}
+
+	public ResultList getResults() {
+		return results;
 	}
 
 	public ResultsController getResultsController() {
@@ -108,27 +91,19 @@ public class MainController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		this.program = WordAttainer.getInstance();
 		this.preferences = new Preferences();
-		this.generatorSettings = new GeneratorSettings();
 		this.results = new ResultList();
-		this.resultGenerator = new StandardGenerator();
 
 		// Initialize child controllers
 		forEachChildController(controller -> {
 			controller.initialize(this, resources);
 		});
-		forEachChildController(controller -> {
-			controller.updateUI(preferences, generatorSettings, results);
-		});
+		updateChildUI();
 
 	}
 
 	public Parent loadFXML(String name) {
+		Objects.requireNonNull(name, ".fxml file name cannot be null");
 		return program.loadFXML(name);
-	}
-
-	public void setResultGenerator(Generator resultGenerator) {
-		Objects.requireNonNull(resultGenerator, "the result generator cannot be null");
-		this.resultGenerator = resultGenerator;
 	}
 
 	public boolean showConfirmAlert(String title, String content, String okButtonText, String cancelButtonText) {
@@ -167,5 +142,18 @@ public class MainController implements Initializable {
 		alert.getButtonTypes().setAll(okButton, cancelButton);
 
 		return (alert.showAndWait().get().getButtonData() == ButtonData.OK_DONE);
+	}
+
+	/**
+	 * Call to reflect changes in the UI.
+	 */
+	public void stateUpdated() {
+		updateChildUI();
+	}
+
+	private void updateChildUI() {
+		forEachChildController(controller -> {
+			controller.updateUI(preferences, results);
+		});
 	}
 }

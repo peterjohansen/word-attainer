@@ -2,7 +2,6 @@ package com.actram.wordattainer.ui.controllers;
 
 import java.util.ResourceBundle;
 
-import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.generator.GeneratorMode;
@@ -111,7 +110,7 @@ public class MenuBarController implements MainControllerChild {
 	}
 
 	@Override
-	public void updateUI(Preferences preferences, GeneratorSettings generatorSettings, ResultList results) {
+	public void updateUI(Preferences preferences, ResultList results) {
 		modeRadioItemMap.getSecondary(preferences.getGeneratorMode()).setSelected(true);
 	}
 }
