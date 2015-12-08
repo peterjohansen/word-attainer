@@ -88,7 +88,7 @@ public class MorphemeListsController implements MainControllerChild {
 		});
 	}
 
-	private void moveLists(boolean down) {
+	public void moveLists(boolean down) {
 		Preferences preferences = mainController.getPreferences();
 		List<String> selection = new ArrayList<>(morphemeListView.getSelectionModel().getSelectedItems());
 		if (down) {
@@ -96,11 +96,13 @@ public class MorphemeListsController implements MainControllerChild {
 		} else {
 			preferences.getMorphemeFileList().moveUp(selection);
 		}
+
+		mainController.stateUpdated();
+
 		morphemeListView.getSelectionModel().clearSelection();
 		for (String list : selection) {
 			morphemeListView.getSelectionModel().select(list);
 		}
-		mainController.stateUpdated();
 	}
 
 	@FXML
