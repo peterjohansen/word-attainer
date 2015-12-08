@@ -36,15 +36,15 @@ public class ResultsController implements MainControllerChild {
 
 	@FXML
 	public void editResults(ActionEvent event) {
-		ResultList preferences = mainController.getResults();
+		ResultList results = mainController.getResults();
 
 		// Retrieve indices of items to edit
 		List<Integer> indicesSelection;
 		if (resultsListView.getSelectionModel().isEmpty()) {
 
 			// Select every result
-			indicesSelection = new ArrayList<>(preferences.size());
-			for (int i = 0; i < preferences.size(); i++) {
+			indicesSelection = new ArrayList<>(results.size());
+			for (int i = 0; i < results.size(); i++) {
 				indicesSelection.add(i);
 			}
 
@@ -60,8 +60,8 @@ public class ResultsController implements MainControllerChild {
 		TextArea resultsTextArea = (TextArea) content.lookup("#resultsTextArea");
 		for (int i = 0; i < indicesSelection.size(); i++) {
 			int index = indicesSelection.get(i);
-			resultsTextArea.appendText(preferences.get(index));
-			if (index != preferences.size() - 1) {
+			resultsTextArea.appendText(results.get(index));
+			if (index != results.size() - 1) {
 				resultsTextArea.appendText("\n");
 			}
 		}
@@ -69,9 +69,27 @@ public class ResultsController implements MainControllerChild {
 		// Display edit alert and update results if appropriate
 		if (mainController.showFormAlert("Edit Results", content, "Apply changes", "Cancel")) {
 			String[] editedResults = resultsTextArea.getText().split("\\n");
-			for (int i = 0; i < editedResults.length; i++) {
-				int index = indicesSelection.get(i);
-				preferences.set(index, editedResults[i]);
+
+			if (results.size() != editedResults.length) {
+
+				// Amount of results have been changed,
+				// so we just append them to the end
+				for (int index : indicesSelection) {
+					results.remove(index);
+				}
+				for (String editedResult : editedResults) {
+					results.add(editedResult);
+				}
+
+			} else {
+
+				// Amount of results are the same, so
+				// insert them where they were before
+				for (int i = 0; i < editedResults.length; i++) {
+					int index = indicesSelection.get(i);
+					results.set(index, editedResults[i]);
+				}
+
 			}
 		}
 
