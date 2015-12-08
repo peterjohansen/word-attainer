@@ -26,7 +26,6 @@ import javafx.stage.FileChooser;
  */
 public class ResultsController implements MainControllerChild {
 	@FXML private ListView<String> resultsListView;
-	@FXML private Button editButton;
 	@FXML private Button removeButton;
 
 	private MainController mainController;
