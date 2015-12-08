@@ -8,9 +8,12 @@ import com.actram.wordattainer.ui.generator.GeneratorMode;
 import com.actram.wordattainer.util.BiMap;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 
 /**
  *
@@ -21,6 +24,8 @@ public class MenuBarController implements MainControllerChild {
 	private MainController mainController;
 
 	private BiMap<GeneratorMode, RadioMenuItem> modeRadioItemMap;
+
+	@FXML private ToggleGroup generatorModeGroup;
 
 	@FXML private RadioMenuItem listModeRadioItem;
 	@FXML private RadioMenuItem selectionModeRadioItem;
@@ -72,6 +77,17 @@ public class MenuBarController implements MainControllerChild {
 		this.modeRadioItemMap = new BiMap<>();
 		modeRadioItemMap.put(GeneratorMode.LIST, listModeRadioItem);
 		modeRadioItemMap.put(GeneratorMode.SELECTION, selectionModeRadioItem);
+		generatorModeGroup.selectedToggleProperty().addListener((ChangeListener<Toggle>) (observable, oldValue, newValue) -> {
+			RadioMenuItem radioItem = (RadioMenuItem) newValue;
+			if (newValue != null) {
+				GeneratorMode mode = modeRadioItemMap.getPrimary(radioItem);
+				if (mode == null) {
+					throw new AssertionError("no generator mode found for fx:id: " + radioItem.getId());
+				}
+				mainController.getPreferences().setGeneratorMode(mode);
+				mainController.stateUpdated();
+			}
+		});
 	}
 
 	@FXML

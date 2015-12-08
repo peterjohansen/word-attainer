@@ -63,12 +63,14 @@ public class GeneratorController implements MainControllerChild {
 		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);
 		generatorModeGroup.selectedToggleProperty().addListener((ChangeListener<Toggle>) (observable, oldValue, newValue) -> {
 			RadioButton radioButton = (RadioButton) newValue;
-			GeneratorMode mode = modeRadioButtonMap.getPrimary(radioButton);
-			if (mode == null) {
-				throw new AssertionError("no generator mode found for fx:id: " + radioButton.getId());
+			if (newValue != null) {
+				GeneratorMode mode = modeRadioButtonMap.getPrimary(radioButton);
+				if (mode == null) {
+					throw new AssertionError("no generator mode found for fx:id: " + radioButton.getId());
+				}
+				mainController.getPreferences().setGeneratorMode(mode);
+				mainController.stateUpdated();
 			}
-			mainController.getPreferences().setGeneratorMode(mode);
-			mainController.stateUpdated();
 		});
 	}
 
