@@ -52,6 +52,9 @@ public class StandardGenerator implements Generator {
 			List<String> morphemeList = morphemeLists.get(listIndex);
 			String morpheme = morphemeList.get(random.nextInt(morphemeList.size()));
 			resultParts[i] = morpheme;
+			if (i != morphemeCount - 1) {
+				resultParts[i] += settings.getMorphemeSeparator();
+			}
 
 		}
 
