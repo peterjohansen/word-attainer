@@ -124,9 +124,11 @@ public class PreferencesController extends Parent implements MainControllerChild
 			preferences.setMorphemeCountRange(preferences.getMinMorphemeCount(), newValue);
 		});
 
-
 		// Generator Settings -> Miscellaneous
 		capitalizationComboBox.setItems(FXCollections.observableArrayList(ResultCase.values()));
+		capitalizationComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setMorphemeCapitalization(newValue);
+		});
 		allowDuplicateConsecutiveCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.allowDuplicateConsecutiveMorphemes(newValue);
 		});

@@ -31,8 +31,6 @@ public class StandardGenerator implements Generator {
 			morphemeCount = random.nextInt(maxCount + 1) + minCount;
 		}
 
-		ResultCase capitalization = settings.getMorphemeCapitalization();
-		// String morphemeSeparator;
 		// boolean allowDuplicateConsecutiveMorphemes;
 
 		// Create, validate and format each morpheme
@@ -56,6 +54,7 @@ public class StandardGenerator implements Generator {
 			}
 
 		}
+		settings.getMorphemeCapitalization().fixCapitalization(resultParts);
 
 		// Assemble result from morphemes
 		StringBuilder builder = new StringBuilder();
