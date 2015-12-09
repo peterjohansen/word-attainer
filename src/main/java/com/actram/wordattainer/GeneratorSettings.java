@@ -98,7 +98,7 @@ public class GeneratorSettings {
 	public MorphemeFileList getMorphemeFileList() {
 		return morphemeFileList;
 	}
-
+	
 	public String getMorphemeSeparator() {
 		return morphemeSeparator;
 	}

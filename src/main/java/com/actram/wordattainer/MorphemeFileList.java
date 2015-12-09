@@ -49,7 +49,14 @@ public class MorphemeFileList {
 		if (!contains(index)) {
 			throw new IllegalArgumentException("index is out of bounds: " + index);
 		}
-		return Files.readAllLines(Paths.get(get(index)));
+		return load(fileList.get(index));
+	}
+
+	public List<String> load(String file) throws IOException {
+		if (!fileList.contains(file)) {
+			throw new IllegalArgumentException("file is not in this list");
+		}
+		return Files.readAllLines(Paths.get(file));
 	}
 
 	public void moveDown(List<String> selection) {

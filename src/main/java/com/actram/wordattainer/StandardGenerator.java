@@ -68,10 +68,10 @@ public class StandardGenerator implements Generator {
 	@Override
 	public void update(GeneratorSettings settings) throws IOException {
 		this.settings = settings;
-		
-		MorphemeFileList fileList = settings.getMorphemeFileList();
-		for (int i = 0; i < fileList.size(); i++) {
-			List<String> morphemes = fileList.load(i);
+		morphemeLists.clear();
+
+		for (String file : settings.getMorphemeFileList().getFileList()) {
+			List<String> morphemes = settings.getMorphemeFileList().load(file);
 
 			// Remove any morphemes with illegal characters
 			Iterator<String> morphemeIterator = morphemes.iterator();
@@ -84,13 +84,12 @@ public class StandardGenerator implements Generator {
 					}
 				}
 			}
-
 			if (!morphemes.isEmpty()) {
-				throw new IllegalArgumentException("no possible morpheme combinations for the given settings");
+				morphemeLists.add(morphemes);
 			}
-			morphemeLists.clear();
-			morphemeLists.add(morphemes);
-
+		}
+		if (morphemeLists.isEmpty()) {
+			throw new IllegalArgumentException("no possible morpheme combinations for the given settings");
 		}
 	}
 }
