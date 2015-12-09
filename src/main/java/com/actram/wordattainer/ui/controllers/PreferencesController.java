@@ -1,5 +1,8 @@
 package com.actram.wordattainer.ui.controllers;
 
+import static com.actram.wordattainer.GeneratorSettings.MAX_MORPHEME_COUNT;
+import static com.actram.wordattainer.GeneratorSettings.MIN_MORPHEME_COUNT;
+
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.ResultCase;
@@ -16,6 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
@@ -49,10 +53,10 @@ public class PreferencesController extends Parent implements MainControllerChild
 	// Generator Settings -> Morpheme count
 	@FXML private RadioButton exactValueRadioButton;
 	@FXML private ToggleGroup morphemeCountGroup;
-	@FXML private Spinner<?> exactValueTextField;
+	@FXML private Spinner<Integer> exactValueSpinner;
 	@FXML private RadioButton variableValueRadioButton;
-	@FXML private Spinner<?> minValueTextField;
-	@FXML private Spinner<?> maxValueTextField;
+	@FXML private Spinner<Integer> minValueSpinner;
+	@FXML private Spinner<Integer> maxValueSpinner;
 
 	// Generator Settings -> Miscellaneous
 	@FXML private ComboBox<ResultCase> capitalizationComboBox;
@@ -81,6 +85,9 @@ public class PreferencesController extends Parent implements MainControllerChild
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
 
+		// Generator Settings -> Profile
+
+		// Generator Settings -> Characters
 		lettersCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.getCharacterValidator().allowLetters(newValue);
 		});
@@ -96,7 +103,29 @@ public class PreferencesController extends Parent implements MainControllerChild
 		customTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.getCharacterValidator().setCustomCharacters(newValue.toCharArray());
 		});
-		
+
+		// Generator Settings -> Morpheme count
+		exactValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_MORPHEME_COUNT, MAX_MORPHEME_COUNT));
+		exactValueSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setExactMorphemeCount(newValue);
+		});
+		exactValueRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setUseExactMorphemeCount(newValue);
+		});
+		variableValueRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setUseExactMorphemeCount(!newValue);
+		});
+		minValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_MORPHEME_COUNT, MAX_MORPHEME_COUNT));
+		maxValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_MORPHEME_COUNT, MAX_MORPHEME_COUNT));
+		minValueSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setMorphemeCountRange(newValue, preferences.getMaxMorphemeCount());
+		});
+		maxValueSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setMorphemeCountRange(preferences.getMinMorphemeCount(), newValue);
+		});
+
+
+		// Generator Settings -> Miscellaneous
 		capitalizationComboBox.setItems(FXCollections.observableArrayList(ResultCase.values()));
 		allowDuplicateConsecutiveCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.allowDuplicateConsecutiveMorphemes(newValue);
@@ -153,14 +182,28 @@ public class PreferencesController extends Parent implements MainControllerChild
 	@Override
 	public void updateUI(Preferences preferences, ResultList results) {
 		if (this.preferences != null) {
+
+			// Generator Settings -> Characters
 			lettersCheckBox.setSelected(this.preferences.getCharacterValidator().isLettersAllowed());
 			digitsCheckBox.setSelected(this.preferences.getCharacterValidator().isDigitsAllowed());
 			punctuationCheckBox.setSelected(this.preferences.getCharacterValidator().isPunctuationAllowed());
 			customCheckBox.setSelected(this.preferences.getCharacterValidator().isCustomAllowed());
 			customTextField.setText(this.preferences.getCharacterValidator().getCustomCharactersString());
+
+			// Generator Settings -> Morpheme count
+			exactValueRadioButton.setSelected(this.preferences.isExactMorphemeCount());
+			exactValueSpinner.getValueFactory().setValue(this.preferences.getExactMorphemeCount());
+			variableValueRadioButton.setSelected(!this.preferences.isExactMorphemeCount());
+			minValueSpinner.getValueFactory().setValue(this.preferences.getMinMorphemeCount());
+			maxValueSpinner.getValueFactory().setValue(this.preferences.getMaxMorphemeCount());
+			((SpinnerValueFactory.IntegerSpinnerValueFactory) minValueSpinner.getValueFactory()).setMax(this.preferences.getMaxMorphemeCount());
+			((SpinnerValueFactory.IntegerSpinnerValueFactory) maxValueSpinner.getValueFactory()).setMin(this.preferences.getMinMorphemeCount());
+
+			// Generator Settings -> Miscellaneous
 			capitalizationComboBox.getSelectionModel().select(preferences.getMorphemeCapitalization());
 			allowDuplicateConsecutiveCheckBox.setSelected(this.preferences.isDuplicateConsecutiveMorphemesAllowed());
 			mapMorphemesToListsCheckBox.setSelected(this.preferences.isMorphemesMappedToLists());
+
 		}
 	}
 }

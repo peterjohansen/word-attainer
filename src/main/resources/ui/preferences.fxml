@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <fx:root type="VBox" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.actram.wordattainer.ui.controllers.PreferencesController">
    <children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
@@ -79,15 +78,15 @@
                                           <ToggleGroup fx:id="morphemeCountGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <Spinner fx:id="exactValueTextField" />
+                                    <Spinner fx:id="exactValueSpinner" />
                                  </children>
                               </HBox>
                               <HBox spacing="8.0">
                                  <children>
                                     <RadioButton fx:id="variableValueRadioButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Variable value:" toggleGroup="$morphemeCountGroup" />
-                                    <Spinner fx:id="minValueTextField" />
+                                    <Spinner fx:id="minValueSpinner" />
                                     <Label maxHeight="1.7976931348623157E308" text="-" />
-                                    <Spinner fx:id="maxValueTextField" />
+                                    <Spinner fx:id="maxValueSpinner" />
                                  </children>
                               </HBox>
                               <HBox spacing="8.0">

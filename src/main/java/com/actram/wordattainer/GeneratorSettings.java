@@ -36,15 +36,28 @@ import java.util.Random;
  * @author Peter André Johansen
  */
 public class GeneratorSettings {
-	private final MorphemeFileList morphemeFileList;
-	private final CharacterValidator characterValidator;
+	public static final int MIN_MORPHEME_COUNT = 1;
+	public static final int MAX_MORPHEME_COUNT = 1000;
 
+	private static void checkMorphemeCount(int count) {
+		if (count < MIN_MORPHEME_COUNT || count > MAX_MORPHEME_COUNT) {
+			throw new IllegalArgumentException("morpheme count is out of range: " + count);
+		}
+	}
+	private final MorphemeFileList morphemeFileList;
+
+	private final CharacterValidator characterValidator;
 	private Random random;
 	private ResultCase morphemeCapitalization;
+
 	private String morphemeSeparator;
+	private boolean useExactMorphemeCount;
+	private int exactMorphemeCount;
 	private int minMorphemeCount;
+
 	private int maxMorphemeCount;
 	private boolean allowDuplicateConsecutiveMorphemes;
+
 	private boolean mapListsToMorphemes;
 
 	public GeneratorSettings() {
@@ -57,13 +70,17 @@ public class GeneratorSettings {
 		allowDuplicateConsecutiveMorphemes(true);
 		setMapListsToMorphemes(false);
 	}
-	
+
 	public void allowDuplicateConsecutiveMorphemes(boolean allowDuplicateConsecutiveMorphemes) {
 		this.allowDuplicateConsecutiveMorphemes = allowDuplicateConsecutiveMorphemes;
 	}
 
 	public CharacterValidator getCharacterValidator() {
 		return characterValidator;
+	}
+
+	public int getExactMorphemeCount() {
+		return exactMorphemeCount;
 	}
 
 	public int getMaxMorphemeCount() {
@@ -94,16 +111,17 @@ public class GeneratorSettings {
 		return allowDuplicateConsecutiveMorphemes;
 	}
 
+	public boolean isExactMorphemeCount() {
+		return useExactMorphemeCount;
+	}
+
 	public boolean isMorphemesMappedToLists() {
 		return mapListsToMorphemes;
 	}
 
 	public void setExactMorphemeCount(int count) {
-		if (count < 1) {
-			throw new IllegalArgumentException("the exact morpheme count cannot be less than one");
-		}
-		this.minMorphemeCount = count;
-		this.maxMorphemeCount = count;
+		checkMorphemeCount(count);
+		this.exactMorphemeCount = count;
 	}
 
 	public void setMapListsToMorphemes(boolean mapListsToMorphemes) {
@@ -116,9 +134,8 @@ public class GeneratorSettings {
 	}
 
 	public void setMorphemeCountRange(int min, int max) {
-		if (min < 1) {
-			throw new IllegalArgumentException("the minimum morpheme count cannot be less than one");
-		}
+		checkMorphemeCount(min);
+		checkMorphemeCount(max);
 		if (min > max) {
 			throw new IllegalArgumentException("the minimum morpheme count cannot be larger than the maximum");
 		}
@@ -127,7 +144,9 @@ public class GeneratorSettings {
 	}
 
 	public void setMorphemeCountToDefault() {
-		setMorphemeCountRange(2, 3);		
+		setUseExactMorphemeCount(false);
+		setExactMorphemeCount(3);
+		setMorphemeCountRange(2, 4);
 	}
 
 	public void setMorphemeSeparator(String morphemeSeparator) {
@@ -138,5 +157,9 @@ public class GeneratorSettings {
 	public void setRandom(Random random) {
 		Objects.requireNonNull(random, "the random cannot be null");
 		this.random = random;
+	}
+
+	public void setUseExactMorphemeCount(boolean useExactMorphemeCount) {
+		this.useExactMorphemeCount = useExactMorphemeCount;
 	}
 }
