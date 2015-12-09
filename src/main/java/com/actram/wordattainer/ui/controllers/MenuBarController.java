@@ -29,7 +29,7 @@ public class MenuBarController implements MainControllerChild {
 	@FXML private ToggleGroup generatorModeGroup;
 	@FXML private RadioMenuItem listModeRadioItem;
 	@FXML private RadioMenuItem selectionModeRadioItem;
-	
+
 	@FXML private CheckMenuItem mapListsToMorphemesCheckItem;
 
 	@FXML
@@ -44,7 +44,7 @@ public class MenuBarController implements MainControllerChild {
 
 	@FXML
 	public void editPreferences(ActionEvent evt) {
-		System.out.println("edit preferences");
+		mainController.getPreferencesController().showPreferences();
 	}
 
 	@FXML

@@ -100,6 +100,13 @@ public class MorphemeFileList {
 		fileList.removeAll(selection);
 	}
 
+	public MorphemeFileList setTo(MorphemeFileList morphemeFileList) {
+		Objects.requireNonNull(morphemeFileList, "morpheme file list cannot be null");
+		fileList.clear();
+		fileList.addAll(morphemeFileList.fileList);
+		return this;
+	}
+
 	public int size() {
 		return fileList.size();
 	}

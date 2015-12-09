@@ -1,6 +1,7 @@
 package com.actram.wordattainer;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -19,11 +20,7 @@ public class CharacterValidator implements Serializable {
 	private char[] customCharacters;
 
 	public CharacterValidator() {
-		allowLetters(true);
-		allowDigits(false);
-		allowPunctuation(false);
-		allowCustom(false);
-		setCustomCharacters(new char[0]);
+		setToDefault();
 	}
 
 	public void allowCustom(boolean allowCustom) {
@@ -40,6 +37,10 @@ public class CharacterValidator implements Serializable {
 
 	public void allowPunctuation(boolean allowPunctuation) {
 		this.allowPunctuation = allowPunctuation;
+	}
+
+	public String getCustomCharactersString() {
+		return new String(customCharacters);
 	}
 
 	public boolean isCustomAllowed() {
@@ -88,5 +89,24 @@ public class CharacterValidator implements Serializable {
 	public void setCustomCharacters(char[] customCharacters) {
 		Objects.requireNonNull("custom character cannot be null");
 		this.customCharacters = customCharacters;
+	}
+
+	public CharacterValidator setTo(CharacterValidator validator) {
+		Objects.requireNonNull(validator, "validator cannot be null");
+
+		allowLetters(validator.isLettersAllowed());
+		allowDigits(validator.isDigitsAllowed());
+		allowPunctuation(validator.isPunctuationAllowed());
+		allowCustom(validator.isCustomAllowed());
+		setCustomCharacters(Arrays.copyOf(validator.customCharacters, validator.customCharacters.length));
+		return this;
+	}
+
+	public void setToDefault() {
+		allowLetters(true);
+		allowDigits(false);
+		allowPunctuation(false);
+		allowCustom(false);
+		setCustomCharacters(new char[0]);
 	}
 }

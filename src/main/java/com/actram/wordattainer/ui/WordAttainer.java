@@ -1,6 +1,7 @@
 package com.actram.wordattainer.ui;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +30,6 @@ public class WordAttainer extends Application {
 	}
 
 	private Stage stage;
-	private FXMLLoader fxmlLoader;
 
 	public Stage getStage() {
 		return stage;
@@ -39,17 +39,22 @@ public class WordAttainer extends Application {
 		return stage.getTitle();
 	}
 
-	public Parent loadFXML(String name) {
-		fxmlLoader = new FXMLLoader();
-		fxmlLoader.setLocation(getClass().getResource(UI_DIRECTORY));
+	public Parent load(FXMLLoader loader, String name) {
+		Objects.requireNonNull(loader, "the loader cannot be null");
+		Objects.requireNonNull(name, "the name cannot be null");
 
+		loader.setLocation(getClass().getResource(UI_DIRECTORY));
 		final String path = (UI_DIRECTORY + name);
 		try {
-			return fxmlLoader.load(getClass().getResourceAsStream(path));
+			return loader.load(getClass().getResourceAsStream(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("unable to load .fxml file: " + path);
+	}
+
+	public Parent loadFXML(String name) {
+		return load(new FXMLLoader(), name);
 	}
 
 	@Override

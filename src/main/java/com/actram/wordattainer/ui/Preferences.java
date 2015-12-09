@@ -23,6 +23,25 @@ public class Preferences extends GeneratorSettings {
 		setResultAmount(32);
 	}
 
+	public Preferences setTo(Preferences preferences) {
+		Objects.requireNonNull(preferences, "preferences cannot be null");
+
+		getMorphemeFileList().setTo(getMorphemeFileList());
+		getCharacterValidator().setTo(preferences.getCharacterValidator());
+		setRandom(preferences.getRandom());
+		setMorphemeCapitalization(preferences.getMorphemeCapitalization());
+		setMorphemeSeparator(preferences.getMorphemeSeparator());
+		setMorphemeCountRange(preferences.getMinMorphemeCount(), preferences.getMaxMorphemeCount());
+		allowDuplicateConsecutiveMorphemes(preferences.isDuplicateConsecutiveMorphemesAllowed());
+		setMapListsToMorphemes(preferences.isMorphemesMappedToLists());
+
+		setGenerator(preferences.getGenerator());
+		setGeneratorMode(preferences.getGeneratorMode());
+		setResultAmount(preferences.getResultAmount());
+
+		return preferences;
+	}
+
 	public Generator getGenerator() {
 		return generator;
 	}

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<fx:root type="VBox" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.actram.wordattainer.ui.controllers.PreferencesController">
+   <children>
+      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="Generator Settings">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                     <content>
+                        <VBox spacing="16.0">
+                           <children>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Label text="Profile">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#importProfile" text="Import profile" />
+                                    <Button mnemonicParsing="false" onAction="#exportProfile" text="Export profile" />
+                                    <Separator orientation="VERTICAL" />
+                                    <Button mnemonicParsing="false" onAction="#resetSettingsToProfile" text="Reset settings" />
+                                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Last loaded:" />
+                                    <Label fx:id="lastProfileLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="my_profile.wa" textFill="#808080" />
+                                 </children>
+                              </HBox>
+                              <Separator prefWidth="200.0" />
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Label text="Characters">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <CheckBox fx:id="lettersCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Letters" />
+                                    <CheckBox fx:id="digitsCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Numbers" />
+                                    <CheckBox fx:id="punctuationCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Punctuation" />
+                                    <CheckBox fx:id="customCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Custom:" />
+                                    <TextField fx:id="customTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#setDefaultCharacters" text="Reset to defaults" />
+                                 </children>
+                              </HBox>
+                              <Separator prefWidth="200.0" />
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Label text="Morpheme count">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <RadioButton fx:id="exactValueRadioButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Exact value:">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="morphemeCountGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <Spinner fx:id="exactValueTextField" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <RadioButton fx:id="variableValueRadioButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Variable value:" toggleGroup="$morphemeCountGroup" />
+                                    <Spinner fx:id="minValueTextField" />
+                                    <Label maxHeight="1.7976931348623157E308" text="-" />
+                                    <Spinner fx:id="maxValueTextField" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#setDefaultMorphemeCount" text="Reset to defaults" />
+                                 </children>
+                              </HBox>
+                              <Separator prefWidth="200.0" />
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Label text="Miscellaneous">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Label maxHeight="1.7976931348623157E308" text="Capitalization:" />
+                                    <ComboBox fx:id="capitalizationComboBox" prefWidth="150.0" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <CheckBox fx:id="allowDuplicateConsecutiveCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Allow duplicate, consecutive morphemes" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <CheckBox fx:id="mapMorphemesToListsCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Map morphemes to lists" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#setDefaultMiscellaneous" text="Reset to defaults" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </content>
+          </Tab>
+          <Tab text="General">
+            <content>
+                  <VBox spacing="16.0">
+                     <children>
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label text="General">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" text="Language:" />
+                              <ComboBox fx:id="languageComboBox" prefWidth="150.0" />
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label text="Results">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" text="Generator timeout:" />
+                              <Spinner fx:id="timeoutSpinner" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" text="Amount of results to generate in List Mode:" />
+                              <Spinner fx:id="resultAmountSpinner1" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="8.0">
+                           <children>
+                              <CheckBox fx:id="autoSortCheckBox" mnemonicParsing="false" text="Automatically sort results" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                     </padding>
+                  </VBox>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <HBox alignment="CENTER_RIGHT" spacing="8.0">
+         <children>
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#savePreferences" text="Save preferences" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#cancelPreferences" text="Cancel" />
+         </children>
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
+      </HBox>
+   </children>
+</fx:root>

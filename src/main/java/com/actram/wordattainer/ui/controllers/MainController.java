@@ -10,6 +10,7 @@ import com.actram.wordattainer.ui.Preferences;
 import com.actram.wordattainer.ui.WordAttainer;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 
 /**
@@ -29,6 +31,7 @@ public class MainController implements Initializable {
 	@FXML private MenuBarController menuBarController;
 	@FXML private MorphemeListsController morphemeListsController;
 	@FXML private ResultsController resultsController;
+	@FXML private PreferencesController preferencesController;
 
 	private Preferences preferences;
 	private ResultList results;
@@ -46,7 +49,7 @@ public class MainController implements Initializable {
 	}
 
 	private void forEachChildController(Consumer<MainControllerChild> controllerAccessor) {
-		Object[] children = { generatorController, menuBarController, morphemeListsController, resultsController };
+		Object[] children = { generatorController, menuBarController, morphemeListsController, resultsController, preferencesController };
 		for (Object child : children) {
 			if (child == null) {
 				continue;
@@ -75,6 +78,10 @@ public class MainController implements Initializable {
 		return preferences;
 	}
 
+	public PreferencesController getPreferencesController() {
+		return preferencesController;
+	}
+
 	public ResultList getResults() {
 		return results;
 	}
@@ -92,11 +99,18 @@ public class MainController implements Initializable {
 		this.program = WordAttainer.getInstance();
 		this.preferences = new Preferences();
 		this.results = new ResultList();
-		
+
 		results.add("test1");
 		results.add("test2");
 		results.add("test3");
 		results.add("test4");
+
+		// Load preferences
+		FXMLLoader loader = new FXMLLoader();
+		loader.setRoot(new VBox());
+		Parent preferencesParent = program.load(loader, "preferences.fxml");
+		this.preferencesController = loader.getController();
+		preferencesController.setStageParent(preferencesParent);
 
 		// Initialize child controllers
 		forEachChildController(controller -> {

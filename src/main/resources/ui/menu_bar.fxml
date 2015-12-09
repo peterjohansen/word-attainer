@@ -11,7 +11,10 @@
             <MenuItem mnemonicParsing="false" onAction="#importProfile" text="Import Profile" />
             <MenuItem mnemonicParsing="false" onAction="#exportProfile" text="Export Profile" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#editPreferences" text="Preferences" />
+            <MenuItem mnemonicParsing="false" onAction="#editPreferences" text="Preferences">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator></MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
         <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit">
                <accelerator>
