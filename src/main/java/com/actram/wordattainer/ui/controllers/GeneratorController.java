@@ -60,6 +60,7 @@ public class GeneratorController implements MainControllerChild {
 		ResultList results = mainController.getResults();
 		results.clear();
 		results.addAll(Arrays.asList(generatedResults));
+		results.removeDuplicates();
 
 		mainController.stateUpdated();
 	}
