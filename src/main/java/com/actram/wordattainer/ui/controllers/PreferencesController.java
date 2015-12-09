@@ -2,9 +2,11 @@ package com.actram.wordattainer.ui.controllers;
 
 import java.util.ResourceBundle;
 
+import com.actram.wordattainer.ResultCase;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -53,7 +55,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 	@FXML private Spinner<?> maxValueTextField;
 
 	// Generator Settings -> Miscellaneous
-	@FXML private ComboBox<?> capitalizationComboBox;
+	@FXML private ComboBox<ResultCase> capitalizationComboBox;
 	@FXML private CheckBox allowDuplicateConsecutiveCheckBox;
 	@FXML private CheckBox mapMorphemesToListsCheckBox;
 
@@ -94,6 +96,14 @@ public class PreferencesController extends Parent implements MainControllerChild
 		customTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.getCharacterValidator().setCustomCharacters(newValue.toCharArray());
 		});
+		
+		capitalizationComboBox.setItems(FXCollections.observableArrayList(ResultCase.values()));
+		allowDuplicateConsecutiveCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.allowDuplicateConsecutiveMorphemes(newValue);
+		});
+		mapMorphemesToListsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setMapListsToMorphemes(newValue);
+		});
 
 	}
 
@@ -105,12 +115,14 @@ public class PreferencesController extends Parent implements MainControllerChild
 	@FXML
 	public void savePreferences(ActionEvent event) {
 		mainController.getPreferences().setTo(this.preferences);
+		mainController.stateUpdated();
 		stage.hide();
 	}
 
 	@FXML
 	public void setDefaultCharacters(ActionEvent evt) {
 		preferences.getCharacterValidator().setToDefault();
+		updateUI(preferences, mainController.getResults());
 	}
 
 	@FXML
@@ -120,7 +132,8 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 	@FXML
 	public void setDefaultMorphemeCount(ActionEvent evt) {
-
+		preferences.setMorphemeCountToDefault();
+		updateUI(preferences, mainController.getResults());
 	}
 
 	void setStageParent(Parent parent) {
@@ -132,9 +145,9 @@ public class PreferencesController extends Parent implements MainControllerChild
 	}
 
 	public void showPreferences() {
-		stage.show();
 		this.preferences = new Preferences().setTo(mainController.getPreferences());
 		updateUI(mainController.getPreferences(), mainController.getResults());
+		stage.show();
 	}
 
 	@Override
@@ -145,6 +158,9 @@ public class PreferencesController extends Parent implements MainControllerChild
 			punctuationCheckBox.setSelected(this.preferences.getCharacterValidator().isPunctuationAllowed());
 			customCheckBox.setSelected(this.preferences.getCharacterValidator().isCustomAllowed());
 			customTextField.setText(this.preferences.getCharacterValidator().getCustomCharactersString());
+			capitalizationComboBox.getSelectionModel().select(preferences.getMorphemeCapitalization());
+			allowDuplicateConsecutiveCheckBox.setSelected(this.preferences.isDuplicateConsecutiveMorphemesAllowed());
+			mapMorphemesToListsCheckBox.setSelected(this.preferences.isMorphemesMappedToLists());
 		}
 	}
 }

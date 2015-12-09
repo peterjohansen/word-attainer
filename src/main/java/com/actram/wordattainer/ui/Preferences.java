@@ -26,7 +26,7 @@ public class Preferences extends GeneratorSettings {
 	public Preferences setTo(Preferences preferences) {
 		Objects.requireNonNull(preferences, "preferences cannot be null");
 
-		getMorphemeFileList().setTo(getMorphemeFileList());
+		getMorphemeFileList().setTo(preferences.getMorphemeFileList());
 		getCharacterValidator().setTo(preferences.getCharacterValidator());
 		setRandom(preferences.getRandom());
 		setMorphemeCapitalization(preferences.getMorphemeCapitalization());
@@ -39,7 +39,7 @@ public class Preferences extends GeneratorSettings {
 		setGeneratorMode(preferences.getGeneratorMode());
 		setResultAmount(preferences.getResultAmount());
 
-		return preferences;
+		return this;
 	}
 
 	public Generator getGenerator() {

@@ -53,11 +53,11 @@ public class GeneratorSettings {
 		setRandom(new Random());
 		setMorphemeCapitalization(ResultCase.SENTENCE_CASE);
 		setMorphemeSeparator("");
-		setMorphemeCountRange(2, 3);
+		setMorphemeCountToDefault();
 		allowDuplicateConsecutiveMorphemes(true);
 		setMapListsToMorphemes(false);
 	}
-
+	
 	public void allowDuplicateConsecutiveMorphemes(boolean allowDuplicateConsecutiveMorphemes) {
 		this.allowDuplicateConsecutiveMorphemes = allowDuplicateConsecutiveMorphemes;
 	}
@@ -124,6 +124,10 @@ public class GeneratorSettings {
 		}
 		this.minMorphemeCount = min;
 		this.maxMorphemeCount = max;
+	}
+
+	public void setMorphemeCountToDefault() {
+		setMorphemeCountRange(2, 3);		
 	}
 
 	public void setMorphemeSeparator(String morphemeSeparator) {

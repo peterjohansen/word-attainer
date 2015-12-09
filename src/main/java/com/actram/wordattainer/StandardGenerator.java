@@ -68,7 +68,7 @@ public class StandardGenerator implements Generator {
 	@Override
 	public void update(GeneratorSettings settings) throws IOException {
 		this.settings = settings;
-
+		
 		MorphemeFileList fileList = settings.getMorphemeFileList();
 		for (int i = 0; i < fileList.size(); i++) {
 			List<String> morphemes = fileList.load(i);
@@ -85,10 +85,11 @@ public class StandardGenerator implements Generator {
 				}
 			}
 
-			// If the list isn't empty after processing, add it
 			if (!morphemes.isEmpty()) {
-				morphemeLists.add(morphemes);
+				throw new IllegalArgumentException("no possible morpheme combinations for the given settings");
 			}
+			morphemeLists.clear();
+			morphemeLists.add(morphemes);
 
 		}
 	}
