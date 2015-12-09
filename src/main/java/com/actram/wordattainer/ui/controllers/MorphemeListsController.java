@@ -75,6 +75,7 @@ public class MorphemeListsController implements MainControllerChild {
 		this.morphemeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		ListProperty<String> morphemelistProperty = new SimpleListProperty<>();
 		morphemelistProperty.bind(morphemeListView.itemsProperty());
+		morphemeListView.setPlaceholder(mainController.loadFXML("no_morpheme_lists_message.fxml"));
 
 		BooleanBinding emptySelection = morphemeListView.getSelectionModel().selectedItemProperty().isNull();
 		this.clearButton.disableProperty().bind(morphemelistProperty.emptyProperty());
