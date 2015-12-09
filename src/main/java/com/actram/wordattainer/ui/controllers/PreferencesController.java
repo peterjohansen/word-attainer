@@ -2,6 +2,10 @@ package com.actram.wordattainer.ui.controllers;
 
 import static com.actram.wordattainer.GeneratorSettings.MAX_MORPHEME_COUNT;
 import static com.actram.wordattainer.GeneratorSettings.MIN_MORPHEME_COUNT;
+import static com.actram.wordattainer.ui.Preferences.MAX_GENERATOR_TIMEOUT;
+import static com.actram.wordattainer.ui.Preferences.MAX_RESULT_AMOUNT;
+import static com.actram.wordattainer.ui.Preferences.MIN_GENERATOR_TIMEOUT;
+import static com.actram.wordattainer.ui.Preferences.MIN_RESULT_AMOUNT;
 
 import java.util.ResourceBundle;
 
@@ -36,8 +40,8 @@ public class PreferencesController extends Parent implements MainControllerChild
 	@FXML private ComboBox<?> languageComboBox;
 
 	// General -> Results
-	@FXML private Spinner<?> timeoutSpinner;
-	@FXML private Spinner<?> resultAmountSpinner;
+	@FXML private Spinner<Integer> timeoutSpinner;
+	@FXML private Spinner<Integer> resultAmountSpinner;
 	@FXML private CheckBox autoSortCheckBox;
 
 	// Generator Settings -> Profile
@@ -60,6 +64,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 	// Generator Settings -> Miscellaneous
 	@FXML private ComboBox<ResultCase> capitalizationComboBox;
+	@FXML private TextField separatorTextField;
 	@FXML private CheckBox allowDuplicateConsecutiveCheckBox;
 	@FXML private CheckBox mapMorphemesToListsCheckBox;
 
@@ -84,6 +89,21 @@ public class PreferencesController extends Parent implements MainControllerChild
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
+
+		// General -> General
+
+		// General -> Results
+		timeoutSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_GENERATOR_TIMEOUT, MAX_GENERATOR_TIMEOUT));
+		timeoutSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setGeneratorTimeout(newValue);
+		});
+		resultAmountSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_RESULT_AMOUNT, MAX_RESULT_AMOUNT));
+		resultAmountSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setResultAmount(newValue);
+		});
+		autoSortCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setAutoSortResults(newValue);
+		});
 
 		// Generator Settings -> Profile
 
@@ -129,6 +149,9 @@ public class PreferencesController extends Parent implements MainControllerChild
 		capitalizationComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.setMorphemeCapitalization(newValue);
 		});
+		separatorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			preferences.setMorphemeSeparator(newValue);
+		});
 		allowDuplicateConsecutiveCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			preferences.allowDuplicateConsecutiveMorphemes(newValue);
 		});
@@ -158,7 +181,11 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 	@FXML
 	public void setDefaultMiscellaneous(ActionEvent evt) {
-
+		preferences.setMorphemeCapitalizationToDefault();
+		preferences.setMorphemeSeparatorToDefault();
+		preferences.setAllowDuplicateConsecutiveMorphemesToDefault();
+		preferences.setMapListsToMorphemesToDefault();
+		updateUI(preferences, mainController.getResults());
 	}
 
 	@FXML
@@ -185,6 +212,10 @@ public class PreferencesController extends Parent implements MainControllerChild
 	public void updateUI(Preferences preferences, ResultList results) {
 		if (this.preferences != null) {
 
+			// General -> Results
+			timeoutSpinner.getValueFactory().setValue(this.preferences.getGeneratorTimeout());
+			resultAmountSpinner.getValueFactory().setValue(this.preferences.getResultAmount());
+
 			// Generator Settings -> Characters
 			lettersCheckBox.setSelected(this.preferences.getCharacterValidator().isLettersAllowed());
 			digitsCheckBox.setSelected(this.preferences.getCharacterValidator().isDigitsAllowed());
@@ -203,6 +234,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 			// Generator Settings -> Miscellaneous
 			capitalizationComboBox.getSelectionModel().select(preferences.getMorphemeCapitalization());
+			separatorTextField.setText(this.preferences.getMorphemeSeparator());
 			allowDuplicateConsecutiveCheckBox.setSelected(this.preferences.isDuplicateConsecutiveMorphemesAllowed());
 			mapMorphemesToListsCheckBox.setSelected(this.preferences.isMorphemesMappedToLists());
 

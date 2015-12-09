@@ -106,6 +106,12 @@
                               </HBox>
                               <HBox spacing="8.0">
                                  <children>
+                                    <Label maxHeight="1.7976931348623157E308" text="Morpheme separator:" />
+                                    <TextField fx:id="separatorTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
                                     <Label maxHeight="1.7976931348623157E308" text="Capitalization:" />
                                     <ComboBox fx:id="capitalizationComboBox" prefWidth="150.0" />
                                  </children>
@@ -165,14 +171,14 @@
                         </HBox>
                         <HBox spacing="8.0">
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" text="Generator timeout:" />
+                              <Label maxHeight="1.7976931348623157E308" text="Generator timeout (in seconds):" />
                               <Spinner fx:id="timeoutSpinner" />
                            </children>
                         </HBox>
                         <HBox spacing="8.0">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" text="Amount of results to generate in List Mode:" />
-                              <Spinner fx:id="resultAmountSpinner1" />
+                              <Spinner fx:id="resultAmountSpinner" />
                            </children>
                         </HBox>
                         <HBox spacing="8.0">

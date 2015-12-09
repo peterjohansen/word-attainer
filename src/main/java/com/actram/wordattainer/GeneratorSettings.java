@@ -44,6 +44,7 @@ public class GeneratorSettings {
 			throw new IllegalArgumentException("morpheme count is out of range: " + count);
 		}
 	}
+
 	private final MorphemeFileList morphemeFileList;
 
 	private final CharacterValidator characterValidator;
@@ -64,11 +65,11 @@ public class GeneratorSettings {
 		this.morphemeFileList = new MorphemeFileList();
 		this.characterValidator = new CharacterValidator();
 		setRandom(new Random());
-		setMorphemeCapitalization(ResultCase.SENTENCE_CASE);
-		setMorphemeSeparator("");
+		setMorphemeCapitalizationToDefault();
+		setMorphemeSeparatorToDefault();
 		setMorphemeCountToDefault();
-		allowDuplicateConsecutiveMorphemes(true);
-		setMapListsToMorphemes(false);
+		setAllowDuplicateConsecutiveMorphemesToDefault();
+		setMapListsToMorphemesToDefault();
 	}
 
 	public void allowDuplicateConsecutiveMorphemes(boolean allowDuplicateConsecutiveMorphemes) {
@@ -98,7 +99,7 @@ public class GeneratorSettings {
 	public MorphemeFileList getMorphemeFileList() {
 		return morphemeFileList;
 	}
-	
+
 	public String getMorphemeSeparator() {
 		return morphemeSeparator;
 	}
@@ -119,6 +120,10 @@ public class GeneratorSettings {
 		return mapListsToMorphemes;
 	}
 
+	public void setAllowDuplicateConsecutiveMorphemesToDefault() {
+		allowDuplicateConsecutiveMorphemes(true);
+	}
+
 	public void setExactMorphemeCount(int count) {
 		checkMorphemeCount(count);
 		this.exactMorphemeCount = count;
@@ -128,9 +133,17 @@ public class GeneratorSettings {
 		this.mapListsToMorphemes = mapListsToMorphemes;
 	}
 
+	public void setMapListsToMorphemesToDefault() {
+		setMapListsToMorphemes(false);
+	}
+
 	public void setMorphemeCapitalization(ResultCase capitalization) {
 		Objects.requireNonNull("capitalization cannot be null");
 		this.morphemeCapitalization = capitalization;
+	}
+
+	public void setMorphemeCapitalizationToDefault() {
+		setMorphemeCapitalization(ResultCase.SENTENCE_CASE);
 	}
 
 	public void setMorphemeCountRange(int min, int max) {
@@ -153,6 +166,10 @@ public class GeneratorSettings {
 	public void setMorphemeSeparator(String morphemeSeparator) {
 		Objects.requireNonNull(morphemeSeparator, "the morpheme separator cannot be null");
 		this.morphemeSeparator = morphemeSeparator;
+	}
+
+	public void setMorphemeSeparatorToDefault() {
+		setMorphemeSeparator("");
 	}
 
 	public void setRandom(Random random) {
