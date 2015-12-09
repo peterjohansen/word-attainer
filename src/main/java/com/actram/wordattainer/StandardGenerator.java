@@ -2,6 +2,7 @@ package com.actram.wordattainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -31,8 +32,6 @@ public class StandardGenerator implements Generator {
 			morphemeCount = random.nextInt(maxCount + 1) + minCount;
 		}
 
-		// boolean allowDuplicateConsecutiveMorphemes;
-
 		// Create, validate and format each morpheme
 		String[] resultParts = new String[morphemeCount];
 		for (int i = 0; i < morphemeCount; i++) {
@@ -47,7 +46,10 @@ public class StandardGenerator implements Generator {
 
 			// Pick a random morpheme
 			List<String> morphemeList = morphemeLists.get(listIndex);
-			String morpheme = morphemeList.get(random.nextInt(morphemeList.size()));
+			String morpheme = null;
+			do {
+				morpheme = morphemeList.get(random.nextInt(morphemeList.size()));
+			} while (!settings.isDuplicateConsecutiveMorphemesAllowed() && i != 0 && Arrays.asList(resultParts).contains(morpheme));
 			resultParts[i] = morpheme;
 			if (i != morphemeCount - 1) {
 				resultParts[i] += settings.getMorphemeSeparator();

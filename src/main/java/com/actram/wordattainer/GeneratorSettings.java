@@ -147,6 +147,7 @@ public class GeneratorSettings {
 		setUseExactMorphemeCount(false);
 		setExactMorphemeCount(3);
 		setMorphemeCountRange(2, 4);
+		setMorphemeCountRange(2, 2);
 	}
 
 	public void setMorphemeSeparator(String morphemeSeparator) {
