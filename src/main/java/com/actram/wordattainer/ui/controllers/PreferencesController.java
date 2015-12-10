@@ -37,7 +37,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 	private MainController mainController;
 
 	// General -> General
-	@FXML private ComboBox<?> languageComboBox;
+	@FXML private ComboBox<String> languageComboBox;
 
 	// General -> Results
 	@FXML private Spinner<Integer> timeoutSpinner;
@@ -91,6 +91,8 @@ public class PreferencesController extends Parent implements MainControllerChild
 		this.mainController = mainController;
 
 		// General -> General
+		languageComboBox.setItems(FXCollections.observableArrayList("English")); // TODO I18N
+		languageComboBox.getSelectionModel().select("English");
 
 		// General -> Results
 		timeoutSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_GENERATOR_TIMEOUT, MAX_GENERATOR_TIMEOUT));
