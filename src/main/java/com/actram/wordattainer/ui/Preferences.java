@@ -28,8 +28,8 @@ public class Preferences extends GeneratorSettings {
 	public Preferences() {
 		setGenerator(new StandardGenerator());
 		setGeneratorMode(GeneratorMode.LIST);
-		setResultAmount(128);
-		setGeneratorTimeout(4);
+		setResultAmount(16);
+		setGeneratorTimeout(2);
 		setAutoSortResults(false);
 	}
 

@@ -39,6 +39,7 @@ public class GeneratorController implements MainControllerChild {
 	private MainController mainController;
 
 	private boolean generationRunning = false;
+	private boolean lastGenerationTimedOut = false;
 
 	@FXML
 	public void generate(ActionEvent event) {
@@ -74,23 +75,39 @@ public class GeneratorController implements MainControllerChild {
 				results.clear();
 				results.addAll(generatedResults);
 
+				if (lastGenerationTimedOut) {
+					// @formatterOff
+					int timeoutSeconds = preferences.getGeneratorTimeout();
+					mainController.showInfoAlert("Generation timed out",
+										"The generator timed out.\n\n"
+											+ "This means that the generator didn't find any "
+											+ "new results for " + timeoutSeconds + " seconds.");
+					// @formatterOn
+					lastGenerationTimedOut = false;
+				}
+
 				mainController.stateUpdated();
 			}
 		};
 
 		// Task to run the generation. Cancel the task if it times out.
-		long start = System.currentTimeMillis();
 		Task<ResultList> generateTask = new Task<ResultList>() {
 			@Override
 			protected ResultList call() throws Exception {
+				long start = System.currentTimeMillis();
 				while (generatedResults.size() != preferences.getResultAmount()) {
-					if (isCancelled() || !generationRunning || (System.currentTimeMillis() - start) > preferences.getGeneratorTimeout() * 1000) {
+					if ((System.currentTimeMillis() - start) > preferences.getGeneratorTimeout() * 1000) {
+						lastGenerationTimedOut = true;
+						break;
+					}
+					if (isCancelled() || !generationRunning) {
 						break;
 					}
 					progressBar.setProgress(1 - ((double) 1 / (preferences.getResultAmount() - generatedResults.size())));
 					String result = generator.query();
 					if (!generatedResults.contains(result)) {
 						generatedResults.add(result);
+						start = System.currentTimeMillis();
 					}
 				}
 				return generatedResults;

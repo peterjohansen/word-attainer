@@ -48,7 +48,7 @@ public class MainController implements Initializable {
 		alert.setTitle(title != null ? program.getTitle() + " - " + title : program.getTitle());
 		return alert;
 	}
-	
+
 	private void forEachChildController(Consumer<MainControllerChild> controllerAccessor) {
 		Object[] children = { generatorController, menuBarController, morphemeListsController, resultsController, preferencesController };
 		for (Object child : children) {
@@ -166,6 +166,14 @@ public class MainController implements Initializable {
 		alert.getButtonTypes().setAll(okButton, cancelButton);
 
 		return (alert.showAndWait().get().getButtonData() == ButtonData.OK_DONE);
+	}
+
+	public void showInfoAlert(String title, String content) {
+		Objects.requireNonNull(content, "alert content text cannot be null");
+
+		Alert confirmAlert = createAlert(Alert.AlertType.INFORMATION, title);
+		confirmAlert.setContentText(content);
+		confirmAlert.show();
 	}
 
 	/**
