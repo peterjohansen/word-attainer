@@ -2,6 +2,7 @@ package com.actram.wordattainer.ui.controllers;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.Generator;
@@ -68,7 +69,7 @@ public class GeneratorController implements MainControllerChild {
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
-
+		
 		this.modeRadioButtonMap = new BiMap<>();
 		modeRadioButtonMap.put(GeneratorMode.LIST, listModeRadioButton);
 		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);

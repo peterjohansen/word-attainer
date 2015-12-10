@@ -1,6 +1,7 @@
 package com.actram.wordattainer.ui.controllers;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -41,8 +42,15 @@ public class MorphemeListsController implements MainControllerChild {
 	public void addLists(ActionEvent event) {
 		List<File> files = listFileChooser.showOpenMultipleDialog(mainController.getStage());
 		if (files != null && !files.isEmpty()) {
+			Path root = mainController.getRootFile().toPath();
 			for (File file : files) {
-				mainController.getPreferences().getMorphemeFileList().add(file.getAbsolutePath());
+				String path;
+				if (file.toPath().startsWith(root)) {
+					path = root.relativize(file.toPath()).toString();
+				} else {
+					path = file.getAbsolutePath();
+				}
+				mainController.getPreferences().getMorphemeFileList().add(path);
 			}
 			mainController.stateUpdated();
 		}

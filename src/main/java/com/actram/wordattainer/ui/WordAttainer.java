@@ -1,5 +1,6 @@
 package com.actram.wordattainer.ui;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -30,6 +31,11 @@ public class WordAttainer extends Application {
 	}
 
 	private Stage stage;
+	private File rootFile;
+
+	public File getRootFile() {
+		return rootFile;
+	}
 
 	public Stage getStage() {
 		return stage;
@@ -61,6 +67,8 @@ public class WordAttainer extends Application {
 	public void start(Stage stage) throws Exception {
 		WordAttainer.instance = this;
 		this.stage = stage;
+
+		this.rootFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 
 		stage.setScene(new Scene(loadFXML("main.fxml")));
 		stage.setTitle(TITLE);

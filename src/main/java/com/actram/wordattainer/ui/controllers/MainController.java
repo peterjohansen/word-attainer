@@ -1,5 +1,6 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -47,7 +48,7 @@ public class MainController implements Initializable {
 		alert.setTitle(title != null ? program.getTitle() + " - " + title : program.getTitle());
 		return alert;
 	}
-
+	
 	private void forEachChildController(Consumer<MainControllerChild> controllerAccessor) {
 		Object[] children = { generatorController, menuBarController, morphemeListsController, resultsController, preferencesController };
 		for (Object child : children) {
@@ -88,6 +89,10 @@ public class MainController implements Initializable {
 
 	public ResultsController getResultsController() {
 		return resultsController;
+	}
+
+	public File getRootFile() {
+		return program.getRootFile();
 	}
 
 	public Window getStage() {
