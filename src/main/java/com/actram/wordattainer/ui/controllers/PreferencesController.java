@@ -35,6 +35,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
@@ -277,7 +278,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 		updateUI(getPreferences(), mainController.getResults());
 	}
 
-	void setStageParent(Parent parent) {
+	void setRootNode(Parent parent) {
 		this.stage = new Stage();
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Preferences");
@@ -286,6 +287,8 @@ public class PreferencesController extends Parent implements MainControllerChild
 	public void showPreferences() {
 		getPreferences();
 		updateUI(mainController.getPreferences(), mainController.getResults());
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(mainController.getStage());
 		stage.show();
 		stage.setMinWidth(stage.getWidth());
 		stage.setMinHeight(stage.getHeight());
