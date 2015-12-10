@@ -3,6 +3,7 @@ package com.actram.wordattainer.ui.controllers;
 import java.io.File;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -156,16 +157,19 @@ public class MainController implements Initializable {
 	public boolean showFormAlert(String title, Node content, String okButtonText, String cancelButtonText) {
 		Objects.requireNonNull(content, "alert content cannot be null");
 		Objects.requireNonNull(okButtonText, "alert ok button text cannot be null");
-		Objects.requireNonNull(cancelButtonText, "alert cancel button text cannot be null");
 
 		Alert alert = createAlert(AlertType.NONE, title);
 		alert.getDialogPane().setContent(content);
 
 		ButtonType okButton = new ButtonType(okButtonText, ButtonData.OK_DONE);
-		ButtonType cancelButton = new ButtonType(cancelButtonText, ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(okButton, cancelButton);
+		alert.getButtonTypes().add(okButton);
+		if (cancelButtonText != null) {
+			ButtonType cancelButton = new ButtonType(cancelButtonText, ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().add(cancelButton);
+		}
 
-		return (alert.showAndWait().get().getButtonData() == ButtonData.OK_DONE);
+		Optional<ButtonType> result = alert.showAndWait();
+		return (result.isPresent() && result.get().getButtonData() == ButtonData.OK_DONE);
 	}
 
 	public void showInfoAlert(String title, String content) {

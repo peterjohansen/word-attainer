@@ -1,5 +1,9 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.ResultList;
@@ -15,6 +19,7 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.web.WebView;
 
 /**
  *
@@ -118,7 +123,34 @@ public class MenuBarController implements MainControllerChild {
 
 	@FXML
 	public void showAbout(ActionEvent evt) {
-		System.out.println("show about");
+		WebView webView = new WebView();
+		String html;
+		try {
+			html = new String(Files.readAllBytes(Paths.get(ClassLoader.getSystemResource("ui/about.html").toURI())));
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
+			mainController.showErrorAlert("About load fail", "Unable to load about file.");
+			return;
+		}
+		webView.setPrefSize(480, 240);
+		webView.getEngine().loadContent(html);
+		mainController.showFormAlert("About", webView, "Close", null);
+	}
+
+	@FXML
+	public void showHelp(ActionEvent evt) {
+		WebView webView = new WebView();
+		String html;
+		try {
+			html = new String(Files.readAllBytes(Paths.get(ClassLoader.getSystemResource("ui/help.html").toURI())));
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
+			mainController.showErrorAlert("Help load fail", "Unable to load help file.");
+			return;
+		}
+		webView.setPrefSize(720, 480);
+		webView.getEngine().loadContent(html);
+		mainController.showFormAlert("Help", webView, "Close", null);
 	}
 
 	@FXML
