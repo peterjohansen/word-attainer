@@ -11,7 +11,17 @@ import java.io.Serializable;
 public interface Generator extends Serializable {
 
 	/**
-	 * Queries the generator for a result.
+	 * Returns the amount of results the generator has generated. This includes
+	 * duplicates and unique results.
+	 * <p>
+	 * This value will reset when {@link #update(GeneratorSettings)} is called.
+	 * 
+	 * @return the amount of unique values
+	 */
+	public int getAttemptAmount();
+
+	/**
+	 * Queries the generator for a unique result.
 	 * <p>
 	 * <strong>Note:</strong>Changes to the generator settings results in
 	 * undefined behavior. If the settings need to be changed, call
