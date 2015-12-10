@@ -13,6 +13,14 @@ import java.util.List;
 public class ResultList extends ArrayList<String> {
 	private static final long serialVersionUID = 4458962424309645081L;
 
+	public ResultList() {
+		this(10);
+	}
+
+	public ResultList(int capacity) {
+		super(capacity);
+	}
+
 	public void removeDuplicates() {
 		List<String> listSet = new ArrayList<>(new LinkedHashSet<>(this));
 		clear();

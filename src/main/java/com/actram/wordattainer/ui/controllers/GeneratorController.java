@@ -1,8 +1,6 @@
 package com.actram.wordattainer.ui.controllers;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.Generator;
@@ -52,16 +50,16 @@ public class GeneratorController implements MainControllerChild {
 		}
 
 		// Generate desired amount of results
-		String[] generatedResults = new String[preferences.getResultAmount()];
-		for (int i = 0; i < generatedResults.length; i++) {
-			generatedResults[i] = generator.query();
+		ResultList generatedResults = new ResultList(preferences.getResultAmount());
+		while (generatedResults.size() != preferences.getResultAmount()) {
+			generatedResults.add(generator.query());
+			generatedResults.removeDuplicates();
 		}
 
 		// Copy generated results into results
 		ResultList results = mainController.getResults();
 		results.clear();
-		results.addAll(Arrays.asList(generatedResults));
-		results.removeDuplicates();
+		results.addAll(generatedResults);
 
 		mainController.stateUpdated();
 	}
@@ -69,7 +67,7 @@ public class GeneratorController implements MainControllerChild {
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
-		
+
 		this.modeRadioButtonMap = new BiMap<>();
 		modeRadioButtonMap.put(GeneratorMode.LIST, listModeRadioButton);
 		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);
