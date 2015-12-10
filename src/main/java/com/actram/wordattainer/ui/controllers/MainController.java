@@ -20,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 
@@ -34,6 +35,7 @@ public class MainController implements Initializable {
 	@FXML private MorphemeListsController morphemeListsController;
 	@FXML private ResultsController resultsController;
 	@FXML private PreferencesController preferencesController;
+	@FXML private SelectionModeController selectionModeController;
 
 	private Preferences preferences;
 	private ResultList results;
@@ -51,7 +53,7 @@ public class MainController implements Initializable {
 	}
 
 	private void forEachChildController(Consumer<MainControllerChild> controllerAccessor) {
-		Object[] children = { generatorController, menuBarController, morphemeListsController, resultsController, preferencesController };
+		Object[] children = { generatorController, menuBarController, morphemeListsController, resultsController, preferencesController, selectionModeController };
 		for (Object child : children) {
 			if (child == null) {
 				continue;
@@ -96,6 +98,10 @@ public class MainController implements Initializable {
 		return program.getRootFile();
 	}
 
+	public SelectionModeController getSelectionModeController() {
+		return selectionModeController;
+	}
+
 	public Window getStage() {
 		return program.getStage();
 	}
@@ -106,12 +112,19 @@ public class MainController implements Initializable {
 		this.preferences = new Preferences();
 		this.results = new ResultList();
 
-		// Load preferences
-		FXMLLoader loader = new FXMLLoader();
-		loader.setRoot(new VBox());
-		Parent preferencesParent = program.load(loader, "preferences.fxml");
-		this.preferencesController = loader.getController();
-		preferencesController.setStageParent(preferencesParent);
+		// Load preferences controller manually
+		FXMLLoader prefLoader = new FXMLLoader();
+		prefLoader.setRoot(new VBox());
+		Parent preferencesParent = program.load(prefLoader, "preferences.fxml");
+		this.preferencesController = prefLoader.getController();
+		preferencesController.setRootNode(preferencesParent);
+
+		// Load selection mode controller manually
+		FXMLLoader selectionLoader = new FXMLLoader();
+		selectionLoader.setRoot(new BorderPane());
+		Parent selectionParent = program.load(selectionLoader, "selection_mode.fxml");
+		this.selectionModeController = selectionLoader.getController();
+		selectionModeController.setRootNode(selectionParent);
 
 		// Initialize child controllers
 		forEachChildController(controller -> {

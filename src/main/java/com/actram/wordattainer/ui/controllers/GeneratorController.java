@@ -43,16 +43,27 @@ public class GeneratorController implements MainControllerChild {
 
 	@FXML
 	public void generate(ActionEvent event) {
+		GeneratorMode mode = mainController.getPreferences().getGeneratorMode();
+		if (mode == GeneratorMode.LIST) {
+			listGenerate();
+		} else if (mode == GeneratorMode.SELECTION) {
+			selectionGenerate();
+		} else {
+			throw new AssertionError("unkown generator mode");
+		}
+	}
+
+	private boolean generateInit() {
 		if (generationRunning) {
 			setGenerationRunning(false);
-			return;
+			return false;
 		}
 
 		// Don't proceed if there are no morpheme lists
 		Preferences preferences = mainController.getPreferences();
 		if (preferences.getMorphemeFileList().isEmpty()) {
 			mainController.showErrorAlert("Missing Morphemes", "At least one morpheme list must be added before results can be generated.");
-			return;
+			return false;
 		}
 
 		// Update generator with current preferences
@@ -62,6 +73,37 @@ public class GeneratorController implements MainControllerChild {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return true;
+	}
+
+	@Override
+	public void initialize(MainController mainController, ResourceBundle resources) {
+		this.mainController = mainController;
+
+		this.modeRadioButtonMap = new BiMap<>();
+		modeRadioButtonMap.put(GeneratorMode.LIST, listModeRadioButton);
+		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);
+		generatorModeGroup.selectedToggleProperty().addListener((ChangeListener<Toggle>) (observable, oldValue, newValue) -> {
+			RadioButton radioButton = (RadioButton) newValue;
+			if (newValue != null) {
+				GeneratorMode mode = modeRadioButtonMap.getPrimary(radioButton);
+				if (mode == null) {
+					throw new AssertionError("no generator mode found for fx:id: " + radioButton.getId());
+				}
+				mainController.getPreferences().setGeneratorMode(mode);
+				mainController.stateUpdated();
+			}
+		});
+	}
+
+	public void listGenerate() {
+		if (!generateInit()) {
+			return;
+		}
+
+		Preferences preferences = mainController.getPreferences();
+		Generator generator = preferences.getGenerator();
 
 		// Event handler to run when the generation is done
 		ProgressBar progressBar = mainController.getResultsController().generateProgressBar;
@@ -80,12 +122,12 @@ public class GeneratorController implements MainControllerChild {
 
 				if (lastGenerationTimedOut) {
 					// @formatterOff
-					int timeoutSeconds = preferences.getGeneratorTimeout();
-					mainController.showInfoAlert("Generation timed out",
-										"The generator timed out.\n\n"
-											+ "This means that the generator didn't find any "
-											+ "new results for " + timeoutSeconds + " seconds.");
-					// @formatterOn
+							int timeoutSeconds = preferences.getGeneratorTimeout();
+							mainController.showInfoAlert("Generation timed out",
+												"The generator timed out.\n\n"
+													+ "This means that the generator didn't find any "
+													+ "new results for " + timeoutSeconds + " seconds.");
+							// @formatterOn
 					lastGenerationTimedOut = false;
 				}
 
@@ -121,27 +163,13 @@ public class GeneratorController implements MainControllerChild {
 		progressBar.setVisible(true);
 		setGenerationRunning(true);
 		new Thread(generateTask).start();
-
 	}
 
-	@Override
-	public void initialize(MainController mainController, ResourceBundle resources) {
-		this.mainController = mainController;
-
-		this.modeRadioButtonMap = new BiMap<>();
-		modeRadioButtonMap.put(GeneratorMode.LIST, listModeRadioButton);
-		modeRadioButtonMap.put(GeneratorMode.SELECTION, selectionModeRadioButton);
-		generatorModeGroup.selectedToggleProperty().addListener((ChangeListener<Toggle>) (observable, oldValue, newValue) -> {
-			RadioButton radioButton = (RadioButton) newValue;
-			if (newValue != null) {
-				GeneratorMode mode = modeRadioButtonMap.getPrimary(radioButton);
-				if (mode == null) {
-					throw new AssertionError("no generator mode found for fx:id: " + radioButton.getId());
-				}
-				mainController.getPreferences().setGeneratorMode(mode);
-				mainController.stateUpdated();
-			}
-		});
+	public void selectionGenerate() {
+		if (!generateInit()) {
+			return;
+		}
+		mainController.getSelectionModeController().showSelectionMode();
 	}
 
 	private void setGenerationRunning(boolean running) {
