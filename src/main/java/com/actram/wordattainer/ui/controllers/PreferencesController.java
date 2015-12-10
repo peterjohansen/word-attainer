@@ -93,7 +93,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 	public void exportProfile(ActionEvent event) {
 		exportProfile(true);
 	}
-
+	
 	public void exportProfile(boolean current) {
 		File file = profileFileChooser.showSaveDialog(stage);
 

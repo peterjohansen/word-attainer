@@ -1,5 +1,6 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -20,6 +21,8 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  *
@@ -36,6 +39,8 @@ public class MenuBarController implements MainControllerChild {
 	@FXML private RadioMenuItem selectionModeRadioItem;
 
 	@FXML private CheckMenuItem mapListsToMorphemesCheckItem;
+
+	private FileChooser saveResultsFileChooser;
 
 	@FXML
 	public void addLists(ActionEvent evt) {
@@ -75,6 +80,14 @@ public class MenuBarController implements MainControllerChild {
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
+
+		this.saveResultsFileChooser = new FileChooser();
+		saveResultsFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		saveResultsFileChooser.setTitle("Save Results");
+		ExtensionFilter defaultExtensionFilter = new ExtensionFilter("Text file", "*.txt");
+		saveResultsFileChooser.getExtensionFilters().add(defaultExtensionFilter);
+		saveResultsFileChooser.getExtensionFilters().add(new ExtensionFilter("Any type", "*"));
+		saveResultsFileChooser.setSelectedExtensionFilter(defaultExtensionFilter);
 
 		this.modeRadioItemMap = new BiMap<>();
 		modeRadioItemMap.put(GeneratorMode.LIST, listModeRadioItem);
@@ -119,6 +132,20 @@ public class MenuBarController implements MainControllerChild {
 	@FXML
 	public void removeResults(ActionEvent evt) {
 		mainController.getResultsController().removeResults(null);
+	}
+
+	@FXML
+	public void saveResults(ActionEvent evt) {
+		File file = saveResultsFileChooser.showSaveDialog(mainController.getStage());
+
+		if (file != null) {
+			try {
+				Files.write(file.toPath(), mainController.getResults());
+			} catch (IOException e) {
+				e.printStackTrace();
+				mainController.showErrorAlert("Results Save Error", "Unable to save results to: " + file.getAbsolutePath());
+			}
+		}
 	}
 
 	@FXML
