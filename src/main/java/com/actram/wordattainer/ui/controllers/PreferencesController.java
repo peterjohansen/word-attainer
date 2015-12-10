@@ -281,7 +281,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 		this.stage = new Stage();
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Preferences");
-		stage.onShowingProperty().addListener((observable, oldValue, newValue) -> {
+		stage.setOnShowing(evt -> {
 			stage.initOwner(mainController.getStage());
 			stage.initModality(Modality.WINDOW_MODAL);
 		});
