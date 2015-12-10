@@ -106,11 +106,6 @@ public class MainController implements Initializable {
 		this.preferences = new Preferences();
 		this.results = new ResultList();
 
-		results.add("test1");
-		results.add("test2");
-		results.add("test3");
-		results.add("test4");
-
 		// Load preferences
 		FXMLLoader loader = new FXMLLoader();
 		loader.setRoot(new VBox());

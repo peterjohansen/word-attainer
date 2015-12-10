@@ -55,6 +55,12 @@
 	<div id="content">
 		<h1>Word Attainer Help</h1>
 		<article>
+			<h1>What is Word Attainer?</h1>
+			<p>
+				Word Attainer is a program that lets you generate new words which you can use for whatever you'd like. The program can be tweaked to generate words that are betters matches for what you need (e.g. names of people or magic spells).
+			</p>
+		</article>
+		<article>
 			<h1>How do I generate words?</h1>
 			<p>
 				The generation process consists of four steps:
@@ -62,22 +68,72 @@
 					<li>Select lists of morphemes</li>
 					<li>Adjust the generator settings</li>
 					<li>Run the generator</li>
-					<li>Export the words you want to keep</li>
+					<li>Save the words you want to keep</li>
 				</ol>
 			</p>
 		</article>
 		<article>
 			<h1>What is a morpheme?</h1>
 			<p>
-				A morpheme is one part of a word. Several morphemes make up a complete word.
-				<br>
-				E.g. <i>Pe</i> and <i>ter</i> could make up the name "Peter".
+				A morpheme is one part of a word. Several morphemes make up a complete word. 
+				<br><br>
+				For example, the morphemes <i>Pe</i> and <i>ter</i> could make up the name <i>Peter</i>. There are no specific rules as to what is a morpheme - it's up to you when you create morpheme lists.
+				<br><br>
+				Technically, a morpheme could be several words or entire sentences.
 			</p>
 		</article>
 		<article>
 			<h1>What is a generator?</h1>
 			<p>
-			A generator takes lists of morphemes as input and randomly stitches them together to create a unique word. The process can be adjusted by changing the generator's settings.
+				A generator takes lists of morphemes as input and randomly stitches them together to create unique words (which we call results). The process can be adjusted to your liking by modifying the generator's settings.
+			</p>
+		</article>
+		<article>
+			<h1>How do I create morpheme lists?</h1>
+			<p>
+				Morpheme lists are just plain text files where each line in the file is a morpheme. It can be any filetype, as long as it is formatted in this manner.
+				<br><br>
+				If you're still unsure, save the list of morphemes as a <i>.txt</i>-file.
+				<br><br>
+				Filetypes like <i>.doc</i> (Microsoft Word) or <i>.rtf</i> (Rich Text File) are not plain text files, which means you might get weird results if you choose use them as morpheme lists.
+			</p>
+		</article>
+		<article>
+			<h1>What is a profile?</h1>
+			<p>
+				A profile, as a file, specifies the settings and morpheme lists a generator should use. It also contains the preferences for the program itself (e.g. how many results to generate or whether to automatically sort the results).
+				<br>
+				<br>
+				You can tweak settings and preferences to your needs and then export your profile and give it a name. The profile can then be used again or shared with other people.
+				<br>
+				<br>
+				Word Attainer profiles have the filetype <i>.wap</i>.
+			</p>
+		</article>
+		<article>
+			<h1>What does it mean to map morphemes to lists?</h1>
+			<p>
+				Normally when generating results, the generator picks a random morpheme list and then a random morpheme from that list. If you choose to map morphemes to the lists, the first morpheme will be picked from the first list, the second morpheme will be picked from the second list, the third from the third list, and so on...
+				<br><br>
+				If there is going to be more morphemes in a result than amount of lists, the first list will be selected again and the process is repeated from there.
+			</p>
+		</article>
+		<article>
+			<h1>How do I edit a result?</h1>
+			<p>
+				You can edit results individually before you save them. To do this, simply double-click the result you'd like to edit. When you have made the desired changes, hit <i>Return</i>.
+			</p>
+		</article>
+		<article>
+			<h1>What happens if I merge results?</h1>
+			<p>
+				If you generate some results and then click the <i>Merge</i>-button, you can select a file that contains results from a previous generation. The results from this file will then be imported and merged with your new results. Any duplicate results will be removed and you are free to save the new set of results.
+			</p>
+		</article>
+		<article>
+			<h1>Still need help?</h1>
+			<p>
+				If you still need help, you can create an issue on Github <a href="https://github.com/peterjohansen/word-attainer/issues" target="_blank">here</a> (right-click the link and copy it into your browser). An account on Github is required to create issues.
 			</p>
 		</article>
 	</div>
