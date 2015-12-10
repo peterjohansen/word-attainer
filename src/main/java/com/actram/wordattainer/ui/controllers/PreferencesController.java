@@ -111,7 +111,6 @@ public class PreferencesController extends Parent implements MainControllerChild
 	public Preferences getPreferences() {
 		if (preferences == null) {
 			preferences = new Preferences();
-			preferences.setTo(mainController.getPreferences());
 		}
 		return this.preferences;
 	}
@@ -289,7 +288,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 	}
 
 	public void showPreferences() {
-		getPreferences();
+		getPreferences().setTo(mainController.getPreferences());
 		updateUI(mainController.getPreferences(), mainController.getResults());
 		stage.show();
 		stage.setMinWidth(stage.getWidth());
