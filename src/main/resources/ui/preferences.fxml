@@ -186,6 +186,11 @@
                               <CheckBox fx:id="autoSortCheckBox" mnemonicParsing="false" text="Automatically sort results" />
                            </children>
                         </HBox>
+                        <HBox spacing="8.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#setDefaultResults" text="Reset to defaults" />
+                           </children>
+                        </HBox>
                      </children>
                      <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

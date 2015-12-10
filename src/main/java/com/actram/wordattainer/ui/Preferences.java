@@ -28,9 +28,9 @@ public class Preferences extends GeneratorSettings {
 	public Preferences() {
 		setGenerator(new StandardGenerator());
 		setGeneratorMode(GeneratorMode.LIST);
-		setResultAmount(16);
-		setGeneratorTimeout(2);
-		setAutoSortResults(false);
+		setResultAmountToDefault();
+		setGeneratorTimeoutToDefault();
+		setAutoSortResultsToDefault();
 	}
 
 	public Generator getGenerator() {
@@ -57,6 +57,10 @@ public class Preferences extends GeneratorSettings {
 		this.autoSortResults = autoSortResults;
 	}
 
+	public void setAutoSortResultsToDefault() {
+		setAutoSortResults(false);
+	}
+
 	public void setGenerator(Generator generator) {
 		Objects.requireNonNull(generator, "the generator cannot be null");
 		this.generator = generator;
@@ -77,11 +81,19 @@ public class Preferences extends GeneratorSettings {
 		this.generatorTimeout = generatorTimeout;
 	}
 
+	public void setGeneratorTimeoutToDefault() {
+		setGeneratorTimeout(2);
+	}
+
 	public void setResultAmount(int resultAmount) {
 		if (resultAmount < 1) {
 			throw new IllegalArgumentException("result amount cannot be less than one");
 		}
 		this.resultAmount = resultAmount;
+	}
+
+	public void setResultAmountToDefault() {
+		setResultAmount(16);
 	}
 
 	public Preferences setTo(Preferences preferences) {
@@ -99,6 +111,8 @@ public class Preferences extends GeneratorSettings {
 		setGenerator(preferences.getGenerator());
 		setGeneratorMode(preferences.getGeneratorMode());
 		setResultAmount(preferences.getResultAmount());
+		setGeneratorTimeout(preferences.getGeneratorTimeout());
+		setAutoSortResults(preferences.isResultsAutoSort());
 
 		return this;
 	}

@@ -194,6 +194,14 @@ public class PreferencesController extends Parent implements MainControllerChild
 		updateUI(preferences, mainController.getResults());
 	}
 
+	@FXML
+	public void setDefaultResults(ActionEvent evt) {
+		preferences.setResultAmountToDefault();
+		preferences.setGeneratorTimeoutToDefault();
+		preferences.setAutoSortResultsToDefault();
+		updateUI(preferences, mainController.getResults());
+	}
+
 	void setStageParent(Parent parent) {
 		this.stage = new Stage();
 		stage.setScene(new Scene(parent));
@@ -215,6 +223,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 			// General -> Results
 			timeoutSpinner.getValueFactory().setValue(this.preferences.getGeneratorTimeout());
 			resultAmountSpinner.getValueFactory().setValue(this.preferences.getResultAmount());
+			autoSortCheckBox.setSelected(this.preferences.isResultsAutoSort());
 
 			// Generator Settings -> Characters
 			lettersCheckBox.setSelected(this.preferences.getCharacterValidator().isLettersAllowed());

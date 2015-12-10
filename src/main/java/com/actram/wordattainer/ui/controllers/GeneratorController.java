@@ -74,6 +74,9 @@ public class GeneratorController implements MainControllerChild {
 				ResultList results = mainController.getResults();
 				results.clear();
 				results.addAll(generatedResults);
+				if (preferences.isResultsAutoSort()) {
+					results.sort();
+				}
 
 				if (lastGenerationTimedOut) {
 					// @formatterOff
