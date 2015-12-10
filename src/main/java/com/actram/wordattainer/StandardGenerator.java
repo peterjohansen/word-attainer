@@ -22,10 +22,11 @@ public class StandardGenerator implements Generator {
 	private GeneratorSettings settings;
 
 	private Set<String> allResults = new HashSet<>();
+	private int uniqueResultsAmount = 0;
 
 	@Override
-	public int getAttemptAmount() {
-		return allResults.size();
+	public int getUniqueResultsAmount() {
+		return uniqueResultsAmount;
 	}
 
 	@Override
@@ -92,12 +93,15 @@ public class StandardGenerator implements Generator {
 
 		} while (allResults.contains(result));
 
+		uniqueResultsAmount++;
 		return result;
 	}
 
 	@Override
 	public void update(GeneratorSettings settings) throws IOException {
 		this.settings = settings;
+		uniqueResultsAmount = 0;
+		allResults.clear();
 		morphemeLists.clear();
 
 		for (String file : settings.getMorphemeFileList().getFileList()) {

@@ -54,10 +54,6 @@ public class GeneratorController implements MainControllerChild {
 	}
 
 	private boolean generateInit() {
-		if (generationRunning) {
-			setGenerationRunning(false);
-			return false;
-		}
 
 		// Don't proceed if there are no morpheme lists
 		Preferences preferences = mainController.getPreferences();
@@ -72,6 +68,7 @@ public class GeneratorController implements MainControllerChild {
 			generator.update(preferences);
 		} catch (IOException e) {
 			e.printStackTrace();
+			mainController.showErrorAlert("Generator Error", "Unable to generate words.");
 		}
 
 		return true;
@@ -98,6 +95,10 @@ public class GeneratorController implements MainControllerChild {
 	}
 
 	public void listGenerate() {
+		if (generationRunning) {
+			setGenerationRunning(false);
+			return;
+		}
 		if (!generateInit()) {
 			return;
 		}
@@ -124,8 +125,7 @@ public class GeneratorController implements MainControllerChild {
 					// @formatterOff
 							int timeoutSeconds = preferences.getGeneratorTimeout();
 							mainController.showInfoAlert("Generation timed out",
-												"The generator timed out.\n\n"
-													+ "This means that the generator didn't find any "
+													"The generator didn't find any "
 													+ "new results for " + timeoutSeconds + " seconds.");
 							// @formatterOn
 					lastGenerationTimedOut = false;
@@ -149,11 +149,8 @@ public class GeneratorController implements MainControllerChild {
 						break;
 					}
 					progressBar.setProgress(1 - ((double) 1 / (preferences.getResultAmount() - generatedResults.size())));
-					String result = generator.query();
-					if (!generatedResults.contains(result)) {
-						generatedResults.add(result);
-						start = System.currentTimeMillis();
-					}
+					generatedResults.add(generator.query());
+					start = System.currentTimeMillis();
 				}
 				return generatedResults;
 			}
