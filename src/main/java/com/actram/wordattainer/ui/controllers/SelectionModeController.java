@@ -160,7 +160,7 @@ public class SelectionModeController implements MainControllerChild {
 		keepPrevLabel.setText(prevResult == null ? "-" : prevResult);
 		resultLabel.setText(currentResult);
 		final int resultCount = preferences.getGenerator().getUniqueResultsAmount() - 1;
-		statsLabel.setText(String.format("%s kept · %s discarded · %s total", keptResults.size(), resultCount - keptResults.size(), resultCount));
+		statsLabel.setText(String.format("%s kept | %s discarded | %s total", keptResults.size(), resultCount - keptResults.size(), resultCount));
 	}
 
 	@FXML
