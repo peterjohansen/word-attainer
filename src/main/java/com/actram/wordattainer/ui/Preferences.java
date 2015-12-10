@@ -1,5 +1,6 @@
 package com.actram.wordattainer.ui;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.actram.wordattainer.Generator;
@@ -12,7 +13,9 @@ import com.actram.wordattainer.ui.generator.GeneratorMode;
  *
  * @author Peter André Johansen
  */
-public class Preferences extends GeneratorSettings {
+public class Preferences extends GeneratorSettings implements Serializable {
+	private static final long serialVersionUID = -3946149163610904723L;
+
 	public static final int MIN_RESULT_AMOUNT = 1;
 	public static final int MAX_RESULT_AMOUNT = 1000000;
 

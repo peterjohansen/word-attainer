@@ -1,5 +1,6 @@
 package com.actram.wordattainer;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -35,7 +36,9 @@ import java.util.Random;
  *
  * @author Peter André Johansen
  */
-public class GeneratorSettings {
+public class GeneratorSettings implements Serializable {
+	private static final long serialVersionUID = 6011048486666320311L;
+
 	public static final int MIN_MORPHEME_COUNT = 1;
 	public static final int MAX_MORPHEME_COUNT = 1000;
 

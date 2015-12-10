@@ -1,6 +1,7 @@
 package com.actram.wordattainer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -14,7 +15,9 @@ import java.util.Random;
  *
  * @author Peter André Johansen
  */
-public class MorphemeFileList {
+public class MorphemeFileList implements Serializable {
+	private static final long serialVersionUID = -1321200231491594320L;
+
 	private final List<String> fileList = new ArrayList<>();
 
 	public void add(String morphemeFile) {

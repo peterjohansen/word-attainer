@@ -13,6 +13,8 @@ import java.util.Random;
  * @author Peter André Johansen
  */
 public class StandardGenerator implements Generator {
+	private static final long serialVersionUID = 2294330934953407255L;
+
 	private final List<List<String>> morphemeLists = new ArrayList<>();
 
 	private GeneratorSettings settings;

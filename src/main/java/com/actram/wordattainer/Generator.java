@@ -1,13 +1,14 @@
 package com.actram.wordattainer;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Generates words (as {@link String}s) based on {@link GeneratorSettings}.
  *
  * @author Peter André Johansen
  */
-public interface Generator {
+public interface Generator extends Serializable {
 
 	/**
 	 * Queries the generator for a result.

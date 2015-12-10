@@ -59,7 +59,7 @@ public class MenuBarController implements MainControllerChild {
 
 	@FXML
 	public void exportProfile(ActionEvent evt) {
-		System.out.println("export profile");
+		mainController.getPreferencesController().exportProfile(false);
 	}
 
 	@FXML
@@ -69,7 +69,7 @@ public class MenuBarController implements MainControllerChild {
 
 	@FXML
 	public void importProfile(ActionEvent evt) {
-		System.out.println("import profile");
+		mainController.getPreferencesController().importProfile(evt);
 	}
 
 	@Override

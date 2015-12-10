@@ -33,7 +33,7 @@
                                     <Button mnemonicParsing="false" onAction="#exportProfile" text="Export profile" />
                                     <Separator orientation="VERTICAL" />
                                     <Button mnemonicParsing="false" onAction="#resetSettingsToProfile" text="Reset settings" />
-                                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Last loaded:" />
+                                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Last imported:" />
                                     <Label fx:id="lastProfileLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="my_profile.wa" textFill="#808080" />
                                  </children>
                               </HBox>
