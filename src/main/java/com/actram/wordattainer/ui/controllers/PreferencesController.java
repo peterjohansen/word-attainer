@@ -94,7 +94,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 	public void exportProfile(ActionEvent event) {
 		exportProfile(true);
 	}
-	
+
 	public void exportProfile(boolean current) {
 		File file = profileFileChooser.showSaveDialog(stage);
 
@@ -282,13 +282,15 @@ public class PreferencesController extends Parent implements MainControllerChild
 		this.stage = new Stage();
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Preferences");
+		stage.onShowingProperty().addListener((observable, oldValue, newValue) -> {
+			stage.initOwner(mainController.getStage());
+			stage.initModality(Modality.WINDOW_MODAL);
+		});
 	}
 
 	public void showPreferences() {
 		getPreferences();
 		updateUI(mainController.getPreferences(), mainController.getResults());
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.initOwner(mainController.getStage());
 		stage.show();
 		stage.setMinWidth(stage.getWidth());
 		stage.setMinHeight(stage.getHeight());
