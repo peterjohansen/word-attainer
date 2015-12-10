@@ -9,7 +9,7 @@
    <content>
       <HBox alignment="CENTER" spacing="10.0">
          <children>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#generate" text="Generate">
+            <Button fx:id="generateButton" defaultButton="true" mnemonicParsing="false" onAction="#generate" text="Generate">
                <padding>
                   <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                </padding>

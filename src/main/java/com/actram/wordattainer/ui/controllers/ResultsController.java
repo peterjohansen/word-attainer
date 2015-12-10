@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.FileChooser;
@@ -27,6 +28,7 @@ import javafx.stage.FileChooser;
 public class ResultsController implements MainControllerChild {
 	@FXML private ListView<String> resultsListView;
 	@FXML private Button removeButton;
+	@FXML ProgressBar generateProgressBar;
 
 	private MainController mainController;
 

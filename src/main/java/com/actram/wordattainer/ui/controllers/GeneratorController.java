@@ -10,8 +10,13 @@ import com.actram.wordattainer.ui.generator.GeneratorMode;
 import com.actram.wordattainer.util.BiMap;
 
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -24,6 +29,8 @@ import javafx.scene.control.ToggleGroup;
 public class GeneratorController implements MainControllerChild {
 	@FXML private ToggleGroup generatorModeGroup;
 
+	@FXML private Button generateButton;
+
 	@FXML private RadioButton listModeRadioButton;
 	@FXML private RadioButton selectionModeRadioButton;
 
@@ -31,8 +38,14 @@ public class GeneratorController implements MainControllerChild {
 
 	private MainController mainController;
 
+	private boolean generationRunning = false;
+
 	@FXML
 	public void generate(ActionEvent event) {
+		if (generationRunning) {
+			setGenerationRunning(false);
+			return;
+		}
 
 		// Don't proceed if there are no morpheme lists
 		Preferences preferences = mainController.getPreferences();
@@ -49,19 +62,46 @@ public class GeneratorController implements MainControllerChild {
 			e.printStackTrace();
 		}
 
-		// Generate desired amount of results
+		// Event handler to run when the generation is done
+		ProgressBar progressBar = mainController.getResultsController().generateProgressBar;
 		ResultList generatedResults = new ResultList(preferences.getResultAmount());
-		while (generatedResults.size() != preferences.getResultAmount()) {
-			generatedResults.add(generator.query());
-			generatedResults.removeDuplicates();
-		}
+		EventHandler<WorkerStateEvent> onTaskDone = new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				setGenerationRunning(false);
+				progressBar.setVisible(false);
+				ResultList results = mainController.getResults();
+				results.clear();
+				results.addAll(generatedResults);
 
-		// Copy generated results into results
-		ResultList results = mainController.getResults();
-		results.clear();
-		results.addAll(generatedResults);
+				mainController.stateUpdated();
+			}
+		};
 
-		mainController.stateUpdated();
+		// Task to run the generation. Cancel the task if it times out.
+		long start = System.currentTimeMillis();
+		Task<ResultList> generateTask = new Task<ResultList>() {
+			@Override
+			protected ResultList call() throws Exception {
+				while (generatedResults.size() != preferences.getResultAmount()) {
+					if (isCancelled() || !generationRunning || (System.currentTimeMillis() - start) > preferences.getGeneratorTimeout() * 1000) {
+						break;
+					}
+					progressBar.setProgress(1 - ((double) 1 / (preferences.getResultAmount() - generatedResults.size())));
+					String result = generator.query();
+					if (!generatedResults.contains(result)) {
+						generatedResults.add(result);
+					}
+				}
+				return generatedResults;
+			}
+		};
+		generateTask.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, onTaskDone);
+		generateTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, onTaskDone);
+		progressBar.setVisible(true);
+		setGenerationRunning(true);
+		new Thread(generateTask).start();
+
 	}
 
 	@Override
@@ -82,6 +122,15 @@ public class GeneratorController implements MainControllerChild {
 				mainController.stateUpdated();
 			}
 		});
+	}
+
+	private void setGenerationRunning(boolean running) {
+		this.generationRunning = running;
+		if (generationRunning) {
+			generateButton.setText("Cancel");
+		} else {
+			generateButton.setText("Generate");
+		}
 	}
 
 	@Override
