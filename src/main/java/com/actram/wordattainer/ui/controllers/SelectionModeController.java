@@ -115,7 +115,9 @@ public class SelectionModeController implements MainControllerChild {
 		stage.getScene().setOnKeyReleased(evt -> {
 			switch (evt.getCode()) {
 				case F:
-					discardPrevious(null);
+					if (!discardPrevButton.isDisabled()) {
+						discardPrevious(null);
+					}
 					break;
 				case G:
 					discardCurrent(null);
@@ -124,7 +126,9 @@ public class SelectionModeController implements MainControllerChild {
 					keepCurrent(null);
 					break;
 				case J:
-					keepPrevious(null);
+					if (!keepPrevButton.isDisable()) {
+						keepPrevious(null);
+					}
 					break;
 				default:
 					break;
