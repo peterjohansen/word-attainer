@@ -36,6 +36,8 @@ public class SelectionModeController implements MainControllerChild {
 	private String prevResult;
 	private String currentResult;
 
+	private boolean stageShowedOnce = false;
+
 	@FXML
 	public void cancelSelectionMode(ActionEvent evt) {
 		if (!keptResults.isEmpty()) {
@@ -110,10 +112,6 @@ public class SelectionModeController implements MainControllerChild {
 		this.stage = new Stage();
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Generator: Selection Mode");
-		stage.setOnShowing(evt -> {
-			stage.initOwner(mainController.getStage());
-			stage.initModality(Modality.WINDOW_MODAL);
-		});
 		stage.getScene().setOnKeyReleased(evt -> {
 			switch (evt.getCode()) {
 				case F:
@@ -140,7 +138,12 @@ public class SelectionModeController implements MainControllerChild {
 		this.currentResult = mainController.getPreferences().getGenerator().query();
 
 		updateUI(mainController.getPreferences(), mainController.getResults());
+		if (!stageShowedOnce) {
+			stage.initOwner(mainController.getStage());
+			stage.initModality(Modality.WINDOW_MODAL);
+		}
 		stage.show();
+		stageShowedOnce = true;
 		stage.setMinWidth(stage.getWidth());
 		stage.setMinHeight(stage.getHeight());
 	}

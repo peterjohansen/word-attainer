@@ -35,8 +35,8 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -84,6 +84,8 @@ public class PreferencesController extends Parent implements MainControllerChild
 	private Stage stage;
 	private Preferences preferences;
 	private Preferences lastProfileLoaded;
+
+	private boolean stageShowedOnce = false;
 
 	@FXML
 	public void cancelPreferences(ActionEvent event) {
@@ -281,16 +283,17 @@ public class PreferencesController extends Parent implements MainControllerChild
 		this.stage = new Stage();
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Preferences");
-		stage.setOnShowing(evt -> {
-			stage.initOwner(mainController.getStage());
-			stage.initModality(Modality.WINDOW_MODAL);
-		});
 	}
 
 	public void showPreferences() {
 		getPreferences().setTo(mainController.getPreferences());
 		updateUI(mainController.getPreferences(), mainController.getResults());
+		if (!stageShowedOnce) {
+			stage.initOwner(mainController.getStage());
+			stage.initModality(Modality.WINDOW_MODAL);
+		}
 		stage.show();
+		stageShowedOnce = true;
 		stage.setMinWidth(stage.getWidth());
 		stage.setMinHeight(stage.getHeight());
 	}
