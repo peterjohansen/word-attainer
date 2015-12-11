@@ -42,10 +42,10 @@ public class StandardGenerator implements Generator {
 			final int morphemeCount;
 			final int minCount = settings.getMinMorphemeCount();
 			final int maxCount = settings.getMaxMorphemeCount();
-			if (minCount == maxCount) {
-				morphemeCount = minCount;
+			if (settings.isExactMorphemeCount()) {
+				morphemeCount = settings.getExactMorphemeCount();
 			} else {
-				morphemeCount = random.nextInt(maxCount + 1) + minCount;
+				morphemeCount = (int) (Math.random() * ((maxCount + 1) - minCount) + minCount);
 			}
 
 			// Create, validate and format each morpheme

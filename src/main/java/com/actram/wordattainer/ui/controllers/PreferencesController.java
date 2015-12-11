@@ -202,9 +202,11 @@ public class PreferencesController extends Parent implements MainControllerChild
 		maxValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_MORPHEME_COUNT, MAX_MORPHEME_COUNT));
 		minValueSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().setMorphemeCountRange(newValue, getPreferences().getMaxMorphemeCount());
+			updateUI(preferences, mainController.getResults());
 		});
 		maxValueSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().setMorphemeCountRange(getPreferences().getMinMorphemeCount(), newValue);
+			updateUI(preferences, mainController.getResults());
 		});
 
 		// Generator Settings -> Miscellaneous
