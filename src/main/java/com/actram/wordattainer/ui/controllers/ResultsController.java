@@ -90,6 +90,10 @@ public class ResultsController implements MainControllerChild {
 			results.removeDuplicates();
 		}
 		mainController.stateUpdated();
+		
+		// Select next item
+		int selectionIndex = (result.getIndex() + 1) % results.size();
+		resultsListView.getSelectionModel().select(selectionIndex);
 	}
 
 	@FXML
