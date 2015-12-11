@@ -25,8 +25,8 @@ public class SelectionModeController implements MainControllerChild {
 	@FXML private Label resultLabel;
 	@FXML private Button discardPrevButton;
 	@FXML private Button keepPrevButton;
-	@FXML private Label discardPrevLabel;
-	@FXML private Label keepPrevLabel;
+	@FXML private Label nextLabel;
+	@FXML private Label prevLabel;
 
 	private MainController mainController;
 
@@ -156,8 +156,7 @@ public class SelectionModeController implements MainControllerChild {
 	public void updateUI(Preferences preferences, ResultList results) {
 		discardPrevButton.setDisable(prevResult == null || !keptResults.contains(prevResult));
 		keepPrevButton.setDisable(prevResult == null || keptResults.contains(prevResult));
-		discardPrevLabel.setText(prevResult == null ? "-" : prevResult);
-		keepPrevLabel.setText(prevResult == null ? "-" : prevResult);
+		prevLabel.setText(prevResult == null ? "-" : prevResult);
 		resultLabel.setText(currentResult);
 		final int resultCount = preferences.getGenerator().getUniqueResultsAmount() - 1;
 		statsLabel.setText(String.format("%s kept | %s discarded | %s total", keptResults.size(), resultCount - keptResults.size(), resultCount));
@@ -166,7 +165,8 @@ public class SelectionModeController implements MainControllerChild {
 	@FXML
 	public void viewShortcuts(ActionEvent evt) {
 		// @formatterOff
-		mainController.showInfoAlert("Selection Mode Shortcuts",  "H\tKeep result\n"
+		mainController.showInfoAlert("Selection Mode Shortcuts",  "Shortcuts:\n"
+																+ "H\tKeep result\n"
 																+ "J\tKeep previous\n"
 																+ "G\tDiscard result\n"
 																+ "F\tDiscard previous\n");
