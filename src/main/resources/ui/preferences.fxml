@@ -114,6 +114,7 @@
                                  <children>
                                     <Label maxHeight="1.7976931348623157E308" text="Capitalization:" />
                                     <ComboBox fx:id="capitalizationComboBox" prefWidth="150.0" />
+                                    <Label fx:id="capitalizationExampleLabel" maxHeight="1.7976931348623157E308" text="This is an example sentence" textFill="#808080" />
                                  </children>
                               </HBox>
                               <HBox spacing="8.0">

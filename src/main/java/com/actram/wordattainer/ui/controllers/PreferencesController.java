@@ -75,6 +75,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 	// Generator Settings -> Miscellaneous
 	@FXML private ComboBox<ResultCase> capitalizationComboBox;
+	@FXML private Label capitalizationExampleLabel;
 	@FXML private TextField separatorTextField;
 	@FXML private CheckBox allowDuplicateConsecutiveCheckBox;
 	@FXML private CheckBox mapMorphemesToListsCheckBox;
@@ -210,6 +211,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 		capitalizationComboBox.setItems(FXCollections.observableArrayList(ResultCase.values()));
 		capitalizationComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().setMorphemeCapitalization(newValue);
+			updateUI(preferences, mainController.getResults());
 		});
 		separatorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().setMorphemeSeparator(newValue);
@@ -324,6 +326,13 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 		// Generator Settings -> Miscellaneous
 		capitalizationComboBox.getSelectionModel().select(preferences.getMorphemeCapitalization());
+		String[] sentenceParts = capitalizationExampleLabel.getText().split(" ");
+		preferences.getMorphemeCapitalization().fixCapitalization(sentenceParts);
+		String sentence = "";
+		for (String part : sentenceParts) {
+			sentence += part + " ";
+		}
+		capitalizationExampleLabel.setText(sentence);
 		separatorTextField.setText(getPreferences().getMorphemeSeparator());
 		allowDuplicateConsecutiveCheckBox.setSelected(getPreferences().isDuplicateConsecutiveMorphemesAllowed());
 		mapMorphemesToListsCheckBox.setSelected(getPreferences().isMorphemesMappedToLists());
