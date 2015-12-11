@@ -34,7 +34,7 @@ public enum ResultCase {
 	CAMEL_CASE(morphemes -> {
 		LOWER_CASE.fixCapitalization(morphemes);
 		for (int i = 0; i < morphemes.length; i++) {
-			morphemes[i] = upperCaseFirstLetter(morphemes[0]);
+			morphemes[i] = upperCaseFirstLetter(morphemes[i]);
 		}
 	}),
 
