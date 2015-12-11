@@ -14,8 +14,8 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.FileChooser;
@@ -28,7 +28,7 @@ import javafx.stage.FileChooser;
 public class ResultsController implements MainControllerChild {
 	@FXML private ListView<String> resultsListView;
 	@FXML private Button removeButton;
-	@FXML ProgressBar generateProgressBar;
+	@FXML private Label resultCountLabel;
 
 	private MainController mainController;
 
@@ -101,5 +101,6 @@ public class ResultsController implements MainControllerChild {
 	@Override
 	public void updateUI(Preferences preferences, ResultList results) {
 		resultsListView.getItems().setAll(results);
+		resultCountLabel.setText(results.size() + " results");
 	}
 }

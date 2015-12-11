@@ -24,7 +24,7 @@
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sortResults" text="Sort results" />
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#mergeResults" text="Merge results" />
                   <Button fx:id="removeButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeResults" text="Remove results" />
-                  <ProgressBar fx:id="generateProgressBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" visible="false" />
+                  <Label fx:id="resultCountLabel" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Result count" textAlignment="RIGHT" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </bottom>

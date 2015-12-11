@@ -107,13 +107,11 @@ public class GeneratorController implements MainControllerChild {
 		Generator generator = preferences.getGenerator();
 
 		// Event handler to run when the generation is done
-		ProgressBar progressBar = mainController.getResultsController().generateProgressBar;
 		ResultList generatedResults = new ResultList(preferences.getResultAmount());
 		EventHandler<WorkerStateEvent> onTaskDone = new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				setGenerationRunning(false);
-				progressBar.setVisible(false);
 				ResultList results = mainController.getResults();
 				results.clear();
 				results.addAll(generatedResults);
@@ -148,7 +146,6 @@ public class GeneratorController implements MainControllerChild {
 					if (isCancelled() || !generationRunning) {
 						break;
 					}
-					progressBar.setProgress(1 - ((double) 1 / (preferences.getResultAmount() - generatedResults.size())));
 					generatedResults.add(generator.query());
 					start = System.currentTimeMillis();
 				}
@@ -157,7 +154,6 @@ public class GeneratorController implements MainControllerChild {
 		};
 		generateTask.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, onTaskDone);
 		generateTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, onTaskDone);
-		progressBar.setVisible(true);
 		setGenerationRunning(true);
 		new Thread(generateTask).start();
 	}
