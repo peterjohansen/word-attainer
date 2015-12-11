@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -23,6 +25,7 @@ import javafx.stage.Stage;
 public class SelectionModeController implements MainControllerChild {
 	@FXML private Label statsLabel;
 	@FXML private Label resultLabel;
+	@FXML private TextField resultTextField;
 	@FXML private Button discardPrevButton;
 	@FXML private Button keepPrevButton;
 	@FXML private Label nextLabel;
@@ -69,6 +72,17 @@ public class SelectionModeController implements MainControllerChild {
 		}
 	}
 
+	@FXML
+	public void editDone() {
+		String result = resultTextField.getText().trim();
+		if (!result.isEmpty()) {
+			currentResult = result;
+		}
+		resultLabel.setVisible(true);
+		resultTextField.setVisible(false);
+		updateUI(mainController.getPreferences(), mainController.getResults());
+	}
+
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
@@ -113,6 +127,9 @@ public class SelectionModeController implements MainControllerChild {
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Generator: Selection Mode");
 		stage.getScene().setOnKeyReleased(evt -> {
+			if (resultTextField.isVisible()) {
+				return;
+			}
 			switch (evt.getCode()) {
 				case F:
 					if (!discardPrevButton.isDisabled()) {
@@ -150,6 +167,16 @@ public class SelectionModeController implements MainControllerChild {
 		stageShowedOnce = true;
 		stage.setMinWidth(stage.getWidth());
 		stage.setMinHeight(stage.getHeight());
+	}
+
+	@FXML
+	public void startEdit(MouseEvent evt) {
+		if (evt.getClickCount() == 2) {
+			resultTextField.setText(currentResult);
+			resultLabel.setVisible(false);
+			resultTextField.setVisible(true);
+			resultTextField.selectAll();
+		}
 	}
 
 	@Override
