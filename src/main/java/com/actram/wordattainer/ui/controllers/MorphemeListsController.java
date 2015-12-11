@@ -2,6 +2,7 @@ package com.actram.wordattainer.ui.controllers;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -17,9 +18,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 /**
  *
@@ -27,11 +31,30 @@ import javafx.stage.FileChooser;
  * @author Peter André Johansen
  */
 public class MorphemeListsController implements MainControllerChild {
+	private static class MorphemeListListCell extends ListCell<String> {
+		@Override
+		protected void updateItem(String filePath, boolean empty) {
+			super.updateItem(filePath, empty);
+			if (empty) {
+				setText(null);
+			} else {
+				String fileName = Paths.get(filePath).getFileName().toString();
+				if (!filePath.startsWith(fileName)) {
+					setText(".../" + fileName);
+				} else {
+					setText(fileName);
+				}
+				setTooltip(new Tooltip(filePath));
+			}
+		}
+	}
+
 	@FXML private ListView<String> morphemeListView;
 	@FXML private Button removeButton;
 	@FXML private Button clearButton;
 	@FXML private Button moveUpButton;
 	@FXML private Button moveDownButton;
+
 	@FXML private CheckBox mapListsToMorphemesCheckBox;
 
 	private MainController mainController;
@@ -81,6 +104,12 @@ public class MorphemeListsController implements MainControllerChild {
 		listFileChooser.setTitle("Open Morpheme Lists");
 
 		this.morphemeListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		morphemeListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override
+			public ListCell<String> call(ListView<String> param) {
+				return new MorphemeListListCell();
+			}
+		});
 		ListProperty<String> morphemelistProperty = new SimpleListProperty<>();
 		morphemelistProperty.bind(morphemeListView.itemsProperty());
 		morphemeListView.setPlaceholder(mainController.loadFXML("no_morpheme_lists_message.fxml"));
