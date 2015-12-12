@@ -42,6 +42,8 @@ public class GeneratorSettings implements Serializable {
 	public static final int MIN_MORPHEME_COUNT = 1;
 	public static final int MAX_MORPHEME_COUNT = 1000;
 
+	public static final int MIN_TRIM_COUNT = 1;
+
 	private static void checkMorphemeCount(int count) {
 		if (count < MIN_MORPHEME_COUNT || count > MAX_MORPHEME_COUNT) {
 			throw new IllegalArgumentException("morpheme count is out of range: " + count);
@@ -53,6 +55,11 @@ public class GeneratorSettings implements Serializable {
 	private final CharacterValidator characterValidator;
 	private Random random;
 	private ResultCase morphemeCapitalization;
+
+	private boolean trimVowels;
+	private int trimVowelCount;
+	private boolean trimConsonants;
+	private int trimConsonantCount;
 
 	private String morphemeSeparator;
 	private boolean useExactMorphemeCount;
@@ -67,6 +74,7 @@ public class GeneratorSettings implements Serializable {
 	public GeneratorSettings() {
 		this.morphemeFileList = new MorphemeFileList();
 		this.characterValidator = new CharacterValidator();
+		setCharactersToDefault();
 		setRandom(new Random());
 		setMorphemeCapitalizationToDefault();
 		setMorphemeSeparatorToDefault();
@@ -111,6 +119,18 @@ public class GeneratorSettings implements Serializable {
 		return random;
 	}
 
+	public int getTrimConsonantCount() {
+		return trimConsonantCount;
+	}
+
+	public int getTrimVowelCount() {
+		return trimVowelCount;
+	}
+
+	public boolean isConsonantsTrimmed() {
+		return trimConsonants;
+	}
+
 	public boolean isDuplicateConsecutiveMorphemesAllowed() {
 		return allowDuplicateConsecutiveMorphemes;
 	}
@@ -123,8 +143,20 @@ public class GeneratorSettings implements Serializable {
 		return mapListsToMorphemes;
 	}
 
+	public boolean isVowelsTrimmed() {
+		return trimVowels;
+	}
+
 	public void setAllowDuplicateConsecutiveMorphemesToDefault() {
 		allowDuplicateConsecutiveMorphemes(true);
+	}
+
+	public void setCharactersToDefault() {
+		characterValidator.setToDefault();
+		setTrimVowels(true);
+		setTrimVowelCount(2);
+		setTrimConsonants(true);
+		setTrimConsonantCount(2);
 	}
 
 	public void setExactMorphemeCount(int count) {
@@ -177,6 +209,28 @@ public class GeneratorSettings implements Serializable {
 	public void setRandom(Random random) {
 		Objects.requireNonNull(random, "the random cannot be null");
 		this.random = random;
+	}
+
+	public void setTrimConsonantCount(int trimConsonantCount) {
+		if (trimConsonantCount < MIN_TRIM_COUNT) {
+			throw new IllegalArgumentException("trim count cannot be less than " + MIN_TRIM_COUNT);
+		}
+		this.trimConsonantCount = trimConsonantCount;
+	}
+
+	public void setTrimConsonants(boolean trimConsonants) {
+		this.trimConsonants = trimConsonants;
+	}
+
+	public void setTrimVowelCount(int trimVowelCount) {
+		if (trimVowelCount < MIN_TRIM_COUNT) {
+			throw new IllegalArgumentException("trim count cannot be less than " + MIN_TRIM_COUNT);
+		}
+		this.trimVowelCount = trimVowelCount;
+	}
+
+	public void setTrimVowels(boolean trimVowels) {
+		this.trimVowels = trimVowels;
 	}
 
 	public void setUseExactMorphemeCount(boolean useExactMorphemeCount) {

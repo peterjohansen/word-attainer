@@ -58,6 +58,18 @@
                               </HBox>
                               <HBox spacing="8.0">
                                  <children>
+                                    <CheckBox fx:id="vowelCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Trim consecutive vowels to:" />
+                                    <Spinner fx:id="vowelSpinner" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
+                                    <CheckBox fx:id="consonantCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Trim consecutive consonants to:" />
+                                    <Spinner fx:id="consonantSpinner" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="8.0">
+                                 <children>
                                     <Button mnemonicParsing="false" onAction="#setDefaultCharacters" text="Reset to defaults" />
                                  </children>
                               </HBox>

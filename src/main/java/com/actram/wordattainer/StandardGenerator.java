@@ -2,7 +2,6 @@ package com.actram.wordattainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -17,11 +16,14 @@ import java.util.Set;
 public class StandardGenerator implements Generator {
 	private static final long serialVersionUID = 2294330934953407255L;
 
+	private static final String VOWELS = "aeiouyæøå";
+	private static final String CONSONANTS = "bcdfghjklmnpqrstvwxz";
+
 	private final List<List<String>> morphemeLists = new ArrayList<>();
 
 	private GeneratorSettings settings;
-
 	private Set<String> allResults = new HashSet<>();
+
 	private int uniqueResultsAmount = 0;
 
 	@Override
@@ -35,7 +37,7 @@ public class StandardGenerator implements Generator {
 		Random random = settings.getRandom();
 
 		// Create results until we get a unique one
-		String result;
+		String finalResult;
 		do {
 
 			// Find the morpheme count in the next result
@@ -49,8 +51,8 @@ public class StandardGenerator implements Generator {
 			}
 
 			// Create, validate and format each morpheme
-			String[] resultParts = new String[morphemeCount];
-			for (int i = 0; i < morphemeCount; i++) {
+			Result result = new Result(morphemeCount);
+			for (int i = 0; i < result.partCount(); i++) {
 
 				// Find index of list of morphemes to pick from
 				int listIndex;
@@ -68,7 +70,7 @@ public class StandardGenerator implements Generator {
 
 					// Check for repeated morpheme and create
 					// a new one if that's not allowed
-					if (!settings.isDuplicateConsecutiveMorphemesAllowed() && i != 0 && Arrays.asList(resultParts).contains(morpheme)) {
+					if (!settings.isDuplicateConsecutiveMorphemesAllowed() && result.isValue(i - 1, morpheme)) {
 						continue;
 					}
 
@@ -76,25 +78,27 @@ public class StandardGenerator implements Generator {
 					break;
 
 				}
-				resultParts[i] = morpheme;
+				result.set(i, morpheme);
 			}
 
-			settings.getMorphemeCapitalization().fixCapitalization(resultParts);
-
-			// Assemble result from morphemes
-			StringBuilder builder = new StringBuilder();
-			for (String part : resultParts) {
-				if (builder.length() != 0) {
-					builder.append(settings.getMorphemeSeparator());
+			boolean trimVowels = settings.isVowelsTrimmed();
+			boolean trimConsonants = settings.isConsonantsTrimmed();
+			if (trimVowels || trimConsonants) {
+				if (trimVowels && trimConsonants && settings.getTrimVowelCount() == settings.getTrimConsonantCount()) {
+					result.trimDuplicateConsecutive(settings.getTrimVowelCount(), VOWELS + CONSONANTS);
+				} else if (trimVowels) {
+					result.trimDuplicateConsecutive(settings.getTrimVowelCount(), VOWELS);
+				} else if (trimConsonants) {
+					result.trimDuplicateConsecutive(settings.getTrimConsonantCount(), CONSONANTS);
 				}
-				builder.append(part);
 			}
-			result = builder.toString();
+			result.capitalize(settings.getMorphemeCapitalization());
+			finalResult = result.join(settings.getMorphemeSeparator());
 
-		} while (allResults.contains(result));
+		} while (allResults.contains(finalResult));
 
 		uniqueResultsAmount++;
-		return result;
+		return finalResult;
 	}
 
 	@Override

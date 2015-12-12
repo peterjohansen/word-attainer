@@ -17,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ResourceBundle;
 
+import com.actram.wordattainer.GeneratorSettings;
 import com.actram.wordattainer.ResultCase;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
@@ -64,6 +65,10 @@ public class PreferencesController extends Parent implements MainControllerChild
 	@FXML private CheckBox punctuationCheckBox;
 	@FXML private CheckBox customCheckBox;
 	@FXML private TextField customTextField;
+	@FXML private CheckBox vowelCheckBox;
+	@FXML private Spinner<Integer> vowelSpinner;
+	@FXML private CheckBox consonantCheckBox;
+	@FXML private Spinner<Integer> consonantSpinner;
 
 	// Generator Settings -> Morpheme count
 	@FXML private RadioButton exactValueRadioButton;
@@ -183,9 +188,26 @@ public class PreferencesController extends Parent implements MainControllerChild
 		customCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().getCharacterValidator().allowCustom(newValue);
 		});
+		customTextField.disableProperty().bind(customCheckBox.selectedProperty().not());
 		customTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().getCharacterValidator().setCustomCharacters(newValue.toCharArray());
 		});
+		vowelCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			getPreferences().setTrimVowels(newValue);
+		});
+		vowelSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			getPreferences().setTrimVowelCount(newValue);
+		});
+		vowelSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(GeneratorSettings.MIN_TRIM_COUNT, Integer.MAX_VALUE));
+		vowelSpinner.disableProperty().bind(vowelCheckBox.selectedProperty().not());
+		consonantCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			getPreferences().setTrimConsonants(newValue);
+		});
+		consonantSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+			getPreferences().setTrimConsonantCount(newValue);
+		});
+		consonantSpinner.disableProperty().bind(consonantCheckBox.selectedProperty().not());
+		consonantSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(GeneratorSettings.MIN_TRIM_COUNT, Integer.MAX_VALUE));
 
 		// Generator Settings -> Morpheme count
 		exactValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_MORPHEME_COUNT, MAX_MORPHEME_COUNT));
@@ -195,6 +217,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 		exactValueRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().setUseExactMorphemeCount(newValue);
 		});
+		exactValueSpinner.disableProperty().bind(exactValueRadioButton.selectedProperty().not());
 		variableValueRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			getPreferences().setUseExactMorphemeCount(!newValue);
 		});
@@ -208,6 +231,8 @@ public class PreferencesController extends Parent implements MainControllerChild
 			getPreferences().setMorphemeCountRange(getPreferences().getMinMorphemeCount(), newValue);
 			updateUI(preferences, mainController.getResults());
 		});
+		minValueSpinner.disableProperty().bind(variableValueRadioButton.selectedProperty().not());
+		maxValueSpinner.disableProperty().bind(variableValueRadioButton.selectedProperty().not());
 
 		// Generator Settings -> Miscellaneous
 		capitalizationComboBox.setItems(FXCollections.observableArrayList(ResultCase.values()));
@@ -256,7 +281,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 
 	@FXML
 	public void setDefaultCharacters(ActionEvent evt) {
-		getPreferences().getCharacterValidator().setToDefault();
+		getPreferences().setCharactersToDefault();
 		updateUI(getPreferences(), mainController.getResults());
 	}
 
@@ -316,6 +341,10 @@ public class PreferencesController extends Parent implements MainControllerChild
 		punctuationCheckBox.setSelected(getPreferences().getCharacterValidator().isPunctuationAllowed());
 		customCheckBox.setSelected(getPreferences().getCharacterValidator().isCustomAllowed());
 		customTextField.setText(getPreferences().getCharacterValidator().getCustomCharactersString());
+		vowelCheckBox.setSelected(getPreferences().isVowelsTrimmed());
+		vowelSpinner.getValueFactory().setValue(getPreferences().getTrimVowelCount());
+		consonantCheckBox.setSelected(getPreferences().isConsonantsTrimmed());
+		consonantSpinner.getValueFactory().setValue(getPreferences().getTrimConsonantCount());
 
 		// Generator Settings -> Morpheme count
 		exactValueRadioButton.setSelected(getPreferences().isExactMorphemeCount());

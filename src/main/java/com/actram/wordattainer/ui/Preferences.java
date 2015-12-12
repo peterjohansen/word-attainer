@@ -105,6 +105,10 @@ public class Preferences extends GeneratorSettings implements Serializable {
 		getMorphemeFileList().setTo(preferences.getMorphemeFileList());
 		getCharacterValidator().setTo(preferences.getCharacterValidator());
 		setRandom(preferences.getRandom());
+		setTrimVowels(preferences.isVowelsTrimmed());
+		setTrimVowelCount(preferences.getTrimVowelCount());
+		setTrimConsonants(preferences.isConsonantsTrimmed());
+		setTrimConsonantCount(preferences.getTrimConsonantCount());
 		setMorphemeCapitalization(preferences.getMorphemeCapitalization());
 		setMorphemeSeparator(preferences.getMorphemeSeparator());
 		setMorphemeCountRange(preferences.getMinMorphemeCount(), preferences.getMaxMorphemeCount());
