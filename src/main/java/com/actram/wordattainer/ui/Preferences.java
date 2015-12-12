@@ -111,6 +111,8 @@ public class Preferences extends GeneratorSettings implements Serializable {
 		setTrimConsonantCount(preferences.getTrimConsonantCount());
 		setMorphemeCapitalization(preferences.getMorphemeCapitalization());
 		setMorphemeSeparator(preferences.getMorphemeSeparator());
+		setUseExactMorphemeCount(preferences.isExactMorphemeCount());
+		setExactMorphemeCount(preferences.getExactMorphemeCount());
 		setMorphemeCountRange(preferences.getMinMorphemeCount(), preferences.getMaxMorphemeCount());
 		allowDuplicateConsecutiveMorphemes(preferences.isDuplicateConsecutiveMorphemesAllowed());
 		setMapListsToMorphemes(preferences.isMorphemesMappedToLists());
