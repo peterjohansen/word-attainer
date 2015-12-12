@@ -127,7 +127,6 @@ public class GeneratorController implements MainControllerChild {
 				results.clear();
 				results.addAll(generatedResults);
 				generateDone();
-				showTimedOutMessage();
 			}
 		});
 		generateButton.setDisable(true);

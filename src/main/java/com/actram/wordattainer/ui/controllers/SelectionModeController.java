@@ -42,8 +42,6 @@ public class SelectionModeController implements MainControllerChild {
 
 	private boolean stageShowedOnce = false;
 
-	private boolean timedOut = false;
-
 	@FXML
 	public void cancelSelectionMode(ActionEvent evt) {
 		if (!keptResults.isEmpty()) {
@@ -130,7 +128,9 @@ public class SelectionModeController implements MainControllerChild {
 		prevResult = currentResult;
 		currentResult = null;
 
+		choiceParent.setDisable(true);
 		this.currentResult = nextResult();
+		choiceParent.setDisable(false);
 		updateUI(mainController.getPreferences(), mainController.getResults());
 
 	}
@@ -140,7 +140,7 @@ public class SelectionModeController implements MainControllerChild {
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Generator: Selection Mode");
 		stage.getScene().setOnKeyReleased(evt -> {
-			if (resultTextField.isVisible() || timedOut) {
+			if (resultTextField.isVisible() || choiceParent.isDisabled()) {
 				return;
 			}
 			switch (evt.getCode()) {
@@ -170,7 +170,6 @@ public class SelectionModeController implements MainControllerChild {
 		keptResults.clear();
 		prevResult = null;
 		choiceParent.setDisable(false);
-		timedOut = false;
 
 		if (!stageShowedOnce) {
 			stage.initOwner(mainController.getStage());

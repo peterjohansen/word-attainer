@@ -45,22 +45,24 @@ public class WordAttainer extends Application {
 		return stage.getTitle();
 	}
 
-	public Parent load(FXMLLoader loader, String name) {
-		Objects.requireNonNull(loader, "the loader cannot be null");
+	public FXMLLoader loadFXML(String name) {
+		return loadFXML(name, null);
+	}
+
+	public <T extends Parent> FXMLLoader loadFXML(String name, T root) {
 		Objects.requireNonNull(name, "the name cannot be null");
 
-		loader.setLocation(getClass().getResource(UI_DIRECTORY));
 		final String path = (UI_DIRECTORY + name);
 		try {
-			return loader.load(getClass().getResourceAsStream(path));
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource(path));
+			loader.setRoot(root);
+			loader.load(getClass().getResourceAsStream(path));
+			return loader;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("unable to load .fxml file: " + path);
-	}
-
-	public Parent loadFXML(String name) {
-		return load(new FXMLLoader(), name);
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class WordAttainer extends Application {
 
 		this.rootFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 
-		stage.setScene(new Scene(loadFXML("main.fxml")));
+		stage.setScene(new Scene(loadFXML("main.fxml").getRoot()));
 		stage.setTitle(TITLE);
 		stage.show();
 		stage.setMinWidth(stage.getWidth());

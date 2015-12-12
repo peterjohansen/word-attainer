@@ -113,18 +113,14 @@ public class MainController implements Initializable {
 		this.results = new ResultList();
 
 		// Load preferences controller manually
-		FXMLLoader prefLoader = new FXMLLoader();
-		prefLoader.setRoot(new VBox());
-		Parent preferencesParent = program.load(prefLoader, "preferences.fxml");
+		FXMLLoader prefLoader = program.loadFXML("preferences.fxml", new VBox());
 		this.preferencesController = prefLoader.getController();
-		preferencesController.setRootNode(preferencesParent);
+		preferencesController.setRootNode(prefLoader.getRoot());
 
 		// Load selection mode controller manually
-		FXMLLoader selectionLoader = new FXMLLoader();
-		selectionLoader.setRoot(new BorderPane());
-		Parent selectionParent = program.load(selectionLoader, "selection_mode.fxml");
+		FXMLLoader selectionLoader = program.loadFXML("selection_mode.fxml", new BorderPane());
 		this.selectionModeController = selectionLoader.getController();
-		selectionModeController.setRootNode(selectionParent);
+		selectionModeController.setRootNode(selectionLoader.getRoot());
 
 		// Initialize child controllers
 		forEachChildController(controller -> {
@@ -136,7 +132,7 @@ public class MainController implements Initializable {
 
 	public Parent loadFXML(String name) {
 		Objects.requireNonNull(name, ".fxml file name cannot be null");
-		return program.loadFXML(name);
+		return program.loadFXML(name).getRoot();
 	}
 
 	public boolean showConfirmAlert(String title, String content, String okButtonText, String cancelButtonText) {
