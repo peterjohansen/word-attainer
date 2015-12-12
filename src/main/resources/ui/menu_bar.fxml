@@ -42,6 +42,8 @@
       </Menu>
       <Menu mnemonicParsing="false" text="Morphemes">
          <items>
+            <MenuItem mnemonicParsing="false" onAction="#createNewList" text="Create New List" />
+            <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#addLists" text="Add Lists" />
             <MenuItem mnemonicParsing="false" onAction="#removeLists" text="Remove Lists" />
             <MenuItem mnemonicParsing="false" onAction="#clearLists" text="Clear Lists" />

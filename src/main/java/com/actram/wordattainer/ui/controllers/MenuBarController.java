@@ -1,5 +1,6 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -38,6 +39,7 @@ public class MenuBarController implements MainControllerChild {
 	@FXML private RadioMenuItem selectionModeRadioItem;
 
 	private FileChooser saveResultsFileChooser;
+	private FileChooser createListFileChooser;
 
 	@FXML
 	public void addLists(ActionEvent evt) {
@@ -47,6 +49,20 @@ public class MenuBarController implements MainControllerChild {
 	@FXML
 	public void clearLists(ActionEvent evt) {
 		mainController.getMorphemeListsController().clearLists(evt);
+	}
+
+	@FXML
+	public void createNewList(ActionEvent evt) {
+		File file = createListFileChooser.showSaveDialog(mainController.getStage());
+		if (file != null) {
+			try {
+				file.createNewFile();
+				Desktop.getDesktop().edit(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+				mainController.showErrorAlert("File Save Error", "Unable to save morpheme list file.");
+			}
+		}
 	}
 
 	@FXML
@@ -73,7 +89,7 @@ public class MenuBarController implements MainControllerChild {
 	public void importProfile(ActionEvent evt) {
 		mainController.getPreferencesController().importProfile(evt);
 	}
-
+	
 	@Override
 	public void initialize(MainController mainController, ResourceBundle resources) {
 		this.mainController = mainController;
@@ -85,6 +101,13 @@ public class MenuBarController implements MainControllerChild {
 		saveResultsFileChooser.getExtensionFilters().add(defaultExtensionFilter);
 		saveResultsFileChooser.getExtensionFilters().add(new ExtensionFilter("Any type", "*"));
 		saveResultsFileChooser.setSelectedExtensionFilter(defaultExtensionFilter);
+		
+		this.createListFileChooser = new FileChooser();
+		createListFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		createListFileChooser.setTitle("Choose Where To Create Morpheme List");
+		createListFileChooser.getExtensionFilters().add(defaultExtensionFilter);
+		createListFileChooser.getExtensionFilters().add(new ExtensionFilter("Any type", "*"));
+		createListFileChooser.setSelectedExtensionFilter(defaultExtensionFilter);
 
 		this.modeRadioItemMap = new BiMap<>();
 		modeRadioItemMap.put(GeneratorMode.LIST, listModeRadioItem);
