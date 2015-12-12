@@ -172,6 +172,7 @@ public class SelectionModeController implements MainControllerChild {
 		choiceParent.setDisable(false);
 
 		if (!stageShowedOnce) {
+			mainController.setIcon(stage);
 			stage.initOwner(mainController.getStage());
 			stage.initModality(Modality.WINDOW_MODAL);
 		}

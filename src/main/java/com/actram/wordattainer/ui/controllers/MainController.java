@@ -22,6 +22,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 /**
@@ -133,6 +134,10 @@ public class MainController implements Initializable {
 	public Parent loadFXML(String name) {
 		Objects.requireNonNull(name, ".fxml file name cannot be null");
 		return program.loadFXML(name).getRoot();
+	}
+	
+	public void setIcon(Stage stage) {
+		program.setIcon(stage);
 	}
 
 	public boolean showConfirmAlert(String title, String content, String okButtonText, String cancelButtonText) {

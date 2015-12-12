@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -36,7 +37,7 @@ public class WordAttainer extends Application {
 	public File getRootFile() {
 		return rootFile;
 	}
-
+	
 	public Stage getStage() {
 		return stage;
 	}
@@ -65,6 +66,10 @@ public class WordAttainer extends Application {
 		throw new IllegalArgumentException("unable to load .fxml file: " + path);
 	}
 
+	public void setIcon(Stage stage) {
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+	}
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		WordAttainer.instance = this;
@@ -72,6 +77,7 @@ public class WordAttainer extends Application {
 
 		this.rootFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 
+		setIcon(stage);
 		stage.setScene(new Scene(loadFXML("main.fxml").getRoot()));
 		stage.setTitle(TITLE);
 		stage.show();

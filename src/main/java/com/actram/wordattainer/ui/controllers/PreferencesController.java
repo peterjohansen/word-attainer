@@ -318,6 +318,7 @@ public class PreferencesController extends Parent implements MainControllerChild
 		getPreferences().setTo(mainController.getPreferences());
 		updateUI(mainController.getPreferences(), mainController.getResults());
 		if (!stageShowedOnce) {
+			mainController.setIcon(stage);
 			stage.initOwner(mainController.getStage());
 			stage.initModality(Modality.WINDOW_MODAL);
 		}
