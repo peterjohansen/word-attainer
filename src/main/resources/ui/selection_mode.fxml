@@ -11,7 +11,7 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <center>
-            <GridPane hgap="10.0">
+            <GridPane fx:id="choiceParent" hgap="10.0">
                <BorderPane.margin>
                   <Insets left="5.0" right="5.0" />
                </BorderPane.margin>

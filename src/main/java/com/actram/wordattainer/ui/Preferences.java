@@ -19,20 +19,15 @@ public class Preferences extends GeneratorSettings implements Serializable {
 	public static final int MIN_RESULT_AMOUNT = 1;
 	public static final int MAX_RESULT_AMOUNT = 1000000;
 
-	public static final int MIN_GENERATOR_TIMEOUT = 1;
-	public static final int MAX_GENERATOR_TIMEOUT = 3600;
-
 	private Generator generator;
 	private GeneratorMode generatorMode;
 	private int resultAmount;
-	private int generatorTimeout;
 	private boolean autoSortResults;
 
 	public Preferences() {
 		setGenerator(new StandardGenerator());
 		setGeneratorMode(GeneratorMode.LIST);
 		setResultAmountToDefault();
-		setGeneratorTimeoutToDefault();
 		setAutoSortResultsToDefault();
 	}
 
@@ -42,10 +37,6 @@ public class Preferences extends GeneratorSettings implements Serializable {
 
 	public GeneratorMode getGeneratorMode() {
 		return generatorMode;
-	}
-
-	public int getGeneratorTimeout() {
-		return generatorTimeout;
 	}
 
 	public int getResultAmount() {
@@ -72,20 +63,6 @@ public class Preferences extends GeneratorSettings implements Serializable {
 	public void setGeneratorMode(GeneratorMode generatorMode) {
 		Objects.requireNonNull(generatorMode, "the generator mode cannot be null");
 		this.generatorMode = generatorMode;
-	}
-
-	public void setGeneratorTimeout(int generatorTimeout) {
-		if (generatorTimeout < MIN_GENERATOR_TIMEOUT) {
-			throw new IllegalArgumentException("generator timeout is too low");
-		}
-		if (generatorTimeout > MAX_GENERATOR_TIMEOUT) {
-			throw new IllegalArgumentException("generator timeout is too high");
-		}
-		this.generatorTimeout = generatorTimeout;
-	}
-
-	public void setGeneratorTimeoutToDefault() {
-		setGeneratorTimeout(2);
 	}
 
 	public void setResultAmount(int resultAmount) {

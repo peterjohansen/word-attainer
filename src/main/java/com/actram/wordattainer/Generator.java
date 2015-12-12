@@ -2,6 +2,7 @@ package com.actram.wordattainer;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.channels.InterruptedByTimeoutException;
 
 /**
  * Generates words (as {@link String}s) based on {@link GeneratorSettings}.
@@ -28,8 +29,10 @@ public interface Generator extends Serializable {
 	 * 
 	 * @return the result
 	 * @throws IllegalStateException if the generator hasn't been initialized
+	 * @throws InterruptedByTimeoutException if the generator times out
+	 *             according to the settings
 	 */
-	public String query();
+	public String query() throws InterruptedByTimeoutException;
 
 	/**
 	 * Initializes this generator.

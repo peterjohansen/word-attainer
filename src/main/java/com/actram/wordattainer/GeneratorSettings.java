@@ -7,37 +7,14 @@ import java.util.Random;
 /**
  * Contains settings that can customize the set of results a {@link Generator}
  * produces.
- * <p>
- * <ul>
- * Explanation for each setting (accessed by setters and getters):
- * <li>{@link GeneratorSettings#morphemeFileList} - A list of files that contain
- * morphemes. Each line in each file corresponds to a morpheme.</li>
- * <li>{@link GeneratorSettings#characterValidator} - A
- * {@link CharacterValidator} that specifies which characters are allowed in
- * morphemes, thereby also in the final result.</li>
- * <li>{@link GeneratorSettings#random} - The {@link Random} to use for the
- * random numbers required to generate results.</li>
- * <li>{@link GeneratorSettings#morphemeCapitalization} - A {@link ResultCase}
- * that specifies how the morphemes should be capitalized in relation to each
- * other.</li>
- * <li>{@link GeneratorSettings#morphemeSeparator} - The {@link String} to join
- * the morphemes with.</li>
- * <li>{@link GeneratorSettings#minMorphemeCount} - The minimum amount of
- * morphemes in each result.</li>
- * <li>{@link GeneratorSettings#maxMorphemeCount} - The maximum amount of
- * morphemes in each result.</li>
- * <li>{@link GeneratorSettings#allowDuplicateConsecutiveMorphemes} - Whether or
- * not two equal morphemes can appear directly after one and other in a result.
- * </li>
- * <li>{@link GeneratorSettings#mapListsToMorphemes} - Whether or not each
- * morpheme should be picked from the list with the corresponding index,
- * wrapping around the file lists as needed.</li>
- * </ul>
- *
+ * 
  * @author Peter André Johansen
  */
 public class GeneratorSettings implements Serializable {
 	private static final long serialVersionUID = 6011048486666320311L;
+
+	public static final int MIN_GENERATOR_TIMEOUT = 1;
+	public static final int MAX_GENERATOR_TIMEOUT = 3600;
 
 	public static final int MIN_MORPHEME_COUNT = 1;
 	public static final int MAX_MORPHEME_COUNT = 1000;
@@ -51,6 +28,7 @@ public class GeneratorSettings implements Serializable {
 	}
 
 	private final MorphemeFileList morphemeFileList;
+	private int generatorTimeout;
 
 	private final CharacterValidator characterValidator;
 	private Random random;
@@ -74,6 +52,7 @@ public class GeneratorSettings implements Serializable {
 	public GeneratorSettings() {
 		this.morphemeFileList = new MorphemeFileList();
 		this.characterValidator = new CharacterValidator();
+		setGeneratorTimeoutToDefault();
 		setCharactersToDefault();
 		setRandom(new Random());
 		setMorphemeCapitalizationToDefault();
@@ -93,6 +72,10 @@ public class GeneratorSettings implements Serializable {
 
 	public int getExactMorphemeCount() {
 		return exactMorphemeCount;
+	}
+
+	public int getGeneratorTimeout() {
+		return generatorTimeout;
 	}
 
 	public int getMaxMorphemeCount() {
@@ -162,6 +145,20 @@ public class GeneratorSettings implements Serializable {
 	public void setExactMorphemeCount(int count) {
 		checkMorphemeCount(count);
 		this.exactMorphemeCount = count;
+	}
+
+	public void setGeneratorTimeout(int generatorTimeout) {
+		if (generatorTimeout < MIN_GENERATOR_TIMEOUT) {
+			throw new IllegalArgumentException("generator timeout is too low");
+		}
+		if (generatorTimeout > MAX_GENERATOR_TIMEOUT) {
+			throw new IllegalArgumentException("generator timeout is too high");
+		}
+		this.generatorTimeout = generatorTimeout;
+	}
+
+	public void setGeneratorTimeoutToDefault() {
+		setGeneratorTimeout(2);
 	}
 
 	public void setMapListsToMorphemes(boolean mapListsToMorphemes) {

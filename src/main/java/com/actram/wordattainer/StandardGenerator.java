@@ -1,6 +1,7 @@
 package com.actram.wordattainer;
 
 import java.io.IOException;
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,13 +33,17 @@ public class StandardGenerator implements Generator {
 	}
 
 	@Override
-	public String query() {
+	public String query() throws InterruptedByTimeoutException {
 
 		Random random = settings.getRandom();
+		long start = System.currentTimeMillis();
 
 		// Create results until we get a unique one
 		String finalResult;
 		do {
+			if (System.currentTimeMillis() - start > settings.getGeneratorTimeout() * 1000) {
+				throw new InterruptedByTimeoutException();
+			}
 
 			// Find the morpheme count in the next result
 			final int morphemeCount;
@@ -97,6 +102,7 @@ public class StandardGenerator implements Generator {
 
 		} while (allResults.contains(finalResult));
 
+		allResults.add(finalResult);
 		uniqueResultsAmount++;
 		return finalResult;
 	}

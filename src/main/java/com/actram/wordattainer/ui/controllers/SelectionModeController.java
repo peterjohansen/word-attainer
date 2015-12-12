@@ -1,8 +1,8 @@
 package com.actram.wordattainer.ui.controllers;
 
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ResourceBundle;
 
-import com.actram.wordattainer.Generator;
 import com.actram.wordattainer.ResultList;
 import com.actram.wordattainer.ui.Preferences;
 
@@ -30,6 +30,7 @@ public class SelectionModeController implements MainControllerChild {
 	@FXML private Button keepPrevButton;
 	@FXML private Label nextLabel;
 	@FXML private Label prevLabel;
+	@FXML private Parent choiceParent;
 
 	private MainController mainController;
 
@@ -40,6 +41,8 @@ public class SelectionModeController implements MainControllerChild {
 	private String currentResult;
 
 	private boolean stageShowedOnce = false;
+
+	private boolean timedOut = false;
 
 	@FXML
 	public void cancelSelectionMode(ActionEvent evt) {
@@ -105,21 +108,31 @@ public class SelectionModeController implements MainControllerChild {
 	public void keepResults(ActionEvent evt) {
 		mainController.getResults().clear();
 		mainController.getResults().addAll(keptResults);
-		mainController.getResults().removeDuplicates();
+		mainController.getGeneratorController().generateDone();
 		close();
 		mainController.stateUpdated();
 	}
 
-	private void nextResult(boolean keepCurrent) {
-		Preferences preferences = mainController.getPreferences();
-		Generator generator = preferences.getGenerator();
+	private String nextResult() {
+		try {
+			return currentResult = mainController.getPreferences().getGenerator().query();
+		} catch (InterruptedByTimeoutException e) {
+			keepResults(null);
+			mainController.getGeneratorController().showTimedOutMessage();
+			return null;
+		}
+	}
 
+	private void nextResult(boolean keepCurrent) {
 		if (keepCurrent) {
 			keptResults.add(currentResult);
 		}
 		prevResult = currentResult;
-		this.currentResult = generator.query();
-		updateUI(preferences, mainController.getResults());
+		currentResult = null;
+
+		this.currentResult = nextResult();
+		updateUI(mainController.getPreferences(), mainController.getResults());
+
 	}
 
 	void setRootNode(Parent parent) {
@@ -127,7 +140,7 @@ public class SelectionModeController implements MainControllerChild {
 		stage.setScene(new Scene(parent));
 		stage.setTitle("Generator: Selection Mode");
 		stage.getScene().setOnKeyReleased(evt -> {
-			if (resultTextField.isVisible()) {
+			if (resultTextField.isVisible() || timedOut) {
 				return;
 			}
 			switch (evt.getCode()) {
@@ -156,9 +169,9 @@ public class SelectionModeController implements MainControllerChild {
 	public void showSelectionMode() {
 		keptResults.clear();
 		prevResult = null;
-		this.currentResult = mainController.getPreferences().getGenerator().query();
+		choiceParent.setDisable(false);
+		timedOut = false;
 
-		updateUI(mainController.getPreferences(), mainController.getResults());
 		if (!stageShowedOnce) {
 			stage.initOwner(mainController.getStage());
 			stage.initModality(Modality.WINDOW_MODAL);
@@ -167,6 +180,9 @@ public class SelectionModeController implements MainControllerChild {
 		stageShowedOnce = true;
 		stage.setMinWidth(stage.getWidth());
 		stage.setMinHeight(stage.getHeight());
+
+		this.currentResult = nextResult();
+		updateUI(mainController.getPreferences(), mainController.getResults());
 	}
 
 	@FXML
@@ -183,8 +199,8 @@ public class SelectionModeController implements MainControllerChild {
 	public void updateUI(Preferences preferences, ResultList results) {
 		discardPrevButton.setDisable(prevResult == null || !keptResults.contains(prevResult));
 		keepPrevButton.setDisable(prevResult == null || keptResults.contains(prevResult));
-		prevLabel.setText(prevResult == null ? "-" : prevResult);
 		resultLabel.setText(currentResult);
+		prevLabel.setText(prevResult == null ? "-" : prevResult);
 		final int resultCount = preferences.getGenerator().getUniqueResultsAmount() - 1;
 		statsLabel.setText(String.format("%s kept | %s discarded | %s total", keptResults.size(), resultCount - keptResults.size(), resultCount));
 	}

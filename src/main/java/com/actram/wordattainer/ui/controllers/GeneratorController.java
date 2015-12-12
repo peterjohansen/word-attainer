@@ -1,6 +1,7 @@
 package com.actram.wordattainer.ui.controllers;
 
 import java.io.IOException;
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ResourceBundle;
 
 import com.actram.wordattainer.Generator;
@@ -13,7 +14,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -37,9 +37,6 @@ public class GeneratorController implements MainControllerChild {
 
 	private MainController mainController;
 
-	private boolean generationRunning = false;
-	private boolean lastGenerationTimedOut = false;
-
 	@FXML
 	public void generate(ActionEvent event) {
 		GeneratorMode mode = mainController.getPreferences().getGeneratorMode();
@@ -50,6 +47,13 @@ public class GeneratorController implements MainControllerChild {
 		} else {
 			throw new AssertionError("unkown generator mode");
 		}
+	}
+
+	void generateDone() {
+		if (mainController.getPreferences().isResultsAutoSort()) {
+			mainController.getResults().sort();
+		}
+		mainController.stateUpdated();
 	}
 
 	private boolean generateInit() {
@@ -94,66 +98,39 @@ public class GeneratorController implements MainControllerChild {
 	}
 
 	public void listGenerate() {
-		if (generationRunning) {
-			setGenerationRunning(false);
-			return;
-		}
 		if (!generateInit()) {
 			return;
 		}
 
 		Preferences preferences = mainController.getPreferences();
 		Generator generator = preferences.getGenerator();
-
-		// Event handler to run when the generation is done
 		ResultList generatedResults = new ResultList(preferences.getResultAmount());
-		EventHandler<WorkerStateEvent> onTaskDone = new EventHandler<WorkerStateEvent>() {
+
+		Task<Void> generateTask = new Task<Void>() {
 			@Override
-			public void handle(WorkerStateEvent event) {
-				setGenerationRunning(false);
+			protected Void call() {
+				for (int i = 0; i < preferences.getResultAmount(); i++) {
+					try {
+						generatedResults.add(generator.query());
+					} catch (InterruptedByTimeoutException e) {
+						showTimedOutMessage();
+						cancel();
+					}
+				}
+				return null;
+			}
+		};
+		generateTask.addEventHandler(WorkerStateEvent.ANY, event -> {
+			if (event.getEventType() == WorkerStateEvent.WORKER_STATE_SUCCEEDED || event.getEventType() == WorkerStateEvent.WORKER_STATE_FAILED) {
+				generateButton.setDisable(false);
 				ResultList results = mainController.getResults();
 				results.clear();
 				results.addAll(generatedResults);
-				if (preferences.isResultsAutoSort()) {
-					results.sort();
-				}
-
-				if (lastGenerationTimedOut) {
-					// @formatterOff
-							int timeoutSeconds = preferences.getGeneratorTimeout();
-							mainController.showInfoAlert("Generation timed out",
-													"The generator didn't find any "
-													+ "new results for " + timeoutSeconds + " seconds.");
-							// @formatterOn
-					lastGenerationTimedOut = false;
-				}
-
-				mainController.stateUpdated();
+				generateDone();
+				showTimedOutMessage();
 			}
-		};
-
-		// Task to run the generation. Cancel the task if it times out.
-		Task<ResultList> generateTask = new Task<ResultList>() {
-			@Override
-			protected ResultList call() throws Exception {
-				long start = System.currentTimeMillis();
-				while (generatedResults.size() != preferences.getResultAmount()) {
-					if ((System.currentTimeMillis() - start) > preferences.getGeneratorTimeout() * 1000) {
-						lastGenerationTimedOut = true;
-						break;
-					}
-					if (isCancelled() || !generationRunning) {
-						break;
-					}
-					generatedResults.add(generator.query());
-					start = System.currentTimeMillis();
-				}
-				return generatedResults;
-			}
-		};
-		generateTask.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, onTaskDone);
-		generateTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, onTaskDone);
-		setGenerationRunning(true);
+		});
+		generateButton.setDisable(true);
 		new Thread(generateTask).start();
 	}
 
@@ -164,13 +141,13 @@ public class GeneratorController implements MainControllerChild {
 		mainController.getSelectionModeController().showSelectionMode();
 	}
 
-	private void setGenerationRunning(boolean running) {
-		this.generationRunning = running;
-		if (generationRunning) {
-			generateButton.setText("Cancel");
-		} else {
-			generateButton.setText("Generate");
-		}
+	void showTimedOutMessage() {
+		int timeoutSeconds = mainController.getPreferences().getGeneratorTimeout();
+		// @formatterOff
+		mainController.showInfoAlert("Generation Timed Out",
+								"The generator didn't find any "
+								+ "new results for " + timeoutSeconds + " seconds.");
+		// @formatterOn
 	}
 
 	@Override
