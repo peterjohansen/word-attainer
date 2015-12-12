@@ -38,12 +38,7 @@ public class MorphemeListsController implements MainControllerChild {
 			if (empty) {
 				setText(null);
 			} else {
-				String fileName = Paths.get(filePath).getFileName().toString();
-				if (!filePath.startsWith(fileName)) {
-					setText(".../" + fileName);
-				} else {
-					setText(fileName);
-				}
+				setText(Paths.get(filePath).getFileName().toString());
 				setTooltip(new Tooltip(filePath));
 			}
 		}
