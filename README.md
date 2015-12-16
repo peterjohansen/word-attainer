@@ -7,7 +7,7 @@ A graphical, adjustable, random word generator.
 ## Screenshot
 ![](demo/screenshot.png)
 
-These names were generated with [this morpheme list](demo/names_fantasy.txt).
+These names were generated with [this morpheme list](demo/names_fantasy.txt). The desired results were fantasy names.
 
 ## License
 MIT
